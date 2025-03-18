@@ -1,11 +1,13 @@
 ﻿using LinguaRise.Models;
+using LinguaRise.Models.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace LinguaRise.DataAccess;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -15,14 +17,14 @@ public class AppDbContext : DbContext
 
         var domainAssembly = Assembly.Load("LinguaRise.Models");
         var entityTypes = domainAssembly.GetTypes()
-            .Where(t => t.Namespace == "LinguaRise.Models.Domain" &&
+            .Where(t => t.Namespace == "LinguaRise.Models.Entities" &&
                         t.IsClass &&
                         !t.IsAbstract &&
                         t.GetCustomAttribute<DatabaseEntityAttribute>() != null);
 
         foreach (var entityType in entityTypes)
         {
-            modelBuilder.Model.AddEntityType(entityType);
+            modelBuilder.Entity(entityType);
         }
     }
 

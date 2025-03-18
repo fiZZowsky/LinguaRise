@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LinguaRise.Models.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,5 +12,9 @@ public static class DataAccessExtensions
     {
         var connectionString = configuration.GetConnectionString("LinguaRise");
         services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
+        services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
     }
 }
