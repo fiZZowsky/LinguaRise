@@ -12,9 +12,5 @@ public static class DataAccessExtensions
     {
         var connectionString = configuration.GetConnectionString("LinguaRise");
         services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
-
-        services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
     }
 }
