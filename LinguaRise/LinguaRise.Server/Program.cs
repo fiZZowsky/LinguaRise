@@ -1,8 +1,6 @@
 using LinguaRise.DataAccess;
-using LinguaRise.Models.Entities;
 using LinguaRise.Repositories;
 using LinguaRise.Services;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,20 +10,6 @@ builder.Services.AddDataAccess(builder.Configuration);
 
 builder.Services.AddRepositories();
 builder.Services.AddService();
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
-
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.LoginPath = "/api/auth/login";
-    options.AccessDeniedPath = "/api/auth/access-denied";
-});
-
-
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -48,7 +32,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
