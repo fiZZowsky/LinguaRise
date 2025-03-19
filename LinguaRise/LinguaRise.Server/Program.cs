@@ -39,12 +39,6 @@ AppDbContext.EnsureDatabaseUpdated(app.Services);
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.Map("/logout", async (SignInManager<ApplicationUser> signInManager) =>
-{
-    await signInManager.SignOutAsync();
-    return Results.Ok();
-}).RequireAuthorization();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
