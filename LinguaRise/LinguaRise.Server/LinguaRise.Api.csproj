@@ -24,6 +24,7 @@
     <ProjectReference Include="..\linguarise.client\linguarise.app.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\LinguaRise.Common\LinguaRise.Common.csproj" />
     <ProjectReference Include="..\LinguaRise.DataAccess\LinguaRise.DataAccess.csproj" />
     <ProjectReference Include="..\LinguaRise.Models\LinguaRise.Models.csproj" />
     <ProjectReference Include="..\LinguaRise.Services\LinguaRise.Services.csproj" />
