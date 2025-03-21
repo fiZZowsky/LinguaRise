@@ -18,8 +18,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-AppDbContext.EnsureDatabaseUpdated(app.Services);
-
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

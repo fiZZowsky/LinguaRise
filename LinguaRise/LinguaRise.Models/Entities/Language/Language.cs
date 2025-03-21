@@ -2,7 +2,6 @@
 
 namespace LinguaRise.Models.Entities;
 
-[DatabaseEntity]
 public class Language
 {
     [Key]
