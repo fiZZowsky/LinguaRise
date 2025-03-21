@@ -8,4 +8,6 @@ public class VocabularyCategory
     public int Id { get; set; }
     [Required]
     public string Name { get; set; }
+
+    public ICollection<Word> Words { get; set; } = new List<Word>();
 }

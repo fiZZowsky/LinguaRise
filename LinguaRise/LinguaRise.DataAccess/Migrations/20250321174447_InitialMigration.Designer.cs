@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LinguaRise.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250321150418_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250321174447_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,19 +25,19 @@ namespace LinguaRise.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CourseWords", b =>
+            modelBuilder.Entity("LessonWord", b =>
                 {
-                    b.Property<int>("CourseId")
+                    b.Property<int>("LearnedWordsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WordsId")
+                    b.Property<int>("LessonId")
                         .HasColumnType("int");
 
-                    b.HasKey("CourseId", "WordsId");
+                    b.HasKey("LearnedWordsId", "LessonId");
 
-                    b.HasIndex("WordsId");
+                    b.HasIndex("LessonId");
 
-                    b.ToTable("CourseWords");
+                    b.ToTable("LessonWord");
                 });
 
             modelBuilder.Entity("LinguaRise.Models.Entities.Course", b =>
@@ -48,15 +48,15 @@ namespace LinguaRise.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CompletionDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Courses");
                 });
@@ -82,7 +82,7 @@ namespace LinguaRise.DataAccess.Migrations
                     b.ToTable("Languages");
                 });
 
-            modelBuilder.Entity("LinguaRise.Models.Entities.Translation", b =>
+            modelBuilder.Entity("LinguaRise.Models.Entities.Lesson", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,32 +90,44 @@ namespace LinguaRise.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CompletionDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WordId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId");
+                    b.HasIndex("CourseId");
 
-                    b.HasIndex("WordId");
+                    b.ToTable("Lessons");
+                });
 
-                    b.ToTable("Translations");
+            modelBuilder.Entity("LinguaRise.Models.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("LinguaRise.Models.Entities.VocabularyCategory", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -157,87 +169,87 @@ namespace LinguaRise.DataAccess.Migrations
                     b.ToTable("Words");
                 });
 
-            modelBuilder.Entity("CourseWords", b =>
+            modelBuilder.Entity("LessonWord", b =>
                 {
-                    b.HasOne("LinguaRise.Models.Entities.Course", null)
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("LinguaRise.Models.Entities.Word", null)
                         .WithMany()
-                        .HasForeignKey("WordsId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("LearnedWordsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LinguaRise.Models.Entities.Lesson", null)
+                        .WithMany()
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("LinguaRise.Models.Entities.Course", b =>
                 {
-                    b.HasOne("LinguaRise.Models.Entities.Language", "Language")
+                    b.HasOne("LinguaRise.Models.Entities.User", null)
                         .WithMany("Courses")
-                        .HasForeignKey("LanguageId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("LinguaRise.Models.Entities.Translation", b =>
+            modelBuilder.Entity("LinguaRise.Models.Entities.Lesson", b =>
                 {
-                    b.HasOne("LinguaRise.Models.Entities.Language", "Language")
-                        .WithMany("Translations")
-                        .HasForeignKey("LanguageId")
+                    b.HasOne("LinguaRise.Models.Entities.Course", "Course")
+                        .WithMany("Lessons")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LinguaRise.Models.Entities.Word", "Word")
-                        .WithMany("Translations")
-                        .HasForeignKey("WordId")
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("LinguaRise.Models.Entities.VocabularyCategory", b =>
+                {
+                    b.HasOne("LinguaRise.Models.Entities.Language", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("Word");
                 });
 
             modelBuilder.Entity("LinguaRise.Models.Entities.Word", b =>
                 {
                     b.HasOne("LinguaRise.Models.Entities.Language", "Language")
-                        .WithMany("Words")
+                        .WithMany()
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("LinguaRise.Models.Entities.VocabularyCategory", "VocabularyCategory")
+                    b.HasOne("LinguaRise.Models.Entities.VocabularyCategory", "Category")
                         .WithMany("Words")
                         .HasForeignKey("VocabularyCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Language");
+                    b.Navigation("Category");
 
-                    b.Navigation("VocabularyCategory");
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("LinguaRise.Models.Entities.Course", b =>
+                {
+                    b.Navigation("Lessons");
                 });
 
             modelBuilder.Entity("LinguaRise.Models.Entities.Language", b =>
                 {
+                    b.Navigation("Categories");
+                });
+
+            modelBuilder.Entity("LinguaRise.Models.Entities.User", b =>
+                {
                     b.Navigation("Courses");
-
-                    b.Navigation("Translations");
-
-                    b.Navigation("Words");
                 });
 
             modelBuilder.Entity("LinguaRise.Models.Entities.VocabularyCategory", b =>
                 {
                     b.Navigation("Words");
-                });
-
-            modelBuilder.Entity("LinguaRise.Models.Entities.Word", b =>
-                {
-                    b.Navigation("Translations");
                 });
 #pragma warning restore 612, 618
         }

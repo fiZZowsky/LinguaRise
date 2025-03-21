@@ -14,4 +14,7 @@ public class Word
     public int LanguageId { get; set; }
     [Required]
     public int VocabularyCategoryId { get; set; }
+
+    public Language Language { get; set; }
+    public VocabularyCategory Category { get; set; }
 }

@@ -2,14 +2,14 @@
 
 namespace LinguaRise.Models.Entities;
 
-public class Language
+public class User
 {
     [Key]
     public int Id { get; set; }
     [Required]
-    public string Code { get; set; }
-    [Required]
     public string Name { get; set; }
+    [Required]
+    public string Email { get; set; }
 
-    public ICollection<VocabularyCategory> Categories { get; set; } = new List<VocabularyCategory>();
+    public ICollection<Course> Courses { get; set; } = new List<Course>();
 }
