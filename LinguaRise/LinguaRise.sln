@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinguaRise.Api", "LinguaRise.Server\LinguaRise.Api.csproj", "{09C60E90-4608-45B5-855D-10B9B8094460}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinguaRise.Api", "LinguaRise.Server\LinguaRise.Api.csproj", "{09C60E90-4608-45B5-855D-10B9B8094460}"
 	ProjectSection(ProjectDependencies) = postProject
 		{09D4779F-40DF-4114-BE0C-0BE88F31C929} = {09D4779F-40DF-4114-BE0C-0BE88F31C929}
 		{CE38E7D5-F417-4703-9DF6-3AEE8906CF3F} = {CE38E7D5-F417-4703-9DF6-3AEE8906CF3F}
@@ -16,23 +16,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{81
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{5DF0EFF1-CE1A-4C1F-AD79-03B2A2442A6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinguaRise.Models", "LinguaRise.Models\LinguaRise.Models.csproj", "{09D4779F-40DF-4114-BE0C-0BE88F31C929}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinguaRise.Models", "LinguaRise.Models\LinguaRise.Models.csproj", "{09D4779F-40DF-4114-BE0C-0BE88F31C929}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinguaRise.Repositories", "LinguaRise.Repositories\LinguaRise.Repositories.csproj", "{F2E231F3-792C-46FD-AD31-370800E70AC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinguaRise.Repositories", "LinguaRise.Repositories\LinguaRise.Repositories.csproj", "{F2E231F3-792C-46FD-AD31-370800E70AC6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{09D4779F-40DF-4114-BE0C-0BE88F31C929} = {09D4779F-40DF-4114-BE0C-0BE88F31C929}
 		{54F688A8-2BBA-47D7-8CF2-6B7BF2F6A917} = {54F688A8-2BBA-47D7-8CF2-6B7BF2F6A917}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinguaRise.Services", "LinguaRise.Services\LinguaRise.Services.csproj", "{CE38E7D5-F417-4703-9DF6-3AEE8906CF3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinguaRise.Services", "LinguaRise.Services\LinguaRise.Services.csproj", "{CE38E7D5-F417-4703-9DF6-3AEE8906CF3F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{09D4779F-40DF-4114-BE0C-0BE88F31C929} = {09D4779F-40DF-4114-BE0C-0BE88F31C929}
 		{F2E231F3-792C-46FD-AD31-370800E70AC6} = {F2E231F3-792C-46FD-AD31-370800E70AC6}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinguaRise.DataAccess", "LinguaRise.DataAccess\LinguaRise.DataAccess.csproj", "{54F688A8-2BBA-47D7-8CF2-6B7BF2F6A917}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinguaRise.DataAccess", "LinguaRise.DataAccess\LinguaRise.DataAccess.csproj", "{54F688A8-2BBA-47D7-8CF2-6B7BF2F6A917}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinguaRise.Database", "LinguaRise.Database\LinguaRise.Database.csproj", "{B42D654C-D65D-466E-AFD4-C4359144AC93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinguaRise.Database", "LinguaRise.Database\LinguaRise.Database.csproj", "{B42D654C-D65D-466E-AFD4-C4359144AC93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinguaRise.Common", "LinguaRise.Common\LinguaRise.Common.csproj", "{6E1C21CE-6ADE-4E2A-90F0-AE85407F211D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,6 +72,10 @@ Global
 		{B42D654C-D65D-466E-AFD4-C4359144AC93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B42D654C-D65D-466E-AFD4-C4359144AC93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B42D654C-D65D-466E-AFD4-C4359144AC93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E1C21CE-6ADE-4E2A-90F0-AE85407F211D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E1C21CE-6ADE-4E2A-90F0-AE85407F211D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E1C21CE-6ADE-4E2A-90F0-AE85407F211D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E1C21CE-6ADE-4E2A-90F0-AE85407F211D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{CE38E7D5-F417-4703-9DF6-3AEE8906CF3F} = {5DF0EFF1-CE1A-4C1F-AD79-03B2A2442A6E}
 		{54F688A8-2BBA-47D7-8CF2-6B7BF2F6A917} = {5DF0EFF1-CE1A-4C1F-AD79-03B2A2442A6E}
 		{B42D654C-D65D-466E-AFD4-C4359144AC93} = {5DF0EFF1-CE1A-4C1F-AD79-03B2A2442A6E}
+		{6E1C21CE-6ADE-4E2A-90F0-AE85407F211D} = {5DF0EFF1-CE1A-4C1F-AD79-03B2A2442A6E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF76EAE8-DF47-41E9-BAA5-600C7273B00A}

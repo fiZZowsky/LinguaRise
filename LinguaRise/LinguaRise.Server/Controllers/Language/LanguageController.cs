@@ -21,4 +21,11 @@ public class LanguageController : ControllerBase
         var res = await _languageService.GetLanguagesAsync();
         return res;
     }
+
+    [HttpGet("{id}")]
+    public async Task<LanguageDTO> GetLanguageAsync(int id)
+    {
+        var res = await _languageService.GetLanguageAsync(id);
+        return res;
+    }
 }

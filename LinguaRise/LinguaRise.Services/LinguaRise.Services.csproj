@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LinguaRise.Common\LinguaRise.Common.csproj" />
     <ProjectReference Include="..\LinguaRise.Models\LinguaRise.Models.csproj" />
     <ProjectReference Include="..\LinguaRise.Repositories\LinguaRise.Repositories.csproj" />
   </ItemGroup>
