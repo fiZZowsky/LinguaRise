@@ -21,19 +21,18 @@ namespace LinguaRise.Api.Controllers.Lesson
             var res = await _lessonService.GetLessonsAsync();
             return res;
         }
-#
+
         [HttpGet("{id}")]
         public async Task<LessonDTO> GetLessonAsync(int id)
         {
-            var res = _lessonService.GetLessonAsync(id);
+            var res = await _lessonService.GetLessonAsync(id);
             return res;
         }
 
         [HttpPost]
-        public async Task<LessonDTO> CreateLessonAsync([FromBody] LessonDTO lesson)
+        public async Task CreateLessonAsync([FromBody] LessonDTO lesson)
         {
-            var res = _lessonService.CreateLessonAsync(lesson);
-            return res;
+            await _lessonService.CreateLessonAsync(lesson);
         }
     }
 }

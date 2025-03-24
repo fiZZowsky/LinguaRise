@@ -1,6 +1,7 @@
 ﻿using LinguaRise.Models.DTOs;
 using LinguaRise.Repositories.Interfaces;
 using LinguaRise.Services.Interfaces;
+using LinguaRise.Models.Converters;
 
 namespace LinguaRise.Services;
 
@@ -28,10 +29,9 @@ public class LessonService : ILessonService
     }
 
     // TODO: Brak zabezpieczeń dla błędu tworzenia nowej lekcji
-    public async Task<LessonDTO> CreateLessonAsync(LessonDTO dto)
+    public async Task CreateLessonAsync(LessonDTO dto)
     {
         var model = dto.ToLesson();
-        var res = await _lessonRepository.AddAsync(model);
-        return res.ToLessonDTO();
+        await _lessonRepository.AddAsync(model);
     }
 }

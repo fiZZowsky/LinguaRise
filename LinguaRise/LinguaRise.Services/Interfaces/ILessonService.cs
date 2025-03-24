@@ -6,6 +6,6 @@ namespace LinguaRise.Services.Interfaces
     {
         public Task<IEnumerable<LessonDTO>> GetLessonsAsync();
         public Task<LessonDTO> GetLessonAsync(int id);
-        public Task<LessonDTO> CreateLessonAsync(LessonDTO lesson);
+        public Task CreateLessonAsync(LessonDTO lesson);
     }
 }
