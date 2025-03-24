@@ -1,6 +1,0 @@
-@LinguaRise.Server_HostAddress = http://localhost:5283
-
-GET {{LinguaRise.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
