@@ -30,9 +30,11 @@ namespace LinguaRise.Api.Controllers.Lesson
         }
 
         [HttpPost]
-        public async Task CreateLessonAsync([FromBody] LessonDTO lesson)
+        public async Task<IActionResult> CreateLessonAsync([FromBody] LessonDTO lesson)
         {
             await _lessonService.CreateLessonAsync(lesson);
+
+            return Ok();
         }
     }
 }

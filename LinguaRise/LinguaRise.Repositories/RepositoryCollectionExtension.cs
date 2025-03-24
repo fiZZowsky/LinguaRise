@@ -8,5 +8,7 @@ public static class RepositoryCollectionExtension
     public static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<ILanguageRepository, LanguageRepository>();
+        services.AddScoped<ILessonRepository, LessonRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 }
