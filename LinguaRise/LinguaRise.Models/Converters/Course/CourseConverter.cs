@@ -16,7 +16,7 @@ public static class CourseConverter
             UserId = course.UserId,
             UserEmail = course.User?.Email,
             UserName = course.User?.Name,
-            Lessons = course.Lessons
+            Lessons = course.Lessons?.Select(lesson => lesson.ToLessonDTO()).ToList() ?? new List<LessonDTO>()
         };
     }
 
@@ -27,7 +27,7 @@ public static class CourseConverter
             Id = courseDTO.Id,
             LanguageId = courseDTO.LanguageId,
             UserId = courseDTO.UserId,
-            Lessons = courseDTO.Lessons
+            Lessons = courseDTO.Lessons?.Select(lessonDTO => lessonDTO.ToLesson()).ToList() ?? new List<Lesson>()
         };
     }
 }
