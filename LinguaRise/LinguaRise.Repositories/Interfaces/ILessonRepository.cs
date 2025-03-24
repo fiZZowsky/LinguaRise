@@ -5,4 +5,5 @@ namespace LinguaRise.Repositories.Interfaces;
 
 public interface ILessonRepository : IRepository<Lesson, int>
 {
+    Task<IEnumerable<Lesson>> GetAllWithDetailsAsync();
 }

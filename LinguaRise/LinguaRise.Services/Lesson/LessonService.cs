@@ -2,6 +2,7 @@
 using LinguaRise.Repositories.Interfaces;
 using LinguaRise.Services.Interfaces;
 using LinguaRise.Models.Converters;
+using LinguaRise.Common.Exceptions;
 
 namespace LinguaRise.Services;
 
@@ -14,24 +15,34 @@ public class LessonService : ILessonService
         _lessonRepository = lessonRepository;
     }
 
-    // TODO: Aktualnie brak mapowań dla Course, User, Language, LearnedWords
     public async Task<IEnumerable<LessonDTO>> GetLessonsAsync()
     {
-        var lessons = await _lessonRepository.GetAllAsync();
+        var lessons = await _lessonRepository.GetAllWithDetailsAsync();
         return lessons.Select(lesson => lesson.ToLessonDTO());
     }
 
-    // TODO: Brak zabezpieczeń dla braku lekcji
     public async Task<LessonDTO> GetLessonAsync(int id)
     {
         var lesson = await _lessonRepository.GetAsync(id);
+
+        if(lesson == null)
+        {
+            throw new NotFoundException($"Lesson with ID {id} not found.", 404);
+        }
+
         return lesson.ToLessonDTO();
     }
 
-    // TODO: Brak zabezpieczeń dla błędu tworzenia nowej lekcji
     public async Task CreateLessonAsync(LessonDTO dto)
     {
-        var model = dto.ToLesson();
-        await _lessonRepository.AddAsync(model);
+        try
+        {
+            var model = dto.ToLesson();
+            await _lessonRepository.AddAsync(model);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("An error occurred while creating the lesson.", ex);
+        }
     }
 }

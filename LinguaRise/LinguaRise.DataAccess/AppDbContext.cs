@@ -32,6 +32,20 @@ public class AppDbContext : DbContext
             .HasForeignKey(l => l.CourseId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Relacja: Kurs N:1 Użytkownik
+        modelBuilder.Entity<Course>()
+            .HasOne(c => c.User)
+            .WithMany(u => u.Courses)
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Relacja: Kurs N:1 Język
+        modelBuilder.Entity<Course>()
+            .HasOne(c => c.Language)
+            .WithMany()
+            .HasForeignKey(c => c.LanguageId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // Relacja: Język 1:N Kategorii słownictwa
         modelBuilder.Entity<VocabularyCategory>()
             .HasOne<Language>()
@@ -53,7 +67,7 @@ public class AppDbContext : DbContext
 
         // Relacja: Kategoria 1:N Słowa
         modelBuilder.Entity<Word>()
-            .HasOne(w => w.Category)
+            .HasOne(w => w.VocabularyCategory)
             .WithMany(c => c.Words)
             .HasForeignKey(w => w.VocabularyCategoryId)
             .OnDelete(DeleteBehavior.Cascade);
