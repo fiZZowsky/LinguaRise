@@ -6,7 +6,7 @@ namespace LinguaRise.Api.Controllers.User
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public partial class UserController : ControllerBase
     {
         private readonly IUserService _userService;
 

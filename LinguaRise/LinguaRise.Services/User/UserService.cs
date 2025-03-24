@@ -80,4 +80,11 @@ public class UserService : IUserService
             throw new InvalidOperationException("An error occurred while deleting the user.", ex);
         }
     }
+
+    public async Task<IEnumerable<CourseDTO>> GetUserCoursesAsync(int id)
+    {
+        var courses = await _userRepository.GetCoursesAsync(id);
+
+        return courses.Select(course => course.ToCourseDTO());
+    }
 }

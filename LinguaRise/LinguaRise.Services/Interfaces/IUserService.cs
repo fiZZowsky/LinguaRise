@@ -8,4 +8,6 @@ public interface IUserService
     public Task CreateUserAsync(UserDTO userDTO);
     public Task UpdateUserAsync(int id, UserDTO userDTO);
     public Task DeleteUserAsync(int id);
+
+    public Task<IEnumerable<CourseDTO>> GetUserCoursesAsync(int id);
 }

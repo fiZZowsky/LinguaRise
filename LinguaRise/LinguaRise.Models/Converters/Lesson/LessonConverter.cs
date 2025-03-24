@@ -1,5 +1,6 @@
 ﻿using LinguaRise.Models.DTOs;
 using LinguaRise.Models.Entities;
+using LinguaRise.Models.Enums;
 
 namespace LinguaRise.Models.Converters;
 
@@ -22,7 +23,7 @@ public static class LessonConverter
             {
                 Id = word.Id,
                 Name = word.Name,
-                Level = word.Level,
+                Level = Level.FromValue(word.Level),
                 LanguageId = word.LanguageId,
                 LanguageCode = word.Language?.Code,
                 VocabularyCategoryId = word.VocabularyCategory?.Id,
@@ -60,7 +61,7 @@ public static class LessonConverter
             {
                 Id = wordDTO.Id,
                 Name = wordDTO.Name,
-                Level = wordDTO.Level,
+                Level = Level.ToValue(wordDTO.Level),
                 LanguageId = wordDTO.LanguageId ?? 0,
                 VocabularyCategoryId = wordDTO.VocabularyCategoryId ?? 0,
                 VocabularyCategory = wordDTO.VocabularyCategoryId.HasValue ? new VocabularyCategory
