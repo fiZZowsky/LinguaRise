@@ -17,8 +17,23 @@ System obsługuje logowanie poprzez konto **lokalne** oraz **konto Microsoft**.
 ---
 
 ## Członkowie zespołu i podział zadań  
-👨‍💻 **Piotr Równicki** – Backend (.NET Core, Entity Framework), baza danych, integracja z Azure  
-👨‍💻 **Dawid Rudnicki** – Frontend (ReactJS), interfejs użytkownika, integracja z backendem  
+### 👨‍💻 **Piotr Równicki**
+- [x] Implementacja podstaw backendu  
+- [x] Projektowanie i zarządzanie bazą danych
+- [x] Autoryzacja i autentykacja użytkownika
+- [x] Rozwój funkcjonalności słuchania i powtarzania fraz  
+- [x] Implementacja ćwiczeń pisania ze słuchu
+
+### 👨‍💻 Dawid Rudnicki  
+- [x] Implementacja podstaw frontendu  
+- [x] Integracja frontendu z backendem  
+- [x] Rozwój funkcjonalności uzupełniania luk w zdaniach  
+- [x] Nauka słownictwa poprzez obrazki
+
+### 🤝 Zadania wspólne  
+- [x] Realizacja funkcjonalności swobodnej konwersacji z chatbotem  
+- [x] Implementacja mniejszych funkcji wspierających projekt
+- [x] Interfejs użytkownika
 
 ---
 
