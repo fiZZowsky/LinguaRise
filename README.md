@@ -11,8 +11,7 @@ System wspiera naukę języka poprzez różne metody, takie jak:
 - 🖼️ Nauka słownictwa poprzez obrazki  
 - 💬 Swobodna konwersacja z chatbotem dostosowaną do poziomu użytkownika
 
-Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest kontynuowanie nauki w dowolnym momencie.  
-System obsługuje logowanie poprzez konto **lokalne** oraz **konto Microsoft**.
+Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest kontynuowanie nauki w dowolnym momencie.
 
 ---
 
