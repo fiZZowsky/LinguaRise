@@ -53,6 +53,7 @@ Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest k
 ---
 
 ## Struktura bazy danych
+![Schemat bazy danych](Resources/database.png)
 
 ---
 
