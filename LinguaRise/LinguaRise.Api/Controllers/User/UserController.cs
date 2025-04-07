@@ -1,9 +1,11 @@
 ﻿using LinguaRise.Models.DTOs;
 using LinguaRise.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinguaRise.Api.Controllers.User
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public partial class UserController : ControllerBase
@@ -44,6 +46,13 @@ namespace LinguaRise.Api.Controllers.User
             await _userService.DeleteUserAsync(id);
 
             return Ok();
+        }
+
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            string email = "Test@email.com";
+            return Ok(new { email });
         }
     }
 }
