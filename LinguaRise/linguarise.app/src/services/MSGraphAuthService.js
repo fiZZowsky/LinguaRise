@@ -1,5 +1,4 @@
-import { msalInstance } from '../lib/msalInstance';
-import { loginRequest } from '../lib/authConfig';
+import { msalInstance, loginRequest } from '../lib/msalConfig';
 
 export const getAccessToken = async () => {
   const account = msalInstance.getActiveAccount();
@@ -10,5 +9,5 @@ export const getAccessToken = async () => {
     account
   });
 
-  return response.idToken;
+  return response.accessToken;
 };

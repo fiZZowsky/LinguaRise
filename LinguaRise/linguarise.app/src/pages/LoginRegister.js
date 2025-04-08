@@ -12,7 +12,8 @@ export default function LoginRegister() {
     try {
       const loginResponse = await instance.loginPopup(loginRequest);
       console.log("Zalogowano:", loginResponse.account);
-
+      instance.setActiveAccount(loginResponse.account);
+      
       const tokenResponse = await instance.acquireTokenSilent({
         ...loginRequest,
         account: loginResponse.account,

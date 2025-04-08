@@ -1,3 +1,5 @@
+import { PublicClientApplication } from "@azure/msal-browser";
+
 export const msalConfig = {
   auth: {
     clientId: "9a37fa92-f126-4c0c-87b6-c0dd6bda1038",
@@ -13,3 +15,5 @@ export const msalConfig = {
 export const loginRequest = {
   scopes: ["User.Read"],
 };
+
+export const msalInstance = new PublicClientApplication(msalConfig);
