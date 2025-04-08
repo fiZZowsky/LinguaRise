@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMsal } from "@azure/msal-react";
-import { loginRequest } from "../lib/authConfig";
+import { loginRequest } from "../lib/msalConfig";
 import '../assets/styles/LoginRegister.css';
 
 export default function LoginRegister() {
