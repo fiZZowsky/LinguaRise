@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../lib/msalConfig";
 import '../assets/styles/LoginRegister.css';
+import microsoftLogo from '../assets/images/microsoft-logo.png';
 
 export default function LoginRegister() {
   const { instance } = useMsal();
@@ -71,10 +72,10 @@ export default function LoginRegister() {
         </div>
         <button className="submit" type="submit">Log In</button>
 
-        <div className="divider">or</div>
+        <div className="divider">or Log in with</div>
 
-        <button className="submit" type="button" onClick={handleMicrosoftLogin}>
-          Log in with Microsoft
+        <button className="microsoft-button" type="button" onClick={handleMicrosoftLogin}>
+          <img src={microsoftLogo} alt="Microsoft logo" className="microsoft-logo" />
         </button>
 
         <div className="signup-link">Don't have an account? <a href="#">Sign up</a></div>
