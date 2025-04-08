@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { LoadingProvider } from './context/LoadingContext';
 import { MsalProvider } from "@azure/msal-react";
 import { msalInstance } from './lib/msalConfig';
+import { AuthProvider } from './context/AuthContext';
 
 msalInstance.initialize().then(() => {
   const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -15,7 +16,9 @@ msalInstance.initialize().then(() => {
         <BrowserRouter>
           <MsalProvider instance={msalInstance}>
             <LoadingProvider>
-              <App />
+              <AuthProvider>
+                <App />
+              </AuthProvider>
             </LoadingProvider>
           </MsalProvider>
         </BrowserRouter>
