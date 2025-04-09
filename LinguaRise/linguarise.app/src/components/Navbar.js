@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import "../assets/styles/Navbar.css";
 
 export default function Navbar() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -27,8 +27,8 @@ export default function Navbar() {
             Wyloguj
           </button>
         ) : (
-          <button className="login-btn">
-            <Link to="/login-register">Login/Register</Link>
+          <button className="login-btn" onClick={() => navigate("/login-register")}>
+            Login/Register
           </button>
         )}
       </div>

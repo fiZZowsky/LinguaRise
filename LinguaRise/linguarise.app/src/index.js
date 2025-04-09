@@ -6,7 +6,7 @@ import reportWebVitals from './utils/reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { LoadingProvider } from './context/LoadingContext';
 import { MsalProvider } from "@azure/msal-react";
-import { msalInstance } from './lib/msalConfig';
+import { msalInstance } from './lib/MsalConfig';
 import { AuthProvider } from './context/AuthContext';
 
 msalInstance.initialize().then(() => {
