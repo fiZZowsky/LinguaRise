@@ -6,69 +6,63 @@ import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const { instance, accounts } = useMsal();
+  const { instance } = useMsal();
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
+  // Sprawdzanie, czy użytkownik jest zalogowany na podstawie tokenu w localStorage
   useEffect(() => {
-    // Sprawdzamy, czy logowanie zostało zakończone (w przypadku przekierowania)
-    instance.handleRedirectPromise().then((response) => {
-      if (response) {
-        console.log("Logowanie zakończone:", response);
-        const account = response.account;
-        instance.setActiveAccount(account);
+    const checkAuthStatus = async () => {
+      const account = instance.getActiveAccount();
+
+      if (!account) {
+        const storedToken = localStorage.getItem("msalToken");
+        if (storedToken) {
+          try {
+            // Próba ponownego ustawienia aktywnego konta
+            const tokenResponse = await instance.acquireTokenSilent({
+              ...loginRequest,
+              account: account,
+            });
+
+            if (tokenResponse) {
+              setIsAuthenticated(true);
+              setUser(account);
+            }
+          } catch (error) {
+            console.error("Błąd podczas autoryzacji:", error);
+          }
+        }
+      } else {
         setIsAuthenticated(true);
         setUser(account);
-        navigate("/"); // lub jakąkolwiek stronę, na którą chcesz przekierować po logowaniu
       }
-    }).catch((error) => {
-      console.error("Błąd podczas obsługi przekierowania:", error);
-    });
-  }, [instance, navigate]);
+    };
+
+    checkAuthStatus();
+  }, [instance]);
 
   const login = async () => {
+    const activeAccount = instance.getActiveAccount();
+    if (activeAccount) {
+      console.log("✅ Użytkownik już zalogowany:", activeAccount);
+      return;
+    }
+
     try {
-      await instance.loginRedirect(loginRequest); // Zainicjuj proces logowania
+      await instance.loginRedirect(loginRequest);
     } catch (error) {
-      console.error("Błąd logowania:", error);
+      console.error("❌ Błąd logowania:", error);
     }
   };
 
   const logout = () => {
     instance.logoutRedirect({ postLogoutRedirectUri: "/" });
-    console.log("❌ Wylogowano"); // Informacja o wylogowaniu
+    console.log("❌ Wylogowano");
+    setIsAuthenticated(false);
+    setUser(null);
   };
-
-  const fetchProfile = async () => {
-    const account = instance.getActiveAccount();
-    if (!account) return;
-
-    try {
-      const tokenResponse = await instance.acquireTokenSilent({
-        ...loginRequest,
-        account,
-      });
-
-      const res = await fetch("https://localhost:7049/api/user/profile", {
-        headers: {
-          Authorization: `Bearer ${tokenResponse.accessToken}`,
-        },
-      });
-
-      const data = await res.json();
-      setUser(data);
-      setIsAuthenticated(true);
-      console.log("✅ Zalogowano jako:", data);
-      navigate("/"); // przekierowanie po zalogowaniu
-    } catch (err) {
-      console.error("❌ Błąd pobierania profilu:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchProfile(); // Pobranie profilu po zalogowaniu
-  }, [accounts]);
 
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>

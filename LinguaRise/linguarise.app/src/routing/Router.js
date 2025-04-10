@@ -6,7 +6,7 @@ import About from '../pages/About';
 import FAQ from '../pages/FAQ';
 import LoginRegister from '../pages/LoginRegister';
 import Profile from '../pages/Profile';
-import { PrivateRoute } from './PrivateRoute'; // Zaimportuj PrivateRoute
+import { PrivateRoute } from './PrivateRoute';
 
 export default function AppRoutes() {
   return (

@@ -12,26 +12,25 @@ export const msalConfig = {
     cacheLocation: "localStorage",
     storeAuthStateInCookie: false,
   },
-  system: {
-    loggerOptions: {
-      loggerCallback: (level, message, piiLoggingEnabled) => {
-        if (level === LogLevel.Error) {
-          console.error(message);
-        } else if (level === LogLevel.Warning) {
-          console.warn(message);
-        } else {
-          console.log(message);
-        }
-      },
-      LogLevel: LogLevel.Verbose,
-      piiLoggingEnabled: false,
-    },
-  }
+  // system: {
+  //   loggerOptions: {
+  //     loggerCallback: (level, message, piiLoggingEnabled) => {
+  //       if (level === LogLevel.Error) {
+  //         console.error(message);
+  //       } else if (level === LogLevel.Warning) {
+  //         console.warn(message);
+  //       } else {
+  //         console.log(message);
+  //       }
+  //     },
+  //     LogLevel: LogLevel.Verbose,
+  //     piiLoggingEnabled: false,
+  //   },
+  // }
 };
 
 export const loginRequest = {
-  scopes: ['User.Access'],
+  scopes: ["openid", "profile", "User.Read"],
 };
-
 
 export const msalInstance = new PublicClientApplication(msalConfig);

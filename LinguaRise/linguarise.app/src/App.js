@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import './assets/styles/App.css';
 import Navbar from './components/Navbar';
-import AppRoutes from './lib/Router';
+import AppRoutes from './routing/Router';
 import { useLoading } from './context/LoadingContext';
 import Loader from './components/Loader';
 
