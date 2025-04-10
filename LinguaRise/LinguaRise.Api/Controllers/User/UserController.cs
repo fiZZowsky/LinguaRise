@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LinguaRise.Api.Controllers.User
 {
-    [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/user")]
+    [Authorize]
     public partial class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -49,6 +49,7 @@ namespace LinguaRise.Api.Controllers.User
         }
 
         [HttpGet("profile")]
+        [Authorize(Policy = "API.Read")]
         public async Task<IActionResult> GetProfile()
         {
             string email = "Test@email.com";

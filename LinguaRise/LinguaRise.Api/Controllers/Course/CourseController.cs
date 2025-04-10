@@ -1,11 +1,14 @@
-﻿using LinguaRise.Models.DTOs;
+﻿using LinguaRise.Common.Exceptions;
+using LinguaRise.Models.DTOs;
 using LinguaRise.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinguaRise.Api.Controllers.Course
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/course")]
+    [Authorize]
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
@@ -16,10 +19,17 @@ namespace LinguaRise.Api.Controllers.Course
         }
 
         [HttpGet("{id}")]
-        public async Task<CourseDTO> GetCourseAsync(int id)
+        public async Task<ActionResult<CourseDTO>> GetCourseAsync(int id)
         {
-            var res = await _courseService.GetCourseAsync(id);
-            return res;
+            try
+            {
+                var res = await _courseService.GetCourseAsync(id);
+                return Ok(res);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]

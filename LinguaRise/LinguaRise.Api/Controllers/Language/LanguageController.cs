@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LinguaRise.Api.Controllers.Language;
 
-[Route("api/[controller]")]
+[Route("api/language")]
 [ApiController]
 public class LanguageController : ControllerBase
 {
