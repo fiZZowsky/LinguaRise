@@ -12,7 +12,11 @@
     align-items: center;
     gap: 8px;
   }
-  
+  .logo:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease-in;
+  }
+
   .logo-img {
     height: 40px;
   }
@@ -24,6 +28,7 @@
   }
   
   .nav-links {
+    margin-left: -160px !important;
     display: flex;
     list-style: none;
     gap: 20px;
@@ -32,12 +37,22 @@
   .nav-links a {
     text-decoration: none;
     color: black;
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 500;
   }
   
   .nav-links a:hover {
+    text-decoration: underline;
     color: #008080;
+    transform: scale(1.08);
+    transition: 0.15s ease-in;
+  }
+
+  .nav-link-active {
+    font-weight: bold !important;
+    text-decoration: underline;
+    color: #008080 !important;
+    font-size: 1.25rem !important;
   }
   
   .nav-right {
@@ -50,8 +65,13 @@
     border: none;
     padding: 10px 20px;
     border-radius: 20px;
+    letter-spacing: 0.05rem;
     cursor: pointer;
     transition: 0.3s;
+  }
+  .login-btn:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease-in;
   }
   
   .login-btn a {
