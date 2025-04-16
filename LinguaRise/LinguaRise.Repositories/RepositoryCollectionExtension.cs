@@ -11,5 +11,6 @@ public static class RepositoryCollectionExtension
         services.AddScoped<ILessonRepository, LessonRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<IWordRepository, WordRepository>();
     }
 }

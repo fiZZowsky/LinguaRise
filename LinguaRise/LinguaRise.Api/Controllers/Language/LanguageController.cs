@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LinguaRise.Api.Controllers.Language;
 
-[Route("api/[controller]")]
+[Route("api/language")]
 [ApiController]
 public class LanguageController : ControllerBase
 {
@@ -27,5 +27,13 @@ public class LanguageController : ControllerBase
     {
         var res = await _languageService.GetLanguageAsync(id);
         return res;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateLanguageAsync([FromBody] LanguageDTO languageDTO)
+    {
+        await _languageService.CreateLanguageAsync(languageDTO);
+
+        return Ok();
     }
 }

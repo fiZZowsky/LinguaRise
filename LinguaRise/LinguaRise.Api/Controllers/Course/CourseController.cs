@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LinguaRise.Api.Controllers.Course
 {
-    [Route("api/[controller]")]
+    [Route("api/course")]
     [ApiController]
     public class CourseController : ControllerBase
     {

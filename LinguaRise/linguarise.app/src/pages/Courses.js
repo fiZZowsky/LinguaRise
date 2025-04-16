@@ -2,19 +2,18 @@ import React from 'react';
 import { useCourses } from '../hooks/useCourses';
 
 const Courses = () => {
-  const { courses, error } = useCourses();
+  const userId = "1";
+  const { courses, error } = useCourses(userId);
 
-  if (error) return <p>Błąd: {error}</p>;
+  if (error) return <div>Błąd: {error}</div>;
+  if (!courses.length) return <div>Brak kursów</div>;
 
   return (
-    <div>
-      <h2>Courses</h2>
-      <ul>
-        {courses.map(course => (
-          <li key={course.id}>{course.name}</li>
-        ))}
-      </ul>
-    </div>
+    <ul>
+      {courses.map(course => (
+        <li key={course.id}>{course.languageName}</li>
+      ))}
+    </ul>
   );
 };
 

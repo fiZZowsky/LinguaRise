@@ -23,7 +23,7 @@ const request = async (method, endpoint, data = null, isJson = true) => {
     throw new Error(error || 'Wystąpił błąd');
   }
 
-  return response.status !== 204 ? response.json() : null;
+  return response.status !== 204 ? await response.json() : null;
 };
 
 const api = {

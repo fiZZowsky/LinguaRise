@@ -3,6 +3,7 @@ using LinguaRise.Repositories.Interfaces;
 using LinguaRise.Services.Interfaces;
 using LinguaRise.Models.Converters;
 using LinguaRise.Common.Exceptions;
+using LinguaRise.Repositories;
 
 namespace LinguaRise.Services;
 
@@ -29,5 +30,19 @@ public class LanguageService : ILanguageService
             throw new NotFoundException($"Language with ID {id} not found.", 404);
 
         return language.ToLanguageDTO();
+    }
+
+    public async Task CreateLanguageAsync(LanguageDTO languageDTO)
+    {
+        try
+        {
+            var newLanguage = languageDTO.ToLanguage();
+
+            await _languageRepository.AddAsync(newLanguage);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("An error occurred while creating the language.", ex);
+        }
     }
 }
