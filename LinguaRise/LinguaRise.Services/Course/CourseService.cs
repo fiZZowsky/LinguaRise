@@ -31,6 +31,19 @@ public class CourseService : ICourseService
             _resourceRepository.GetTranslatedWordAsync(resourceKey, languageCode).Result);
     }
 
+    public async Task CreateCourseAsync(CourseDTO courseDto)
+    {
+        try
+        {
+            var course = courseDto.ToCourse();
+            await _courseRepository.UpdateAsync(course);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("An error occurred while creating the course.", ex);
+        }
+    }
+
     public async Task UpdateCourseAsync(int id, CourseDTO courseDTO)
     {
         try
@@ -54,7 +67,19 @@ public class CourseService : ICourseService
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException("An error occurred while updating the user.", ex);
+            throw new InvalidOperationException("An error occurred while updating the course.", ex);
+        }
+    }
+
+    public async Task DeleteCourseAsync(int id)
+    {
+        try
+        {
+            await _courseRepository.DeleteAsync(id);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("An error occurred while deleting the course.", ex);
         }
     }
 }

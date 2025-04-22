@@ -4,6 +4,8 @@ namespace LinguaRise.Services.Interfaces;
 
 public interface ICourseService
 {
-    public Task<CourseDTO> GetCourseAsync(int id);
-    public Task UpdateCourseAsync(int id, CourseDTO courseDTO);
+    Task<CourseDTO> GetCourseAsync(int id);
+    Task CreateCourseAsync(CourseDTO courseDTO);
+    Task UpdateCourseAsync(int id, CourseDTO courseDTO);
+    Task DeleteCourseAsync(int id);
 }
