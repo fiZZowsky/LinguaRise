@@ -10,10 +10,12 @@ namespace LinguaRise.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IResourceRepository _resourceRepository;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository userRepository, IResourceRepository resourceRepository)
     {
         _userRepository = userRepository;
+        _resourceRepository = resourceRepository;
     }
 
     public async Task<UserDTO> GetUserAsync(int id)
@@ -85,6 +87,12 @@ public class UserService : IUserService
     {
         var courses = await _userRepository.GetCoursesAsync(id);
 
-        return courses.Select(course => course.ToCourseDTO());
+        async Task<string?> TranslateAsync(string resourceKey, string languageCode)
+            => await _resourceRepository.GetTranslatedWordAsync(resourceKey, languageCode);
+
+        string? Translate(string resourceKey, string languageCode)
+            => TranslateAsync(resourceKey, languageCode).GetAwaiter().GetResult();
+
+        return courses.Select(course => course.ToCourseDTO(Translate));
     }
 }

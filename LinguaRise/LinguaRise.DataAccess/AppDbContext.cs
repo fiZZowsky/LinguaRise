@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<VocabularyCategory> VocabularyCategories { get; set; }
     public DbSet<Word> Words { get; set; }
+    public DbSet<Resource> Resources { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,18 +59,18 @@ public class AppDbContext : DbContext
             .HasMany(l => l.LearnedWords)
             .WithMany();
 
-        // Relacja: Język 1:N Słowa
-        modelBuilder.Entity<Word>()
-            .HasOne(w => w.Language)
-            .WithMany()
-            .HasForeignKey(w => w.LanguageId)
-            .OnDelete(DeleteBehavior.Restrict);
-
         // Relacja: Kategoria 1:N Słowa
         modelBuilder.Entity<Word>()
             .HasOne(w => w.VocabularyCategory)
             .WithMany(c => c.Words)
             .HasForeignKey(w => w.VocabularyCategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Relacja: Resource N:1 Language
+        modelBuilder.Entity<Resource>()
+            .HasOne(r => r.Language)
+            .WithMany()
+            .HasForeignKey(r => r.LanguageId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

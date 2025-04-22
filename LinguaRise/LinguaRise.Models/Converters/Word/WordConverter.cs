@@ -11,9 +11,6 @@ public static class WordConverter
         return new WordDTO
         {
             Id = word.Id,
-            Name = word.Name,
-            LanguageId = word.LanguageId,
-            LanguageCode = word.Language?.Code,
             Level = Level.FromValue(word.Level),
             VocabularyCategoryId = word.VocabularyCategoryId,
             VocabularyCategoryName = word.VocabularyCategory?.Name
@@ -25,8 +22,7 @@ public static class WordConverter
         return new Word
         {
             Id = wordDTO.Id,
-            Name = wordDTO.Name,
-            LanguageId = wordDTO.LanguageId,
+            ResourceKey = wordDTO.Name,
             VocabularyCategoryId = wordDTO.VocabularyCategoryId,
             Level = wordDTO.Level?.Value ?? string.Empty
         };

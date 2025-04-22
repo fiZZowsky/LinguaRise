@@ -6,8 +6,10 @@ namespace LinguaRise.Models.Converters;
 
 public static class LessonConverter
 {
-    public static LessonDTO ToLessonDTO(this Lesson lesson)
+    public static LessonDTO ToLessonDTO(this Lesson lesson, Func<string, string, string?> translateWord)
     {
+        var languageCode = lesson.Course?.Language?.Code;
+
         return new LessonDTO
         {
             Id = lesson.Id,
@@ -17,15 +19,15 @@ public static class LessonConverter
             UserEmail = lesson.Course?.User?.Email,
             UserName = lesson.Course?.User?.Name,
             LanguageId = lesson.Course?.LanguageId,
-            LanguageCode = lesson.Course?.Language?.Code,
+            LanguageCode = languageCode,
             LanguageName = lesson.Course?.Language?.Name,
             LearnedWords = lesson.LearnedWords?.Select(word => new WordDTO
             {
                 Id = word.Id,
-                Name = word.Name,
+                Name = languageCode != null ? translateWord(word.ResourceKey, languageCode) ?? word.ResourceKey : word.ResourceKey,
                 Level = Level.FromValue(word.Level),
-                LanguageId = word.LanguageId,
-                LanguageCode = word.Language?.Code,
+                LanguageId = lesson.Course?.LanguageId,
+                LanguageCode = languageCode,
                 VocabularyCategoryId = word.VocabularyCategory?.Id,
                 VocabularyCategoryName = word.VocabularyCategory?.Name
             }).ToList() ?? new List<WordDTO>()
@@ -60,9 +62,8 @@ public static class LessonConverter
             LearnedWords = lessonDTO.LearnedWords?.Select(wordDTO => new Word
             {
                 Id = wordDTO.Id,
-                Name = wordDTO.Name,
+                ResourceKey = wordDTO.Name,
                 Level = Level.ToValue(wordDTO.Level),
-                LanguageId = wordDTO.LanguageId ?? 0,
                 VocabularyCategoryId = wordDTO.VocabularyCategoryId ?? 0,
                 VocabularyCategory = wordDTO.VocabularyCategoryId.HasValue ? new VocabularyCategory
                 {

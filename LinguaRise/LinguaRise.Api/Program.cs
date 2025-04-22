@@ -1,3 +1,4 @@
+using LinguaRise.Api;
 using LinguaRise.DataAccess;
 using LinguaRise.Repositories;
 using LinguaRise.Services;
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDataAccess(builder.Configuration);
 
+builder.Services.AddAppConfig();
 builder.Services.AddRepositories();
 builder.Services.AddService();
 builder.Services.AddControllers();

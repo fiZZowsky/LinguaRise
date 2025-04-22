@@ -4,22 +4,36 @@ using LinguaRise.Services.Interfaces;
 using LinguaRise.Models.Converters;
 using LinguaRise.Common.Exceptions;
 using LinguaRise.Models.Entities;
+using LinguaRise.Common.Context.Interfaces;
 
 namespace LinguaRise.Services;
 
 public class WordService : IWordService
 {
     private readonly IWordRepository _wordRepository;
+    private readonly IUserSession _userSession;
+    private readonly IResourceRepository _resourceRepository;
 
-    public WordService(IWordRepository wordRepository)
+    public WordService(IWordRepository wordRepository, IUserSession userSession, IResourceRepository resourceRepository)
     {
         _wordRepository = wordRepository;
+        _userSession = userSession;
+        _resourceRepository = resourceRepository;
     }
 
     public async Task<IEnumerable<WordDTO>> GetWordsAsync()
     {
         var words = await _wordRepository.GetAllAsync();
-        return words.Select(word => word.ToWordDTO());
+
+        var wordDtoTasks = words.Select(async word =>
+        {
+            var name = await _resourceRepository.GetTranslatedWordAsync(word.ResourceKey, _userSession.LanguageCode);
+            var dto = word.ToWordDTO();
+            dto.Name = name ?? word.ResourceKey;
+            return dto;
+        });
+
+        return await Task.WhenAll(wordDtoTasks);
     }
 
     public async Task<WordDTO> GetWordAsync(int id)
@@ -33,7 +47,10 @@ public class WordService : IWordService
                 throw new NotFoundException($"Word with ID {id} not found.", 404);
             }
 
-            return word.ToWordDTO();
+            var name = await _resourceRepository.GetTranslatedWordAsync(word.ResourceKey, _userSession.LanguageCode);
+            var dto = word.ToWordDTO();
+            dto.Name = name ?? word.ResourceKey;
+            return dto;
         }
         catch (Exception ex)
         {
@@ -45,6 +62,11 @@ public class WordService : IWordService
     {
         try
         {
+            if (IsKeyValid(wordDTO.Name) == false)
+            {
+                throw new InvalidDataException("Invalid resource key name in column 'Name'.");
+            }
+
             var newWord = wordDTO.ToWord();
 
             await _wordRepository.AddAsync(newWord);
@@ -53,6 +75,11 @@ public class WordService : IWordService
         {
             throw new InvalidOperationException("An error occurred while creating the word.", ex);
         }
+    }
+
+    private bool IsKeyValid(string key)
+    {
+        return !string.IsNullOrWhiteSpace(key) && key.All(char.IsLetterOrDigit);
     }
 
     public async Task UpdateWordAsync(int id, WordDTO wordDTO)
@@ -66,11 +93,15 @@ public class WordService : IWordService
                 throw new NotFoundException($"Word with ID {id} not found.", 404);
             }
 
+            if (IsKeyValid(wordDTO.Name) == false)
+            {
+                throw new InvalidDataException("Invalid resource key name in column 'Name'.");
+            }
+
             var updatedWord = new Word
             {
                 Id = id,
-                Name = wordDTO.Name,
-                LanguageId = wordDTO.LanguageId,
+                ResourceKey = wordDTO.Name,
                 Level = wordDTO.Level?.Value ?? string.Empty,
                 VocabularyCategoryId = wordDTO.VocabularyCategoryId
             };

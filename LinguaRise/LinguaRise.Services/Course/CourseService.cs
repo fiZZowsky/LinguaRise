@@ -10,22 +10,25 @@ namespace LinguaRise.Services;
 public class CourseService : ICourseService
 {
     private readonly ICourseRepository _courseRepository;
+    private readonly IResourceRepository _resourceRepository;
 
-    public CourseService(ICourseRepository courseRepository)
+    public CourseService(ICourseRepository courseRepository, IResourceRepository resourceRepository)
     {
         _courseRepository = courseRepository;
+        _resourceRepository = resourceRepository;
     }
 
     public async Task<CourseDTO> GetCourseAsync(int id)
     {
         var course = await _courseRepository.GetAsync(id);
 
-        if(course == null)
+        if (course == null)
         {
             throw new NotFoundException($"Course with ID {id} not found.", 404);
         }
 
-        return course.ToCourseDTO();
+        return course.ToCourseDTO((resourceKey, languageCode) =>
+            _resourceRepository.GetTranslatedWordAsync(resourceKey, languageCode).Result);
     }
 
     public async Task UpdateCourseAsync(int id, CourseDTO courseDTO)

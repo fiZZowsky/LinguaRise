@@ -5,7 +5,7 @@ namespace LinguaRise.Models.Converters;
 
 public static class CourseConverter
 {
-    public static CourseDTO ToCourseDTO(this Course course)
+    public static CourseDTO ToCourseDTO(this Course course, Func<string, string, string?> translateWord)
     {
         return new CourseDTO
         {
@@ -16,7 +16,7 @@ public static class CourseConverter
             UserId = course.UserId,
             UserEmail = course.User?.Email,
             UserName = course.User?.Name,
-            Lessons = course.Lessons?.Select(lesson => lesson.ToLessonDTO()).ToList() ?? new List<LessonDTO>()
+            Lessons = course.Lessons?.Select(lesson => lesson.ToLessonDTO(translateWord)).ToList() ?? new List<LessonDTO>()
         };
     }
 

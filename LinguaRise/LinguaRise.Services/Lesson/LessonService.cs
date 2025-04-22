@@ -9,28 +9,41 @@ namespace LinguaRise.Services;
 public class LessonService : ILessonService
 {
     private readonly ILessonRepository _lessonRepository;
+    private readonly IResourceRepository _resourceRepository;
 
-    public LessonService(ILessonRepository lessonRepository)
+    public LessonService(ILessonRepository lessonRepository, IResourceRepository resourceRepository)
     {
         _lessonRepository = lessonRepository;
+        _resourceRepository = resourceRepository;
     }
 
     public async Task<IEnumerable<LessonDTO>> GetLessonsAsync()
     {
         var lessons = await _lessonRepository.GetAllWithDetailsAsync();
-        return lessons.Select(lesson => lesson.ToLessonDTO());
+        var result = new List<LessonDTO>();
+
+        foreach (var lesson in lessons)
+        {
+            var dto = lesson.ToLessonDTO((resourceKey, languageCode) =>
+            {
+                return _resourceRepository.GetTranslatedWordAsync(resourceKey, languageCode).Result;
+            });
+
+            result.Add(dto);
+        }
+
+        return result;
     }
 
     public async Task<LessonDTO> GetLessonAsync(int id)
     {
         var lesson = await _lessonRepository.GetAsync(id);
 
-        if(lesson == null)
-        {
+        if (lesson == null)
             throw new NotFoundException($"Lesson with ID {id} not found.", 404);
-        }
 
-        return lesson.ToLessonDTO();
+        return lesson.ToLessonDTO((resourceKey, languageCode) =>
+            _resourceRepository.GetTranslatedWordAsync(resourceKey, languageCode).Result);
     }
 
     public async Task CreateLessonAsync(LessonDTO dto)
