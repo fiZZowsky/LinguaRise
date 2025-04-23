@@ -22,6 +22,13 @@ public class LanguageController : ControllerBase
         return res;
     }
 
+    [HttpGet("with-flags")]
+    public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync()
+    {
+        var res = await _languageService.GetLanguagesWithFlagsAsync();
+        return res;
+    }
+
     [HttpGet("{id}")]
     public async Task<LanguageDTO> GetLanguageAsync(int id)
     {
@@ -29,20 +36,21 @@ public class LanguageController : ControllerBase
         return res;
     }
 
-    //[HttpPost]
-    //public async Task<IActionResult> CreateLanguageAsync([FromForm] IFormFile flag, [FromForm] string code, [FromForm] string name)
-    //{
-    //    byte[]? flagImage = null;
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> CreateLanguageAsync([FromForm] LanguageDTO languageDto, IFormFile? flagImage)
+    {
+        byte[]? imageBytes = null;
 
-    //    if (flag != null && flag.Length > 0)
-    //    {
-    //        using var ms = new MemoryStream();
-    //        await flag.CopyToAsync(ms);
-    //        flagImage = ms.ToArray();
-    //    }
+        if (flagImage != null && flagImage.Length > 0)
+        {
+            using var ms = new MemoryStream();
+            await flagImage.CopyToAsync(ms);
+            imageBytes = ms.ToArray();
+        }
 
-    //    await _languageService.CreateLanguageAsync(flagImage, code, name);
+        await _languageService.CreateLanguageAsync(languageDto, imageBytes);
 
-    //    return Ok();
-    //}
+        return Ok();
+    }
 }
