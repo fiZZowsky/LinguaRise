@@ -3,7 +3,7 @@ using LinguaRise.Repositories.Interfaces;
 using LinguaRise.Services.Interfaces;
 using LinguaRise.Models.Converters;
 using LinguaRise.Common.Exceptions;
-using LinguaRise.Repositories;
+using LinguaRise.Models.Entities;
 
 namespace LinguaRise.Services;
 
@@ -32,11 +32,16 @@ public class LanguageService : ILanguageService
         return language.ToLanguageDTO();
     }
 
-    public async Task CreateLanguageAsync(LanguageDTO languageDTO)
+    public async Task CreateLanguageAsync(byte[] flag, string code, string name)
     {
         try
         {
-            var newLanguage = languageDTO.ToLanguage();
+            var newLanguage = new Language
+            {
+                Code = code,
+                Name = name,
+                FlagImage = flag
+            };
 
             await _languageRepository.AddAsync(newLanguage);
         }

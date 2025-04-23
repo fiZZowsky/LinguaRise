@@ -10,6 +10,8 @@ public class Language
     public string Code { get; set; } = string.Empty;
     [Required]
     public string Name { get; set; } = string.Empty;
+    [Required]
+    public byte[]? FlagImage { get; set; }
 
     public ICollection<VocabularyCategory> Categories { get; set; } = new List<VocabularyCategory>();
 }

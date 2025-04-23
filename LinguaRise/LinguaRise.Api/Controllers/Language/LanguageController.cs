@@ -29,11 +29,20 @@ public class LanguageController : ControllerBase
         return res;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateLanguageAsync([FromBody] LanguageDTO languageDTO)
-    {
-        await _languageService.CreateLanguageAsync(languageDTO);
+    //[HttpPost]
+    //public async Task<IActionResult> CreateLanguageAsync([FromForm] IFormFile flag, [FromForm] string code, [FromForm] string name)
+    //{
+    //    byte[]? flagImage = null;
 
-        return Ok();
-    }
+    //    if (flag != null && flag.Length > 0)
+    //    {
+    //        using var ms = new MemoryStream();
+    //        await flag.CopyToAsync(ms);
+    //        flagImage = ms.ToArray();
+    //    }
+
+    //    await _languageService.CreateLanguageAsync(flagImage, code, name);
+
+    //    return Ok();
+    //}
 }

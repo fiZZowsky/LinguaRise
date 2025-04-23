@@ -11,7 +11,8 @@ public static class LanguageConverter
         {
             Id = lang.Id,
             Code = lang.Code,
-            Name = lang.Name
+            Name = lang.Name,
+            FlagImage = lang.FlagImage
         };
     }
 
@@ -21,7 +22,8 @@ public static class LanguageConverter
         {
             Id = dto.Id,
             Code = dto.Code,
-            Name = dto.Name
+            Name = dto.Name,
+            FlagImage = dto.FlagImage
         };
     }
 }

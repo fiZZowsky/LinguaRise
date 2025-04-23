@@ -6,5 +6,5 @@ public interface ILanguageService
 {
     public Task<IEnumerable<LanguageDTO>> GetLanguagesAsync();
     public Task<LanguageDTO> GetLanguageAsync(int id);
-    public Task CreateLanguageAsync(LanguageDTO languageDTO);
+    public Task CreateLanguageAsync(byte[] flag, string code, string name);
 }
