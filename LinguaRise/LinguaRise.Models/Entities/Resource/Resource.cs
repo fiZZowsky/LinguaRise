@@ -13,6 +13,8 @@ public class Resource
     public string Name { get; set; } = string.Empty;
     [Required]
     public int LanguageId {get; set; }
+    [Required]
+    public string Type { get; set; } = string.Empty;
 
     public Language? Language { get; set; }
 }

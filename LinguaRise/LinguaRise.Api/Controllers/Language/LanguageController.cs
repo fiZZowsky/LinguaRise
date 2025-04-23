@@ -53,4 +53,22 @@ public class LanguageController : ControllerBase
 
         return Ok();
     }
+
+    [HttpPut("{id}")]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UpdateLanguageAsync(int id, [FromForm] LanguageDTO languageDto, IFormFile? flagImage)
+    {
+        byte[]? imageBytes = null;
+
+        if (flagImage != null && flagImage.Length > 0)
+        {
+            using var ms = new MemoryStream();
+            await flagImage.CopyToAsync(ms);
+            imageBytes = ms.ToArray();
+        }
+
+        await _languageService.UpdateLanguageAsync(id, languageDto, imageBytes);
+
+        return Ok();
+    }
 }

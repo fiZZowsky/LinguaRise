@@ -8,4 +8,5 @@ public class ResourceDTO
     public int LanguageId { get; set; }
     public string? LanguageCode { get; set; }
     public string? LanguageName { get; set; }
+    public string Type { get; set; }
 }

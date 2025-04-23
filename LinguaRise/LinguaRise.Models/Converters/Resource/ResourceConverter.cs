@@ -14,7 +14,8 @@ public static class ResourceConverter
             Name = resource.Name,
             LanguageId = resource.LanguageId,
             LanguageCode = resource.Language?.Code,
-            LanguageName = resource.Language?.Name
+            LanguageName = resource.Language?.Name,
+            Type = resource.Type
         };
     }
 
@@ -25,7 +26,8 @@ public static class ResourceConverter
             Id = resourceDTO.Id,
             Key = resourceDTO.Key,
             Name = resourceDTO.Name,
-            LanguageId = resourceDTO.LanguageId
+            LanguageId = resourceDTO.LanguageId,
+            Type = resourceDTO.Type
         };
     }
 }
