@@ -1,0 +1,60 @@
+.custom-select {
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid #17a2b8;
+    border-radius: 8px;
+    width: 180px;
+    cursor: pointer;
+    user-select: none;
+    color: #17a2b8;
+    font-weight: 500;
+  }
+  
+  .selected {
+    padding: 10px 12px;
+    font-size: 1rem;
+    color: #17a2b8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+  }
+  
+  .arrow {
+    fill: #17a2b8;
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+  }
+  
+  .options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #17a2b8;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 999;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .option {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    color: #17a2b8;
+    transition: background-color 0.2s;
+    background-color: white;
+  }
+  
+  .option:hover {
+    background-color: #e6f7fa;
+  }
+  
+  .option.active {
+    background-color: #d0f0f5;
+    font-weight: bold;
+  }
+  

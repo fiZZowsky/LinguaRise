@@ -83,6 +83,21 @@
     background-color: #138496;
   }
   
+  .language-select {
+    margin-right: 20px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: white;
+  }
+  
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
   @media (max-width: 768px) {
     .nav {
       flex-direction: column;
