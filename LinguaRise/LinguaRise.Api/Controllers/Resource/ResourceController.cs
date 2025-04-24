@@ -16,9 +16,9 @@ namespace LinguaRise.Api.Controllers.Resource
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ResourceDTO>> GetResourcesAsync()
+        public async Task<IEnumerable<ResourceDTO>> GetResourcesAsync([FromQuery] ResourceQuery query)
         {
-            var resources = await _resourceService.GetResourcesAsync();
+            var resources = await _resourceService.GetResourcesAsync(query);
             return resources;
         }
 
