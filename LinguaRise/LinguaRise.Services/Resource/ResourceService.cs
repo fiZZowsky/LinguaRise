@@ -2,7 +2,6 @@
 using LinguaRise.Models.Converters;
 using LinguaRise.Models.DTOs;
 using LinguaRise.Models.Entities;
-using LinguaRise.Repositories;
 using LinguaRise.Repositories.Interfaces;
 using LinguaRise.Services.Interfaces;
 
@@ -19,7 +18,7 @@ public class ResourceService : IResourceService
 
     public async Task<IEnumerable<ResourceDTO>> GetResourcesAsync(ResourceQuery query)
     {
-        var resources = await _resourceRepository.GetAllAsync();
+        var result = await _resourceRepository.QueryByObjectAsync<Resource>(query);
         return resources.Select(res => res.ToResourceDTO()).ToList();
     }
 
