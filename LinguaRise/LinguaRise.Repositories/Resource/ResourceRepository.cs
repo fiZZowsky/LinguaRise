@@ -26,18 +26,29 @@ public class ResourceRepository : BaseRepository<Resource, int>, IResourceReposi
 
     public async Task<IEnumerable<Resource>> GetByQueryAsync(ResourceQuery query)
     {
-        IQueryable<Resource> queryable = _dbSet.Include(r => r.Language);
-
-        if (!string.IsNullOrWhiteSpace(query.LanguageCode))
+        if (string.IsNullOrWhiteSpace(query.Type) && string.IsNullOrWhiteSpace(query.LanguageCode))
         {
-            queryable = queryable.Where(r => r.Language != null && r.Language.Code == query.LanguageCode);
+            return await _dbSet.Include(r => r.Language).ToListAsync();
         }
 
-        if (!string.IsNullOrWhiteSpace(query.Type))
+        var resources = await _dbSet
+            .Include(r => r.Language)
+            .Where(r => r.Type == query.Type)
+            .ToListAsync();
+
+        if (string.IsNullOrWhiteSpace(query.LanguageCode))
         {
-            queryable = queryable.Where(r => r.Type.Contains(query.Type));
+            return resources;
         }
 
-        return await queryable.ToListAsync();
+        var groupedByKey = resources
+            .GroupBy(r => r.Key)
+            .Select(g =>
+                g.FirstOrDefault(r => r.Language != null && r.Language.Code == query.LanguageCode)
+                ?? g.FirstOrDefault(r => r.Language != null && r.Language.Code == "EN")
+            )
+            .Where(r => r != null)!;
+
+        return groupedByKey;
     }
 }

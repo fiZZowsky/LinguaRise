@@ -58,15 +58,12 @@ public class ResourceService : IResourceService
                 throw new NotFoundException($"Resource with ID {resourceId} not found.", 404);
             }
 
-            var updatedResource = new Resource
-            {
-                Id = resourceId,
-                Key = resourceDto.Key,
-                Name = resourceDto.Name,
-                LanguageId = resourceDto.LanguageId
-            };
+            resource.Key = resourceDto.Key;
+            resource.Name = resourceDto.Name;
+            resource.LanguageId = resourceDto.LanguageId;
+            resource.Type = resourceDto.Type;
 
-            await _resourceRepository.UpdateAsync(updatedResource);
+            await _resourceRepository.UpdateAsync(resource);
         }
         catch (Exception ex)
         {
