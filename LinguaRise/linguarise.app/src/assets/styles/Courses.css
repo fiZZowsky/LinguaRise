@@ -1,11 +1,36 @@
-.language-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+.courses-container {
+    display: flex;
+    height: 100%;
     padding: 20px;
-}
-
-.language-card {
+  }
+  
+  .courses-section {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  
+  .new-courses {
+    padding-right: 20px;
+  }
+  
+  .user-courses {
+    padding-left: 20px;
+  }
+  
+  .divider {
+    width: 2px;
+    background-color: #ccc;
+    margin: 0 10px;
+  }
+  
+  .language-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  
+  .language-card {
     text-align: center;
     border: 1px solid #ccc;
     padding: 12px;
@@ -13,23 +38,21 @@
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: transform 0.3s ease;
-}
-
-.language-card:hover {
-    transform: scale(1.1);
-}
-
-.language-flag {
-    width: 200px;
-    height: 200px;
+  }
+  
+  .language-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .language-flag {
+    width: 100px;
+    height: 100px;
     object-fit: contain;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 100%;
-    max-height: 100%;
-}
-
-.language-name {
+    margin: 0 auto 10px;
+  }
+  
+  .language-name {
     font-weight: bold;
-}
+  }
+  

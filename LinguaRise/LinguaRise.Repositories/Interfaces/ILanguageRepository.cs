@@ -5,4 +5,5 @@ namespace LinguaRise.Repositories.Interfaces;
 
 public interface ILanguageRepository : IRepository<Language, int>
 {
+    Task<IEnumerable<Language>> GetUserLanguages(int userId);
 }

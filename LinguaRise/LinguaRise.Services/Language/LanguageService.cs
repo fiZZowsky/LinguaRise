@@ -50,6 +50,20 @@ public class LanguageService : ILanguageService
         return language.ToLanguageDTO();
     }
 
+    public async Task<IEnumerable<LanguageWithFlagDTO>> GetUserLanguagesWithFlagsAsync(int userId)
+    {
+        var languages = await _languageRepository.GetUserLanguages(userId);
+        var result = new List<LanguageWithFlagDTO>();
+
+        foreach (var lng in languages)
+        {
+            var translatedName = await _resourceRepository.GetTranslatedWordAsync(lng.Name, _context.LanguageCode);
+            result.Add(lng.ToLanguageWithFlagDTO(translatedName));
+        }
+
+        return result;
+    }
+
     public async Task CreateLanguageAsync(LanguageDTO languageDto, byte[] flagImage)
     {
         try

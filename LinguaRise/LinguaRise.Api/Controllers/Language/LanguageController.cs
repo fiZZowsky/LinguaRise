@@ -36,6 +36,13 @@ public class LanguageController : ControllerBase
         return res;
     }
 
+    [HttpGet("user/{id}")]
+    public async Task<IEnumerable<LanguageWithFlagDTO>> GetUserLanguagesWithFlagsAsync(int id)
+    {
+        var res = await _languageService.GetUserLanguagesWithFlagsAsync(id);
+        return res;
+    }
+
     [HttpPost]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateLanguageAsync([FromForm] LanguageDTO languageDto, IFormFile? flagImage)
