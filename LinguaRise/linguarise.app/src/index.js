@@ -5,16 +5,19 @@ import App from './App';
 import reportWebVitals from './utils/reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { LoadingProvider } from './context/LoadingContext';
+import { LanguageProvider } from './context/LanguageContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <LoadingProvider>
-        <App />
+        <LanguageProvider>
+          <App />
+        </LanguageProvider>
       </LoadingProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 reportWebVitals();

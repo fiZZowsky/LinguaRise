@@ -1,7 +1,5 @@
 ﻿using LinguaRise.Models.DTOs;
 using LinguaRise.Models.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 
 namespace LinguaRise.Models.Converters;
 
@@ -27,13 +25,13 @@ public static class LanguageConverter
         };
     }
 
-    public static LanguageWithFlagDTO ToLanguageWithFlagDTO(this Language lang)
+    public static LanguageWithFlagDTO ToLanguageWithFlagDTO(this Language lang, string? translatedName)
     {
         return new LanguageWithFlagDTO
         {
             Id = lang.Id,
             Code = lang.Code,
-            Name = lang.Name,
+            Name = translatedName ?? lang.Name,
             FlagImage = lang.FlagImage != null ? Convert.ToBase64String(lang.FlagImage) : null
         };
     }

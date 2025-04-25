@@ -5,29 +5,26 @@ using LinguaRise.Common.Context.Interfaces;
 namespace LinguaRise.Api.Middlewares;
 public class RequestLocalizationMiddleware
 {
-    private readonly IUserContext _userContext;
+    private readonly RequestDelegate _next;
 
-    public RequestLocalizationMiddleware(IUserContext userContext)
+    public RequestLocalizationMiddleware(RequestDelegate next)
     {
-        _userContext = userContext;
+        _next = next;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context)
     {
-        var language = context.Request.Headers["Accept-Language"].FirstOrDefault() ?? "en";
+        var userContext = context.RequestServices.GetRequiredService<IUserContext>();
+
+        var language = context.Request.Headers["Accept-Language"].FirstOrDefault() ?? "EN";
 
         var session = new UserSession
         {
-            LanguageCode = GetLanguageCode()
+            LanguageCode = language.ToUpper()
         };
 
-        _userContext.Setup(session);
+        userContext.Setup(session);
 
-        await next(context);
-    }
-
-    private string GetLanguageCode()
-    {
-        return CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToUpper();
+        await _next(context);
     }
 }

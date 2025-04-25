@@ -11,7 +11,6 @@ namespace LinguaRise.Api
         {
             services.AddScoped<IUserSession, UserSession>();
             services.AddScoped<IUserContext, UserContext>();
-            services.AddScoped<RequestLocalizationMiddleware>();
 
             return services;
         }

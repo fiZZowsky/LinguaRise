@@ -1,4 +1,5 @@
 using LinguaRise.Api;
+using LinguaRise.Api.Middlewares;
 using LinguaRise.DataAccess;
 using LinguaRise.Repositories;
 using LinguaRise.Services;
@@ -40,6 +41,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("AllowLocalhost3000");
+app.UseMiddleware<RequestLocalizationMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

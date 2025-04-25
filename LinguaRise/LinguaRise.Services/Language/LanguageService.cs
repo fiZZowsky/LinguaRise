@@ -3,17 +3,21 @@ using LinguaRise.Repositories.Interfaces;
 using LinguaRise.Services.Interfaces;
 using LinguaRise.Models.Converters;
 using LinguaRise.Common.Exceptions;
-using LinguaRise.Models.Entities;
+using LinguaRise.Common.Context.Interfaces;
 
 namespace LinguaRise.Services;
 
 public class LanguageService : ILanguageService
 {
     private readonly ILanguageRepository _languageRepository;
+    private readonly IResourceRepository _resourceRepository;
+    private readonly IUserContext _context;
 
-    public LanguageService(ILanguageRepository languageRepository)
+    public LanguageService(ILanguageRepository languageRepository, IResourceRepository resourceRepository, IUserContext context)
     {
         _languageRepository = languageRepository;
+        _resourceRepository = resourceRepository;
+        _context = context;
     }
 
     public async Task<IEnumerable<LanguageDTO>> GetLanguagesAsync()
@@ -25,7 +29,15 @@ public class LanguageService : ILanguageService
     public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync()
     {
         var languages = await _languageRepository.GetAllAsync();
-        return languages.Select(lng => lng.ToLanguageWithFlagDTO());
+        var result = new List<LanguageWithFlagDTO>();
+
+        foreach (var lng in languages)
+        {
+            var translatedName = await _resourceRepository.GetTranslatedWordAsync(lng.Name, _context.LanguageCode);
+            result.Add(lng.ToLanguageWithFlagDTO(translatedName));
+        }
+
+        return result;
     }
 
     public async Task<LanguageDTO> GetLanguageAsync(int id)

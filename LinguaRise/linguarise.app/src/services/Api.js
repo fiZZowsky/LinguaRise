@@ -1,8 +1,15 @@
+import { getCurrentLanguage } from "../context/LanguageContext";
+
 const BASE_URL = 'https://localhost:7049/api';
 
 const getHeaders = (isJson = true) => {
+  const selectedLang = getCurrentLanguage();
   const headers = {};
+
   if (isJson) headers['Content-Type'] = 'application/json';
+
+  headers["Accept-Language"] = selectedLang;
+
   return headers;
 };
 
