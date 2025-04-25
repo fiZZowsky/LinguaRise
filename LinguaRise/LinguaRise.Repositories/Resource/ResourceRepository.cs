@@ -17,4 +17,9 @@ public class ResourceRepository : BaseRepository<Resource, int>, IResourceReposi
             .Select(r => r.Name)
             .FirstOrDefaultAsync();
     }
+
+    protected override IQueryable<Resource> IncludeNavigationProperties(IQueryable<Resource> query)
+    {
+        return query.Include(r => r.Language);
+    }
 }

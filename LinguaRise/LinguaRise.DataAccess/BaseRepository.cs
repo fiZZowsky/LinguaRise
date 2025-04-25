@@ -56,13 +56,21 @@ public abstract class BaseRepository<T, TKey> : IRepository<T, TKey> where T : c
             predicate = predicate == null ? comparison : Expression.AndAlso(predicate, comparison);
         }
 
-        if (predicate == null)
-            return await _dbSet.ToListAsync();
+        IQueryable<T> query = _dbSet.AsQueryable();
+        query = IncludeNavigationProperties(query);
 
-        var lambda = Expression.Lambda<Func<T, bool>>(predicate, parameter);
-        return await _dbSet.Where(lambda).ToListAsync();
+        if (predicate != null)
+        {
+            var lambda = Expression.Lambda<Func<T, bool>>(predicate, parameter);
+            query = query.Where(lambda);
+        }
+
+        return await query.ToListAsync();
     }
-
+    protected virtual IQueryable<T> IncludeNavigationProperties(IQueryable<T> query)
+    {
+        return query;
+    }
     public async Task<T> GetAsync(TKey id) => await _dbSet.FindAsync(id);
     public async Task AddAsync(T entity)
     {

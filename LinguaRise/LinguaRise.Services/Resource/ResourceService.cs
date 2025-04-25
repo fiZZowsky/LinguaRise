@@ -18,8 +18,8 @@ public class ResourceService : IResourceService
 
     public async Task<IEnumerable<ResourceDTO>> GetResourcesAsync(ResourceQuery query)
     {
-        var result = await _resourceRepository.QueryByObjectAsync<Resource>(query);
-        return resources.Select(res => res.ToResourceDTO()).ToList();
+        var result = await _resourceRepository.QueryByObjectAsync(query);
+        return result.Select(res => res.ToResourceDTO()).ToList();
     }
 
     public async Task<ResourceDTO> GetResourceAsync(int resourceId)
