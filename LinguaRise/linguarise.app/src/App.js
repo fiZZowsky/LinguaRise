@@ -25,22 +25,20 @@ function App() {
   return (
     <>
       <Navbar />
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div className='container'>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/home' element={<Home />} />
-            <Route path='/courses' element={<Courses />} />
-            <Route path='/about' element={<About />} />
-            <Route path='/faq' element={<FAQ />} />
-            <Route path='/login-register' element={<LoginRegister />} />
-          </Routes>
-        </div>
-      )}
+      <div className='container'>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/courses' element={<Courses />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/faq' element={<FAQ />} />
+          <Route path='/login-register' element={<LoginRegister />} />
+        </Routes>
+      </div>
+      {isLoading && <Loader />}
     </>
   );
 }
+
 
 export default App;

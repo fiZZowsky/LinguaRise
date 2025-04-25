@@ -1,7 +1,9 @@
 import api from '../services/Api';
 import { useEffect, useState } from 'react';
+import { getCurrentLanguage } from "../context/LanguageContext";
 
 export const useLanguagesWithFlags = () => {
+  const selectedLang = getCurrentLanguage();
   const [languages, setLanguages] = useState([]);
   const [error, setError] = useState(null);
 
@@ -16,7 +18,7 @@ export const useLanguagesWithFlags = () => {
     };
 
     fetchLanguages();
-  }, []);
+  }, [selectedLang]);
 
   return { languages, error };
 };
