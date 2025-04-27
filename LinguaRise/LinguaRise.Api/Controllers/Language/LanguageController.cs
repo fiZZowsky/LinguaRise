@@ -22,10 +22,10 @@ public class LanguageController : ControllerBase
         return res;
     }
 
-    [HttpGet("with-flags")]
-    public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync()
+    [HttpGet("with-flags/user/{id?}")]
+    public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync([FromRoute] int? id)
     {
-        var res = await _languageService.GetLanguagesWithFlagsAsync();
+        var res = await _languageService.GetLanguagesWithFlagsAsync(id);
         return res;
     }
 

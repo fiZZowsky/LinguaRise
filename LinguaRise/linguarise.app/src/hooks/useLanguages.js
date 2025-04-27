@@ -6,11 +6,12 @@ export const useLanguagesWithFlags = () => {
   const selectedLang = getCurrentLanguage();
   const [languages, setLanguages] = useState([]);
   const [error, setError] = useState(null);
+  const userId = 1;
 
   useEffect(() => {
     const fetchLanguages = async () => {
       try {
-        const res = await api.get('language/with-flags');
+        const res = await api.get(`language/with-flags/user/${userId}`);
         setLanguages(res);
       } catch (err) {
         setError(err.message);

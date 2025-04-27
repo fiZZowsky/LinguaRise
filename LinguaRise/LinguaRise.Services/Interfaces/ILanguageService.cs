@@ -5,7 +5,7 @@ namespace LinguaRise.Services.Interfaces;
 public interface ILanguageService
 {
     Task<IEnumerable<LanguageDTO>> GetLanguagesAsync();
-    Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync();
+    Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync(int? userId);
     Task<LanguageDTO> GetLanguageAsync(int id);
     Task<IEnumerable<LanguageWithFlagDTO>> GetUserLanguagesWithFlagsAsync(int userId);
     Task CreateLanguageAsync(LanguageDTO languageDto, byte[] flagImage);

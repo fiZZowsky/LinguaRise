@@ -3,15 +3,18 @@ import '../assets/styles/Courses.css';
 import { useLanguagesWithFlags, useUserLanguagesWithFlags } from '../hooks/useLanguages';
 import { useTranslations } from "../hooks/useTranslations";
 import { useLanguage } from "../context/LanguageContext";
+import { useNavigate } from 'react-router-dom';
 
 const Courses = () => {
   const { language: selectedLang } = useLanguage();
-  const { languages, error } = useLanguagesWithFlags();
-  const { languages: userLanguages, error: userLanguagesError } = useUserLanguagesWithFlags();
+  const { languages } = useLanguagesWithFlags();
+  const { languages: userLanguages } = useUserLanguagesWithFlags();
   const translations = useTranslations(selectedLang, 'CoursesPage');
+  const navigate = useNavigate();
 
-  if (error) return <div>Error: {error}</div>;
-  if (userLanguagesError) return <div>Error: {userLanguagesError}</div>;
+  const handleLanguageSelect = (langCode) => {
+    navigate(`/courses/${langCode}/categories`);
+  };
 
   return (
     <div className="courses-container">
@@ -20,9 +23,9 @@ const Courses = () => {
         <div className="language-grid">
           {languages.map(lang => (
             <div
-              key={lang.id}
+              key={lang.code}
               className="language-card"
-              onClick={() => alert(`Choosed ${lang.name}`)}
+              onClick={() => handleLanguageSelect(lang.code)}
             >
               <img
                 src={`data:image/png;base64,${lang.flagImage}`}
@@ -45,7 +48,7 @@ const Courses = () => {
               <div
                 key={lang.id}
                 className="language-card"
-                onClick={() => alert(`Your course: ${lang.name}`)}
+                onClick={() => handleLanguageSelect(lang.id)}
               >
                 <img
                   src={`data:image/png;base64,${lang.flagImage}`}

@@ -4,6 +4,7 @@ using LinguaRise.Services.Interfaces;
 using LinguaRise.Models.Converters;
 using LinguaRise.Common.Exceptions;
 using LinguaRise.Common.Context.Interfaces;
+using LinguaRise.Models.Entities;
 
 namespace LinguaRise.Services;
 
@@ -26,9 +27,9 @@ public class LanguageService : ILanguageService
         return languages.Select(lng => lng.ToLanguageDTO());
     }
 
-    public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync()
+    public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync(int? userId)
     {
-        var languages = await _languageRepository.GetAllAsync();
+        var languages = await _languageRepository.GetLanguagesNotOwnedByUserAsync(userId);
         var result = new List<LanguageWithFlagDTO>();
 
         foreach (var lng in languages)
