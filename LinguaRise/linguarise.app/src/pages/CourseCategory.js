@@ -6,37 +6,43 @@ import writingFromHearing from '../assets/images/writing-by-ear.png';
 import writing from '../assets/images/filling-gaps.png';
 import casualConversation from '../assets/images/casual-conversation.png';
 import '../assets/styles/CourseCategory.css';
-
-const learningOptions = [
-  {
-    title: "Powtarzanie ze słuchu",
-    image: repeatingByEarImage,
-    description: "Słuchaj nagrań i powtarzaj, aby poprawić wymowę oraz rozumienie.",
-  },
-  {
-    title: "Pisanie ze słuchu",
-    image: writingFromHearing,
-    description: "Słuchaj i zapisuj usłyszane słowa, trenując ortografię i słuch fonematyczny.",
-  },
-  {
-    title: "Pisanie",
-    image: writing,
-    description: "Pisz samodzielnie zdania w języku, którego się uczysz.",
-  },
-  {
-    title: "Swobodna konwersacja",
-    image: casualConversation,
-    description: "Rozmawiaj swobodnie z chatbotem, aby ćwiczyć naturalne dialogi.",
-  },
-];
+import { useTranslations } from "../hooks/useTranslations";
+import { useLanguage } from "../context/LanguageContext";
 
 const CourseCategory = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const { langCode } = useParams();
+  const { language: selectedLang } = useLanguage();
+  const translations = useTranslations(selectedLang, 'CourseCategory');
+
+  const learningOptions = [
+    {
+      title: translations.ListeningRepetition || "Listening repetition",
+      image: repeatingByEarImage,
+      description: translations.ListenRecordingsAndRepeat || "Listen recordings and repeat to improve your pronunciation and comprehension.",
+    },
+    {
+      title: translations.WritingByEar || "Writing by ear",
+      image: writingFromHearing,
+      description: translations.ListenAndWriteDownTheWordsYouHear || "Listen and write down the words you hear, training your spelling and phonemic hearing.",
+    },
+    {
+      title: translations.Writing || "Writing",
+      image: writing,
+      description: translations.WriteWordsAndSentences || "Write your own words and sentences in the language you are learning.",
+    },
+    {
+      title: translations.CasualConversation || "Casual conversation",
+      image: casualConversation,
+      description: translations.SpeakFreely || "Speak freely with the chatbot to practice natural dialogues.",
+    },
+  ];
 
   return (
     <div className="course-category-container">
-      <h1 className="course-category-title">Wybierz w jaki sposób chcesz się uczyć</h1>
+      <h1 className="course-category-title">
+        {translations.ChooseLearningMethod || "Choose how you want to learn"}
+      </h1>
       <div className="learning-options-container">
         {learningOptions.map((option, index) => (
           <div
