@@ -1,4 +1,6 @@
 import { getCurrentLanguage } from "../context/LanguageContext";
+import { msalInstance } from "../lib/msalInstance";
+import { apiRequest } from "../lib/authConfig";
 
 const BASE_URL = 'https://localhost:7049/api';
 
@@ -19,10 +21,23 @@ const request = async (method, endpoint, data = null, isJson = true) => {
     headers: getHeaders(isJson),
   };
 
+  const accounts = msalInstance.getAllAccounts();
+  console.log("Accounts:", accounts);
+  if (accounts.length > 0) {
+    const resp = await msalInstance.acquireTokenSilent({
+     scopes: apiRequest.scopes,
+     account: accounts[0]
+    });
+    console.log("Access token:", resp.accessToken);
+   config.headers["Authorization"] = `Bearer ${resp.accessToken}`;
+  } else {
+    console.log("Brak zalogowanego konta, nie dodano tokena");
+  }
+
   if (data) {
     config.body = isJson ? JSON.stringify(data) : data;
   }
-
+  console.log("Final headers:", config.headers);
   const response = await fetch(`${BASE_URL}/${endpoint}`, config);
 
   if (!response.ok) {

@@ -19,7 +19,13 @@ export const msalConfig = {
     }
   };
   
-  export const loginRequest = {
-    scopes: ["User.Read"],
+  export const apiRequest = {
+    scopes: ["api://79765299-b3c3-42f4-998a-1ff6c326dd5a/access_as_logged_user"]
   };
   
+  export const loginRequest = {
+    scopes: [
+      "User.Read",
+      ...apiRequest.scopes
+    ]
+  };

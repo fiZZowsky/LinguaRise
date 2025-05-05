@@ -11,17 +11,15 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (account) {
-      instance.acquireTokenSilent({
-        ...loginRequest,
-        account,
-      }).then(response => {
-        const accessToken = response.accessToken;
-        fetch('https://graph.microsoft.com/v1.0/me', {
-          headers: { Authorization: `Bearer ${accessToken}` }
-        })
-          .then(res => res.json())
-          .then(profile => setUser(profile));
-      });
+        instance.acquireTokenSilent({
+            scopes: ["User.Read"],
+                account
+            }).then(graphResp => {
+                fetch("https://graph.microsoft.com/v1.0/me", {
+                    headers: { Authorization: `Bearer ${graphResp.accessToken}` }
+                }).then(res => res.json())
+                .then(profile => setUser(profile));
+            });
     } else {
       setUser(null);
     }

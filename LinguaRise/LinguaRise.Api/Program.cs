@@ -3,6 +3,8 @@ using LinguaRise.Api.Middlewares;
 using LinguaRise.DataAccess;
 using LinguaRise.Repositories;
 using LinguaRise.Services;
+using Microsoft.Identity.Web;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,12 @@ builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddAppConfig();
 builder.Services.AddRepositories();
 builder.Services.AddService();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"), "AzureAd");
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
@@ -42,6 +50,8 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowLocalhost3000");
 app.UseMiddleware<RequestLocalizationMiddleware>();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
