@@ -102,6 +102,27 @@
     align-items: center;
     gap: 15px;
   }
+  
+  .profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: black;
+    font-size: 1.15rem;
+    font-weight: 500;
+    transition: color 0.15s ease-in, transform 0.15s ease-in;
+    padding: 0;
+  }
+  .profile-btn:hover {
+    text-decoration: underline;
+    color: #008080;
+    transform: scale(1.08);
+  }
+  
+  .profile-icon {
+    font-size: 1.3rem;
+  } 
 
   @media (max-width: 768px) {
     .nav {

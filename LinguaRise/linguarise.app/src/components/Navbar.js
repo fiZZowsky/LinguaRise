@@ -6,9 +6,12 @@ import Logo from "../assets/images/Logo.png";
 import LanguageDropdown from "./LanguageDropdown";
 import { useLanguage } from "../context/LanguageContext";
 import { useTranslations } from "../hooks/useTranslations";
+import { useAuth } from "../context/AuthContext";
+import { MdPerson } from "react-icons/md";
 
 export default function Navbar() {
   const activeLink = window.location.pathname;
+  const { user, login, logout } = useAuth();
   const { languages } = useLanguages();
   const { language: selectedLang, setLanguage: setSelectedLang } = useLanguage();
   const translations = useTranslations(selectedLang, 'Navbar');
@@ -29,9 +32,21 @@ export default function Navbar() {
       </ul>
 
       <div className="nav-right">
-        <button id="LoginRegister" className="login-btn">
-          <Link to="/login-register">{translations.LoginRegister || 'Login/Register'}</Link>
-        </button>
+      {!user ? (
+          <button onClick={login} className="login-btn">
+            {translations.Login || 'Login'}
+          </button>
+        ) : (
+         <>
+           <Link id="Profile" to="/profile" className="profile-btn">
+             <MdPerson className="profile-icon" />
+             <span className="profile-name">{user.displayName}</span>
+           </Link>
+           <button onClick={logout} className="login-btn">
+             {translations.Logout || 'Logout'}
+           </button>
+         </>
+        )}
         <LanguageDropdown
           languages={languages}
           selectedLang={selectedLang}
