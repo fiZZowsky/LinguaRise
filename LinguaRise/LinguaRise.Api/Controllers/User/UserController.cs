@@ -1,9 +1,13 @@
 ﻿using LinguaRise.Models.DTOs;
 using LinguaRise.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace LinguaRise.Api.Controllers.User
 {
+    [Authorize]
+    [RequiredScope("API.Access")]
     [Route("api/user")]
     [ApiController]
     public partial class UserController : ControllerBase
@@ -13,6 +17,26 @@ namespace LinguaRise.Api.Controllers.User
         public UserController(IUserService userService)
         {
             _userService = userService;
+        }
+
+        [HttpGet]
+        public ActionResult GetUserData() 
+        {
+            var user = HttpContext.User;
+
+            var name = user.FindFirst("name")?.Value
+                        ?? user.Identity?.Name
+                        ?? "Unknown";
+            var email = user.FindFirst("preferred_username")?.Value
+                        ?? user.FindFirst("email")?.Value;
+            var claims = user.Claims.Select(c => new { c.Type, c.Value });
+
+            return Ok(new
+            {
+                Name = name,
+                Email = email,
+                Claims = claims
+            });
         }
 
         [HttpGet("{id}")]
