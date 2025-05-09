@@ -3,34 +3,31 @@ import ReactDOM from 'react-dom/client';
 import './assets/styles/index.css';
 import App from './App';
 import reportWebVitals from './utils/reportWebVitals';
+import { PublicClientApplication } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
+import { msalConfig } from './lib/authConfig';
 import { BrowserRouter } from 'react-router-dom';
 import { LoadingProvider } from './context/LoadingContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
-import { msalInstance, initializePromise } from './lib/msalInstance';
 
-async function bootStrap() {
-  await initializePromise;
+const msalInstance = new PublicClientApplication(msalConfig);
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
-  await msalInstance.handleRedirectPromise();
+root.render(
+  // <React.StrictMode>
+  <MsalProvider instance={msalInstance}>
+    <BrowserRouter>
+      <LoadingProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </LanguageProvider>
+      </LoadingProvider>
+    </BrowserRouter>
+  </MsalProvider>
+  // </React.StrictMode>
+);
 
-  const root = ReactDOM.createRoot(document.getElementById('root'));
-  root.render(
-    <MsalProvider instance={msalInstance}>
-      <BrowserRouter>
-        <LoadingProvider>
-          <LanguageProvider>
-            <AuthProvider>
-              <App />
-            </AuthProvider>
-          </LanguageProvider>
-        </LoadingProvider>
-      </BrowserRouter>
-    </MsalProvider>
-  );
-
-  reportWebVitals();
-}
-
-bootStrap();
+reportWebVitals();

@@ -1,6 +1,5 @@
 ﻿using LinguaRise.Models.DTOs;
 using LinguaRise.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinguaRise.Api.Controllers.Language;
@@ -23,7 +22,6 @@ public class LanguageController : ControllerBase
         return res;
     }
 
-    [Authorize]
     [HttpGet("with-flags/user/{id?}")]
     public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync([FromRoute] int? id)
     {
