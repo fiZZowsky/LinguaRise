@@ -6,7 +6,6 @@ import Home from './pages/Home';
 import Courses from './pages/Courses';
 import About from './pages/About';
 import FAQ from './pages/FAQ';
-import LoginRegister from './pages/LoginRegister';
 import { useLoading } from './context/LoadingContext';
 import Loader from './components/Loader';
 import CourseCategory from './pages/CourseCategory';
@@ -34,7 +33,6 @@ function App() {
           <Route path='/courses/:langCode/categories' element={<CourseCategory />} />
           <Route path='/about' element={<About />} />
           <Route path='/faq' element={<FAQ />} />
-          <Route path='/login-register' element={<LoginRegister />} />
         </Routes>
       </div>
       {isLoading && <Loader />}

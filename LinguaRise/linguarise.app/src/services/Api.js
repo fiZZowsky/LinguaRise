@@ -1,22 +1,43 @@
 import { getCurrentLanguage } from "../context/LanguageContext";
+import { useMsal } from "@azure/msal-react";
+import { InteractionRequiredAuthError } from "@azure/msal-browser";
 
 const BASE_URL = 'https://localhost:7049/api';
 
-const getHeaders = (isJson = true) => {
+const getAccessToken = async () => {
+  const { instance, accounts } = useMsal();
+
+  if (accounts == null || accounts[0] == null) return;
+
+  try {
+    const response = await instance.acquireTokenSilent({
+    ...loginRequest,
+    account: accounts[0],
+   });
+
+   return response.accessToken;
+  } catch (err) {
+    if (err instanceof InteractionRequiredAuthError) return null;
+    throw err;
+  }
+}
+
+const getHeaders = async (token, isJson = true) => {
   const selectedLang = getCurrentLanguage();
   const headers = {};
 
   if (isJson) headers['Content-Type'] = 'application/json';
-
   headers["Accept-Language"] = selectedLang;
+  if (token) headers["Authorization"] = 'Bearer ${token}';
 
   return headers;
 };
 
 const request = async (method, endpoint, data = null, isJson = true) => {
+  const token = await getAccessToken();
   const config = {
     method,
-    headers: getHeaders(isJson),
+    headers: getHeaders(token, isJson),
   };
 
   if (data) {
