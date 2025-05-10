@@ -49,8 +49,6 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowReact");
 app.UseMiddleware<RequestLocalizationMiddleware>();
-
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
