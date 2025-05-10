@@ -1,9 +1,13 @@
 ﻿using LinguaRise.Models.DTOs;
 using LinguaRise.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace LinguaRise.Api.Controllers.Resource
 {
+    [Authorize]
+    [RequiredScope("API.Access")]
     [Route("api/resource")]
     [ApiController]
     public class ResourceController : ControllerBase
@@ -15,6 +19,7 @@ namespace LinguaRise.Api.Controllers.Resource
             _resourceService = resourceService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<ResourceDTO>> GetResourcesAsync([FromQuery] ResourceQuery query)
         {
@@ -29,6 +34,7 @@ namespace LinguaRise.Api.Controllers.Resource
             return resource;
         }
 
+        //[AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateResourceAsync([FromBody] ResourceDTO resourceDto)
         {

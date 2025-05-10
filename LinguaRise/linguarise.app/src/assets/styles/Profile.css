@@ -1,9 +1,22 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .profile-card {
   text-align: left;
-
-  max-width: 520px;
+  width: 600px;
+  max-width: 90%;
+  min-height: 350px;
   margin: 2rem auto;
   padding: 1.75rem;
+  margin: 0;
   border: 2px solid #e0e0e0;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
@@ -39,6 +52,11 @@
   font-size: 0.95rem;
   color: #555;
   background: #f5f5f5;
+}
+
+.profile-field input:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 @media (max-width: 992px) {

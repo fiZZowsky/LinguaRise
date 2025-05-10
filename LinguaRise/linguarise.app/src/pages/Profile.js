@@ -36,17 +36,17 @@ const Profile = () => {
 
       <div className="profile-field">
         <label>First Name</label>
-        <input value={firstName} readOnly />
+        <input value={firstName} readOnly  tabIndex={-1} />
       </div>
 
       <div className="profile-field">
         <label>Last Name</label>
-        <input value={lastName} readOnly />
+        <input value={lastName} readOnly  tabIndex={-1} />
       </div>
 
       <div className="profile-field">
         <label>Email</label>
-        <input value={email} readOnly />
+        <input value={email} readOnly  tabIndex={-1} />
       </div>
     </div>
   );

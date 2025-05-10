@@ -1,9 +1,13 @@
 ﻿using LinguaRise.Models.DTOs;
 using LinguaRise.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace LinguaRise.Api.Controllers.Lesson
 {
+    [Authorize]
+    [RequiredScope("API.Access")]
     [Route("api/lesson")]
     [ApiController]
     public class LessonController : ControllerBase

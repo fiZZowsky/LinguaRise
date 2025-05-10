@@ -1,9 +1,13 @@
 ﻿using LinguaRise.Models.DTOs;
 using LinguaRise.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace LinguaRise.Api.Controllers.Language;
 
+[Authorize]
+[RequiredScope("API.Access")]
 [Route("api/language")]
 [ApiController]
 public class LanguageController : ControllerBase
@@ -15,6 +19,7 @@ public class LanguageController : ControllerBase
         _languageService = languageService;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IEnumerable<LanguageDTO>> GetLanguagesAsync()
     {

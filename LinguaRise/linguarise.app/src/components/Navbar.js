@@ -42,7 +42,7 @@ export default function Navbar() {
 
       <div className="nav-right">
         {!isAuthenticated ? (
-          <LoginButton label={translations.Login || 'Login'} />
+          <LoginButton label={translations.LogIn || 'Log in'} />
         ) : (
           <>
             <Link to="/profile" className="profile-btn">
