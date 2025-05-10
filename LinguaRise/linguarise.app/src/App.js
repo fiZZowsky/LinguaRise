@@ -9,7 +9,6 @@ import FAQ from './pages/FAQ';
 import { useLoading } from './context/LoadingContext';
 import Loader from './components/Loader';
 import CourseCategory from './pages/CourseCategory';
-import Profile from './pages/Profile';
 
 function App() {
   const location = useLocation();
@@ -34,7 +33,6 @@ function App() {
           <Route path='/courses/:langCode/categories' element={<CourseCategory />} />
           <Route path='/about' element={<About />} />
           <Route path='/faq' element={<FAQ />} />
-          <Route path='/profile' element={<Profile />} />
         </Routes>
       </div>
       {isLoading && <Loader />}
