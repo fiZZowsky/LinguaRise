@@ -40,7 +40,7 @@ namespace LinguaRise.Api.Controllers.User
         }
 
         [HttpGet("{id}")]
-        public async Task<UserDTO> GetUserAsync(int id)
+        public async Task<UserDTO> GetUserAsync(Guid id)
         {
             var res = await _userService.GetUserAsync(id);
             return res;
@@ -55,7 +55,7 @@ namespace LinguaRise.Api.Controllers.User
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UserDTO user)
+        public async Task<IActionResult> UpdateUserAsync(Guid id, [FromBody] UserDTO user)
         {
             await _userService.UpdateUserAsync(id, user);
 
@@ -63,7 +63,7 @@ namespace LinguaRise.Api.Controllers.User
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUserAsync(int id)
+        public async Task<IActionResult> DeleteUserAsync(Guid id)
         {
             await _userService.DeleteUserAsync(id);
 

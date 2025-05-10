@@ -27,7 +27,7 @@ public class LanguageService : ILanguageService
         return languages.Select(lng => lng.ToLanguageDTO());
     }
 
-    public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync(int? userId)
+    public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync(Guid? userId)
     {
         var languages = await _languageRepository.GetLanguagesNotOwnedByUserAsync(userId);
         var result = new List<LanguageWithFlagDTO>();
@@ -51,7 +51,7 @@ public class LanguageService : ILanguageService
         return language.ToLanguageDTO();
     }
 
-    public async Task<IEnumerable<LanguageWithFlagDTO>> GetUserLanguagesWithFlagsAsync(int userId)
+    public async Task<IEnumerable<LanguageWithFlagDTO>> GetUserLanguagesWithFlagsAsync(Guid userId)
     {
         var languages = await _languageRepository.GetUserLanguages(userId);
         var result = new List<LanguageWithFlagDTO>();

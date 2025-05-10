@@ -6,7 +6,7 @@ namespace LinguaRise.Api.Controllers.User
     public partial class UserController
     {
         [HttpGet("{id}/courses")]
-        public async Task<IEnumerable<CourseDTO>> GetUserCoursesAsync([FromRoute] int id)
+        public async Task<IEnumerable<CourseDTO>> GetUserCoursesAsync([FromRoute] Guid id)
         {
             var res = await _userService.GetUserCoursesAsync(id);
             return res;

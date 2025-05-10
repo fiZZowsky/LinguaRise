@@ -1,12 +1,8 @@
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
-body {
+.profile-wrapper {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  min-height: 85vh;
 }
 
 .profile-card {

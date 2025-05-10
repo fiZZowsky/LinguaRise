@@ -18,7 +18,7 @@ public class UserService : IUserService
         _resourceRepository = resourceRepository;
     }
 
-    public async Task<UserDTO> GetUserAsync(int id)
+    public async Task<UserDTO> GetUserAsync(Guid id)
     {
         var user = await _userRepository.GetAsync(id);
 
@@ -44,7 +44,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task UpdateUserAsync(int id, UserDTO userDTO)
+    public async Task UpdateUserAsync(Guid id, UserDTO userDTO)
     {
         try
         {
@@ -71,7 +71,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task DeleteUserAsync(int id)
+    public async Task DeleteUserAsync(Guid id)
     {
         try
         {
@@ -83,7 +83,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IEnumerable<CourseDTO>> GetUserCoursesAsync(int id)
+    public async Task<IEnumerable<CourseDTO>> GetUserCoursesAsync(Guid id)
     {
         var courses = await _userRepository.GetCoursesAsync(id);
 

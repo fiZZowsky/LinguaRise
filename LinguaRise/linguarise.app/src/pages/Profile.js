@@ -31,22 +31,24 @@ const Profile = () => {
   const { firstName, lastName, email, country } = profile;
 
   return (
-    <div className="profile-card">
-      <h2 className="profile-header">General Information</h2>
+    <div className="profile-wrapper">
+      <div className="profile-card">
+        <h2 className="profile-header">General Information</h2>
 
-      <div className="profile-field">
-        <label>First Name</label>
-        <input value={firstName} readOnly  tabIndex={-1} />
-      </div>
+        <div className="profile-field">
+          <label>First Name</label>
+          <input value={firstName} readOnly  tabIndex={-1} />
+        </div>
 
-      <div className="profile-field">
-        <label>Last Name</label>
-        <input value={lastName} readOnly  tabIndex={-1} />
-      </div>
+        <div className="profile-field">
+          <label>Last Name</label>
+          <input value={lastName} readOnly  tabIndex={-1} />
+        </div>
 
-      <div className="profile-field">
-        <label>Email</label>
-        <input value={email} readOnly  tabIndex={-1} />
+        <div className="profile-field">
+          <label>Email</label>
+          <input value={email} readOnly  tabIndex={-1} />
+        </div>
       </div>
     </div>
   );

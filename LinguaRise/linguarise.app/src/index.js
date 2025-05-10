@@ -8,6 +8,7 @@ import { LoadingProvider } from './context/LoadingContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { MsalProvider } from '@azure/msal-react';
 import { msalInstance } from './lib/authConfig';
+import { UserProvider } from './context/UserContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -22,13 +23,15 @@ async function initializeApp() {
   } finally {
     root.render(
       <MsalProvider instance={msalInstance}>
-        <BrowserRouter>
-          <LoadingProvider>
-            <LanguageProvider>
-              <App />
-            </LanguageProvider>
-          </LoadingProvider>
-        </BrowserRouter>
+        <UserProvider>
+          <BrowserRouter>
+            <LoadingProvider>
+              <LanguageProvider>
+                <App />
+              </LanguageProvider>
+            </LoadingProvider>
+          </BrowserRouter>
+        </UserProvider>
       </MsalProvider>
     );
   }

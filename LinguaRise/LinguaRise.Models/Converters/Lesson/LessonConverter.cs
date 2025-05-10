@@ -44,7 +44,7 @@ public static class LessonConverter
             Course = new Course
             {
                 Id = lessonDTO.CourseId ?? 0,
-                UserId = lessonDTO.UserId ?? 0,
+                UserId = lessonDTO.UserId,
                 LanguageId = lessonDTO.LanguageId ?? 0,
                 User = lessonDTO.UserId.HasValue ? new User
                 {

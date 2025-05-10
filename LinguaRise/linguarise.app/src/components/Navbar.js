@@ -35,7 +35,13 @@ export default function Navbar() {
 
       <ul className="nav-links">
         <li><Link id="Home" className={activeLink === '/home' ? 'nav-link-active' : ''} to="/home">{translations.Home || 'Home'}</Link></li>
-        <li><Link id="Courses" className={activeLink === '/courses' ? 'nav-link-active' : ''} to="/courses">{translations.Courses || 'Courses'}</Link></li>
+        {isAuthenticated && (
+          <li>
+            <Link id="Courses" to="/courses" className={activeLink === '/courses' ? 'nav-link-active' : ''}>
+              {translations.Courses || 'Courses'}
+            </Link>
+          </li>
+        )}
         <li><Link id="About" className={activeLink === '/about' ? 'nav-link-active' : ''} to="/about">{translations.About || 'About'}</Link></li>
         <li><Link id="FAQ" className={activeLink === '/faq' ? 'nav-link-active' : ''} to="/faq">{translations.FAQ || 'FAQ'}</Link></li>
       </ul>

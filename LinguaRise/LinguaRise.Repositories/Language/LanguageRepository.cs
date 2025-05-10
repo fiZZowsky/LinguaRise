@@ -9,7 +9,7 @@ public class LanguageRepository : BaseRepository<Language, int>, ILanguageReposi
 {
     public LanguageRepository(AppDbContext context) : base(context) { }
 
-    public async Task<IEnumerable<Language>> GetUserLanguages(int userId)
+    public async Task<IEnumerable<Language>> GetUserLanguages(Guid userId)
     {
         return await _context.Courses
         .Where(c => c.UserId == userId && c.Language != null)
@@ -19,7 +19,7 @@ public class LanguageRepository : BaseRepository<Language, int>, ILanguageReposi
         .ToListAsync();
     }
 
-    public async Task<IEnumerable<Language>> GetLanguagesNotOwnedByUserAsync(int? userId)
+    public async Task<IEnumerable<Language>> GetLanguagesNotOwnedByUserAsync(Guid? userId)
     {
         var allLanguages = await _context.Languages.ToListAsync();
 

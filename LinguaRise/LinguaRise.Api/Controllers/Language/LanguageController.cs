@@ -28,7 +28,7 @@ public class LanguageController : ControllerBase
     }
 
     [HttpGet("with-flags/user/{id?}")]
-    public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync([FromRoute] int? id)
+    public async Task<IEnumerable<LanguageWithFlagDTO>> GetLanguagesWithFlagsAsync([FromRoute] Guid? id)
     {
         var res = await _languageService.GetLanguagesWithFlagsAsync(id);
         return res;
@@ -42,7 +42,7 @@ public class LanguageController : ControllerBase
     }
 
     [HttpGet("user/{id}")]
-    public async Task<IEnumerable<LanguageWithFlagDTO>> GetUserLanguagesWithFlagsAsync(int id)
+    public async Task<IEnumerable<LanguageWithFlagDTO>> GetUserLanguagesWithFlagsAsync(Guid id)
     {
         var res = await _languageService.GetUserLanguagesWithFlagsAsync(id);
         return res;
