@@ -65,12 +65,14 @@
   }
   
   .login-btn {
+    display: inline-flex;
     background-color: #17a2b8;
     border: none;
     padding: 10px 20px;
     border-radius: 20px;
     letter-spacing: 0.05rem;
     cursor: pointer;
+    text-decoration: none;
     transition: 0.3s;
   }
   .login-btn:hover {
@@ -102,6 +104,27 @@
     align-items: center;
     gap: 15px;
   }
+
+.profile-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0;
+  border-radius: 50%;
+  background: linear-gradient(to right, #009688 0%, #8bc34a 100%);
+  color: #000;
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1;
+  box-shadow:
+    6px 6px 12px #c5c5c5,
+   -6px -6px 12px #ffffff;
+  overflow: hidden;
+  cursor: pointer;
+}
 
   @media (max-width: 768px) {
     .nav {

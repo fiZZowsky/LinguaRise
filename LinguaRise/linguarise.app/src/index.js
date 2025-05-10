@@ -6,22 +6,34 @@ import reportWebVitals from './utils/reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { LoadingProvider } from './context/LoadingContext';
 import { LanguageProvider } from './context/LanguageContext';
-import { msalInstance } from "./lib/authConfig";
+import { MsalProvider } from '@azure/msal-react';
+import { msalInstance } from './lib/authConfig';
 
-  await msalInstance.handleRedirectPromise();
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
-  const root = ReactDOM.createRoot(document.getElementById('root'));
-  root.render(
-    <MsalProvider instance={msalInstance}>
-      <BrowserRouter>
-        <LoadingProvider>
-          <LanguageProvider>
+async function initializeApp() {
+  try {
+    if (typeof msalInstance.initialize === 'function') {
+      await msalInstance.initialize();
+    }
+    await msalInstance.handleRedirectPromise();
+  } catch (err) {
+    console.error('MSAL initialization error:', err);
+  } finally {
+    root.render(
+      <MsalProvider instance={msalInstance}>
+        <BrowserRouter>
+          <LoadingProvider>
+            <LanguageProvider>
               <App />
-          </LanguageProvider>
-        </LoadingProvider>
-      </BrowserRouter>
-    </MsalProvider>
-  );
-
-  reportWebVitals();
+            </LanguageProvider>
+          </LoadingProvider>
+        </BrowserRouter>
+      </MsalProvider>
+    );
+  }
 }
+
+initializeApp();
+
+reportWebVitals();

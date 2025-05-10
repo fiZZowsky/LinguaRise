@@ -1,6 +1,6 @@
 import React from "react";
-import { msalInstance } from "../authConfig";
-import "../assets/styles/Profile";
+import { msalInstance } from '../lib/authConfig';
+import "../assets/styles/Profile.css";
 
 const getProfileData = () => {
   const account =
@@ -47,11 +47,6 @@ const Profile = () => {
       <div className="profile-field">
         <label>Email</label>
         <input value={email} readOnly />
-      </div>
-
-      <div className="profile-field">
-        <label>Country</label>
-        <input value={country || "—"} readOnly />
       </div>
     </div>
   );

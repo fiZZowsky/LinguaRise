@@ -1,6 +1,7 @@
 import { useMsal } from "@azure/msal-react";
+import "../assets/styles/NavbarButton.css";
 
-const LogoutButton = () => {
+const LogoutButton = ({ label }) => {
   const { instance } = useMsal();
 
   const handleLogout = () => {
@@ -8,8 +9,8 @@ const LogoutButton = () => {
   };
 
   return (
-    <button className="btn" onClick={handleLogout}>
-      Wyloguj
+    <button onClick={handleLogout}>
+      {label}
     </button>
   );
 };

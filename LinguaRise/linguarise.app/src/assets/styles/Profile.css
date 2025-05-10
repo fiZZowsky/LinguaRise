@@ -1,4 +1,6 @@
 .profile-card {
+  text-align: left;
+
   max-width: 520px;
   margin: 2rem auto;
   padding: 1.75rem;
@@ -18,6 +20,7 @@
 .profile-field {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   margin-bottom: 1rem;
 }
 
@@ -25,9 +28,11 @@
   font-size: 0.875rem;
   color: #555;
   margin-bottom: 0.25rem;
+  width: 100%;
 }
 
 .profile-field input {
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 6px;
   padding: 0.5rem 0.75rem;

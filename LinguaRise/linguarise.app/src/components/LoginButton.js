@@ -1,7 +1,8 @@
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../lib/authConfig";
+import "../assets/styles/NavbarButton.css";
 
-const LoginButton = () => {
+const LoginButton = ({ label }) => {
   const { instance } = useMsal();
 
   const handleLogin = () => {
@@ -9,8 +10,8 @@ const LoginButton = () => {
   };
 
   return (
-    <button className="btn" onClick={handleLogin}>
-      Zaloguj przez Microsoft
+    <button onClick={handleLogin}>
+      {label}
     </button>
   );
 };

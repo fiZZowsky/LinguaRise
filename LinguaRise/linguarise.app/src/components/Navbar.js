@@ -8,8 +8,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { useTranslations } from "../hooks/useTranslations";
 import LoginButton from './LoginButton';
 import LogoutButton from "./LogoutButton";
-import { useIsAuthenticated } from "@azure/msal-react";
-import { MdPerson } from "react-icons/md";
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 
 export default function Navbar() {
   const activeLink = window.location.pathname;
@@ -17,6 +16,14 @@ export default function Navbar() {
   const { language: selectedLang, setLanguage: setSelectedLang } = useLanguage();
   const translations = useTranslations(selectedLang, 'Navbar');
   const isAuthenticated = useIsAuthenticated();
+
+ const { accounts } = useMsal();
+ const account = accounts[0];
+ let initials = "";
+ if (account?.name) {
+   const parts = account.name.split(" ");
+   initials = parts[0]?.[0]?.toUpperCase() + (parts[1]?.[0]?.toUpperCase() || "");
+ }
 
   return (
     <nav className="nav">
@@ -35,13 +42,14 @@ export default function Navbar() {
 
       <div className="nav-right">
         {!isAuthenticated ? (
-          <LoginButton />
+          <LoginButton label={translations.Login || 'Login'} />
         ) : (
-          <Link id="Profile" to="/profile" className="profile-btn">
-            <MdPerson className="profile-icon" />
-            <span className="profile-name">{user.displayName}</span>
-          </Link>
-          <LogoutButton />
+          <>
+            <Link to="/profile" className="profile-btn">
+                <span>{initials}</span>
+            </Link>
+            <LogoutButton label={translations.LogOut || 'Log out'}/>
+          </>
         )}
         <LanguageDropdown
           languages={languages}
