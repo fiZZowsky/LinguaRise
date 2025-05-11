@@ -31,7 +31,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/home' element={<Home />} />
           <Route path='/courses' element={<Courses />} />
-          <Route path='/courses/:langCode/categories' element={<CourseCategory />} />
+          <Route path='/courses/:langId/:langCode/categories' element={<CourseCategory />} />
           <Route path='/about' element={<About />} />
           <Route path='/faq' element={<FAQ />} />
           <Route path='/profile' element={<Profile />} />
@@ -41,6 +41,5 @@ function App() {
     </>
   );
 }
-
 
 export default App;

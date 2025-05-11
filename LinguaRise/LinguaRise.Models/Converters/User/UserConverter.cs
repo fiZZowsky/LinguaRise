@@ -11,6 +11,7 @@ public static class UserConverter
         {
             Id = user.Id,
             Name = user.Name,
+            Surname = user.Surname,
             Email = user.Email,
             Courses = user.Courses
         };
@@ -22,6 +23,7 @@ public static class UserConverter
         {
             Id = userDTO.Id,
             Name = userDTO.Name ?? string.Empty,
+            Surname = userDTO.Surname ?? string.Empty,
             Email = userDTO.Email ?? string.Empty,
             Courses = userDTO.Courses
         };

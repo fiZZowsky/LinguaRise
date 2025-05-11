@@ -11,7 +11,7 @@ import { useLanguage } from "../context/LanguageContext";
 
 const CourseCategory = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const { langCode } = useParams();
+  const { langCode, langId } = useParams();
   const { language: selectedLang } = useLanguage();
   const translations = useTranslations(selectedLang, 'CourseCategory');
 

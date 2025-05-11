@@ -54,6 +54,15 @@ namespace LinguaRise.Api.Controllers.User
             return Ok();
         }
 
+        [HttpPost("log-in")]
+        public async Task<IActionResult> LogInUser()
+        {
+            var user = HttpContext.User;
+            await _userService.LogIn(user);
+
+            return Ok();
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUserAsync(Guid id, [FromBody] UserDTO user)
         {

@@ -36,7 +36,7 @@ public class CourseService : ICourseService
         try
         {
             var course = courseDto.ToCourse();
-            await _courseRepository.UpdateAsync(course);
+            await _courseRepository.AddAsync(course);
         }
         catch (Exception ex)
         {

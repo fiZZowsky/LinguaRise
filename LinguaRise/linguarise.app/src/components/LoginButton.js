@@ -2,18 +2,11 @@ import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../lib/authConfig";
 import "../assets/styles/NavbarButton.css";
 
-const LoginButton = ({ label }) => {
+export default function LoginButton({ label }) {
   const { instance } = useMsal();
-
   const handleLogin = () => {
     instance.loginRedirect(loginRequest);
   };
 
-  return (
-    <button onClick={handleLogin}>
-      {label}
-    </button>
-  );
-};
-
-export default LoginButton;
+  return <button onClick={handleLogin}>{label}</button>;
+}

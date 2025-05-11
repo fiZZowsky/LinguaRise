@@ -5,13 +5,12 @@ import { InteractionRequiredAuthError } from "@azure/msal-browser";
 const BASE_URL = "https://localhost:7049/api";
 
 async function getAccessToken() {
-  // Pobieramy konto z globalnej instancji MSAL
   const account =
     msalInstance.getActiveAccount() ||
     msalInstance.getAllAccounts()[0] ||
     null;
 
-  if (!account) return null;  // brak zalogowanego użytkownika
+  if (!account) return null;
 
   try {
     const resp = await msalInstance.acquireTokenSilent({
@@ -20,8 +19,11 @@ async function getAccessToken() {
     });
     return resp.accessToken;
   } catch (err) {
-    // gdy potrzebna interakcja (np. wygaśnięty token), zwracamy null
     if (err instanceof InteractionRequiredAuthError) {
+      const resp = await msalInstance.acquireTokenRedirect({
+        ...loginRequest,
+        account,
+      });
       return null;
     }
     throw err;
@@ -38,7 +40,6 @@ function getHeaders(token, isJson = true) {
   headers["Accept-Language"] = lang;
 
   if (token) {
-    // BACKTICKS zamiast cudzysłowów
     headers["Authorization"] = `Bearer ${token}`;
   }
 
@@ -54,14 +55,15 @@ async function request(method, endpoint, data = null, isJson = true) {
     headers,
     body: data ? (isJson ? JSON.stringify(data) : data) : undefined,
   };
-
   const res = await fetch(`${BASE_URL}/${endpoint}`, config);
   if (!res.ok) {
     const errText = await res.text();
     throw new Error(errText || `API error ${res.status}`);
   }
-  // brak treści przy 204
-  return res.status !== 204 ? await res.json() : null;
+
+  const text = await res.text();
+  if (!text) return null;
+  return JSON.parse(text);
 }
 
 const api = {

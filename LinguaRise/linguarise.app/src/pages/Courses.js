@@ -4,16 +4,30 @@ import { useLanguagesWithFlags, useUserLanguagesWithFlags } from '../hooks/useLa
 import { useTranslations } from "../hooks/useTranslations";
 import { useLanguage } from "../context/LanguageContext";
 import { useNavigate } from 'react-router-dom';
+import { useCourse } from "../hooks/useCourse";
 
 const Courses = () => {
   const { language: selectedLang } = useLanguage();
   const { languages } = useLanguagesWithFlags();
   const { languages: userLanguages } = useUserLanguagesWithFlags();
   const translations = useTranslations(selectedLang, 'CoursesPage');
+  const { createCourse, isSuccess, error } = useCourse();
   const navigate = useNavigate();
 
-  const handleLanguageSelect = (langCode) => {
-    navigate(`/courses/${langCode}/categories`);
+  const handleLanguageSelect = (langId, langCode) => {
+    createCourse(langId)
+    .then(() =>{
+      navigate(
+        `/courses/${langId}/${langCode}/categories`
+      );
+    })
+    .catch(console.error);
+  };
+
+  const handleUserLanguageSelect = (langId, langCode) => {
+    navigate(
+      `/courses/${langId}/${langCode}/categories`
+    );
   };
 
   return (
@@ -25,7 +39,7 @@ const Courses = () => {
             <div
               key={lang.code}
               className="language-card"
-              onClick={() => handleLanguageSelect(lang.code)}
+              onClick={() => handleLanguageSelect(lang.id, lang.code)}
             >
               <img
                 src={`data:image/png;base64,${lang.flagImage}`}
@@ -48,7 +62,7 @@ const Courses = () => {
               <div
                 key={lang.id}
                 className="language-card"
-                onClick={() => handleLanguageSelect(lang.id)}
+                onClick={() => handleUserLanguageSelect(lang.id, lang.code)}
               >
                 <img
                   src={`data:image/png;base64,${lang.flagImage}`}

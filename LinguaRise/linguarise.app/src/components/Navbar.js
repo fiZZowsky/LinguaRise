@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLanguages } from "../hooks/useLanguages";
 import "../assets/styles/Navbar.css";
@@ -9,6 +9,7 @@ import { useTranslations } from "../hooks/useTranslations";
 import LoginButton from './LoginButton';
 import LogoutButton from "./LogoutButton";
 import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { useUserLogin } from "../hooks/useUser";
 
 export default function Navbar() {
   const activeLink = window.location.pathname;
@@ -16,6 +17,7 @@ export default function Navbar() {
   const { language: selectedLang, setLanguage: setSelectedLang } = useLanguage();
   const translations = useTranslations(selectedLang, 'Navbar');
   const isAuthenticated = useIsAuthenticated();
+  const { loginError, loginSuccess } = useUserLogin(isAuthenticated);
 
  const { accounts } = useMsal();
  const account = accounts[0];
