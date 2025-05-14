@@ -12,6 +12,10 @@ public class Language
     public string Name { get; set; } = string.Empty;
     [Required]
     public byte[]? FlagImage { get; set; }
+    [Required]
+    public string Culture { get; set; } = string.Empty;
+    [Required]
+    public string VoiceName { get; set; } = string.Empty;
 
     public ICollection<VocabularyCategory> Categories { get; set; } = new List<VocabularyCategory>();
 }

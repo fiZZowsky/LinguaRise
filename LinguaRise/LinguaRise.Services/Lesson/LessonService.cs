@@ -10,11 +10,13 @@ public class LessonService : ILessonService
 {
     private readonly ILessonRepository _lessonRepository;
     private readonly IResourceRepository _resourceRepository;
+    private readonly ISpeechService _speechService;
 
-    public LessonService(ILessonRepository lessonRepository, IResourceRepository resourceRepository)
+    public LessonService(ILessonRepository lessonRepository, IResourceRepository resourceRepository, ISpeechService speechService)
     {
         _lessonRepository = lessonRepository;
         _resourceRepository = resourceRepository;
+        _speechService = speechService;
     }
 
     public async Task<IEnumerable<LessonDTO>> GetLessonsAsync()
@@ -57,5 +59,11 @@ public class LessonService : ILessonService
         {
             throw new InvalidOperationException("An error occurred while creating the lesson.", ex);
         }
+    }
+
+    public async Task<SpeechResponseDTO> GetLessonContentSpeech(int languageId)
+    {
+        var response = await _speechService.SynthesizeAsync(languageId);
+        return response;
     }
 }

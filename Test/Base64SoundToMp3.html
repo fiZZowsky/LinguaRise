@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Base64 → MP3 Converter</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    .container {
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      background: #f5f5f5;
+      font-family: sans-serif;
+    }
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 500px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      resize: vertical;
+      font-family: monospace;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      align-self: flex-end;
+      padding: 8px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      background: #0078d4;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005a9e;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form">
+      <label for="base64Input">Wklej tu ciąg Base64 (z opcjonalnym prefiksem data URI):</label>
+      <textarea id="base64Input" placeholder="data:audio/mpeg;base64,SUQzBAAAAA..."></textarea>
+      <button id="convertBtn">Konwertuj na MP3</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('convertBtn').addEventListener('click', () => {
+      let b64 = document.getElementById('base64Input').value.trim();
+      if (!b64) {
+        alert('Proszę wkleić ciąg Base64.');
+        return;
+      }
+
+      let mime = 'audio/mpeg';
+      const dataUriMatch = b64.match(/^data:([^;]+);base64,/);
+      if (dataUriMatch) {
+        mime = dataUriMatch[1];
+        b64 = b64.replace(/^data:[^;]+;base64,/, '');
+      }
+
+      try {
+        const byteChars = atob(b64);
+        const byteNumbers = new Array(byteChars.length);
+        for (let i = 0; i < byteChars.length; i++) {
+          byteNumbers[i] = byteChars.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: mime });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'audio.mp3';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error(err);
+        alert('Nie udało się przekonwertować ciągu Base64 na plik.');
+      }
+    });
+  </script>
+</body>
+</html>
