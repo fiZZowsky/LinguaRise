@@ -27,4 +27,13 @@ public static class WordConverter
             Level = wordDTO.Level?.Value ?? string.Empty
         };
     }
+
+    public static WordToLearnDTO ToWordToLearnDTO(this Word word, string translatedWord)
+    {
+        return new WordToLearnDTO
+        {
+            Id = word.Id,
+            Name = translatedWord
+        };
+    }
 }

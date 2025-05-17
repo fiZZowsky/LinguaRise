@@ -1,53 +1,60 @@
-﻿using LinguaRise.Models.DTOs;
+﻿using LinguaRise.Common.Context.Interfaces;
+using LinguaRise.Models.DTOs;
 using LinguaRise.Repositories.Interfaces;
 using LinguaRise.Services.Interfaces;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.Extensions.Configuration;
+using LinguaRise.Models.Converters;
+using LinguaRise.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LinguaRise.Services;
 
 public class SpeechService : ISpeechService
 {
     private readonly ILanguageRepository _languageRepository;
+    private readonly IWordRepository _wordRepository;
+    private readonly IUserContext _userContext;
+    private readonly IResourceRepository _resourceRepository;
     private readonly SpeechConfig _speechConfig;
-    private readonly IReadOnlyDictionary<int, (string Culture, string Voice)> _voiceMap;
 
-    public SpeechService(IConfiguration configuration, ILanguageRepository languageRepository)
+    public SpeechService(IConfiguration configuration, 
+        ILanguageRepository languageRepository,
+        IWordRepository wordRepository,
+        IUserContext userContext,
+        IResourceRepository resourceRepository)
     {
         _languageRepository = languageRepository;
+        _wordRepository = wordRepository;
+        _userContext = userContext;
+        _resourceRepository = resourceRepository;
 
         var speechSection = configuration.GetSection("AzureSpeech");
         _speechConfig = SpeechConfig.FromSubscription(
             speechSection["Key"]!,
             speechSection["Region"]!);
-        
-        _voiceMap = speechSection.GetSection("VoiceMap")
-            .GetChildren()
-            .ToDictionary(
-                x => int.Parse(x.Key),
-                x => (Culture: x["Culture"]!, Voice: x["Voice"]!)
-            );
     }
 
-    public async Task<SpeechResponseDTO> SynthesizeAsync(int courseLanguageId)
+    public async Task<SpeechResponseDTO> SynthesizeAsync(int categoryId, int courseLanguageId)
     {
         var language = await _languageRepository.GetAsync(courseLanguageId);
-
         _speechConfig.SpeechSynthesisVoiceName = language.VoiceName;
 
-        // Przykładowe dane – docelowo pobierane z bazy
-        var phrases = new[]
+        var wordsToLearn = await _wordRepository.GetWordsToLearn(_userContext.UserId.Value, categoryId, courseLanguageId);
+        var wordsToLearnDTO = new List<WordToLearnDTO>();
+
+        foreach (var word in wordsToLearn)
         {
-            "Welcome to LinguaRise!",
-            "This is an example sentence that will be read."
-        };
+            var translatedWord = await _resourceRepository.GetTranslatedWordAsync(word.ResourceKey, language.Code);
+            wordsToLearnDTO.Add(word.ToWordToLearnDTO(translatedWord));
+        }
 
         var items = new List<SpeechItemDTO>();
         using var synthesizer = new SpeechSynthesizer(_speechConfig, null);
 
-        foreach (var text in phrases)
+        foreach (var text in wordsToLearnDTO)
         {
-            var result = await synthesizer.SpeakTextAsync(text);
+            var result = await synthesizer.SpeakTextAsync(text.Name);
 
             if (result.Reason != ResultReason.SynthesizingAudioCompleted)
             {
@@ -57,7 +64,7 @@ public class SpeechService : ISpeechService
             }
 
             var base64 = Convert.ToBase64String(result.AudioData);
-            items.Add(new SpeechItemDTO { Text = text, AudioBase64 = base64 });
+            items.Add(new SpeechItemDTO { TextId = text.Id, Text = text.Name, AudioBase64 = base64 });
         }
 
         return new SpeechResponseDTO { Items = items };

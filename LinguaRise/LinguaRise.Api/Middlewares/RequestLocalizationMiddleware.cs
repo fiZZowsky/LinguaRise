@@ -17,10 +17,19 @@ public class RequestLocalizationMiddleware
         var userContext = context.RequestServices.GetRequiredService<IUserContext>();
 
         var language = context.Request.Headers["Accept-Language"].FirstOrDefault() ?? "EN";
+        var oidValue = context.User?.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
+        Guid userId = Guid.Empty;
+
+        if (!string.IsNullOrEmpty(oidValue)
+            && Guid.TryParse(oidValue, out var parsedOid))
+        {
+            userId = parsedOid;
+        }
 
         var session = new UserSession
         {
-            LanguageCode = language.ToUpper()
+            LanguageCode = language.ToUpper(),
+            UserId = userId
         };
 
         userContext.Setup(session);

@@ -72,10 +72,24 @@ public abstract class BaseRepository<T, TKey> : IRepository<T, TKey> where T : c
         return query;
     }
     public async Task<T> GetAsync(TKey id) => await _dbSet.FindAsync(id);
-    public async Task AddAsync(T entity)
+    public async Task<TKey> AddAsync(T entity)
     {
         await _dbSet.AddAsync(entity);
         await _context.SaveChangesAsync();
+
+        var keyName = _context.Model
+            .FindEntityType(typeof(T))!
+            .FindPrimaryKey()!
+            .Properties
+            .Select(p => p.Name)
+            .Single();
+
+        var keyValue = (TKey)entity
+            .GetType()
+            .GetProperty(keyName)!
+            .GetValue(entity)!;
+
+        return keyValue;
     }
     public async Task UpdateAsync(T entity)
     {

@@ -42,9 +42,9 @@ namespace LinguaRise.Api.Controllers.Lesson
         }
 
         [HttpGet("content-speech")]
-        public async Task<SpeechResponseDTO> GetLessonContentSpeech([FromQuery] int languageId)
+        public async Task<SpeechResponseDTO> GetLessonContentSpeech([FromQuery] int categoryId,  [FromQuery] int languageId)
         {
-            return await _lessonService.GetLessonContentSpeech(languageId);
+            return await _lessonService.GetLessonContentSpeech(categoryId, languageId);
         }
     }
 }

@@ -4,5 +4,5 @@ namespace LinguaRise.Services.Interfaces;
 
 public interface ISpeechService
 {
-    Task<SpeechResponseDTO> SynthesizeAsync(int courseLanguageId);
+    Task<SpeechResponseDTO> SynthesizeAsync(int categoryId, int courseLanguageId);
 }

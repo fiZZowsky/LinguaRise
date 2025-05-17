@@ -2,5 +2,6 @@
 
 public class SpeechResponseDTO
 {
-    public IReadOnlyList<SpeechItemDTO> Items { get; init; } = default!;
+    public int lessonId { get; set; }
+    public IReadOnlyList<SpeechItemDTO> Items { get; set; } = default!;
 }

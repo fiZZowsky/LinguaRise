@@ -3,6 +3,9 @@ using LinguaRise.Repositories.Interfaces;
 using LinguaRise.Services.Interfaces;
 using LinguaRise.Models.Converters;
 using LinguaRise.Common.Exceptions;
+using LinguaRise.Common.Context.Interfaces;
+using LinguaRise.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LinguaRise.Services;
 
@@ -11,12 +14,20 @@ public class LessonService : ILessonService
     private readonly ILessonRepository _lessonRepository;
     private readonly IResourceRepository _resourceRepository;
     private readonly ISpeechService _speechService;
+    private readonly ICourseRepository _courseRepository;
+    private readonly IUserContext _userContext;
 
-    public LessonService(ILessonRepository lessonRepository, IResourceRepository resourceRepository, ISpeechService speechService)
+    public LessonService(ILessonRepository lessonRepository, 
+        IResourceRepository resourceRepository, 
+        ISpeechService speechService,
+        ICourseRepository courseRepository,
+        IUserContext userContext)
     {
         _lessonRepository = lessonRepository;
         _resourceRepository = resourceRepository;
         _speechService = speechService;
+        _courseRepository = courseRepository;
+        _userContext = userContext;
     }
 
     public async Task<IEnumerable<LessonDTO>> GetLessonsAsync()
@@ -61,9 +72,19 @@ public class LessonService : ILessonService
         }
     }
 
-    public async Task<SpeechResponseDTO> GetLessonContentSpeech(int languageId)
+    public async Task<SpeechResponseDTO> GetLessonContentSpeech(int categoryId, int languageId)
     {
-        var response = await _speechService.SynthesizeAsync(languageId);
+        var response = await _speechService.SynthesizeAsync(categoryId, languageId);
+        var userCourse = await _courseRepository.GetByUserAndLanguageAsync(_userContext.UserId.Value, languageId);
+
+        var lesson = new Lesson
+        {
+            CourseId = userCourse.Id,
+            CompletionDate = DateTime.UtcNow
+        };
+
+        response.lessonId = await _lessonRepository.AddAsync(lesson);
+
         return response;
     }
 }
