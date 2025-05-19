@@ -78,8 +78,22 @@ public class SpeechService : ISpeechService
             throw new InvalidOperationException(
                 $"No translation for wordId = {wordId}, language = {language.Code}");
 
-        var pushStream = AudioInputStream.CreatePushStream();
+        var speechConfig = SpeechConfig.FromSubscription(_speechConfig.SubscriptionKey, _speechConfig.Region);
+        speechConfig.SpeechRecognitionLanguage = language.Culture;
+
+        using var pushStream = AudioInputStream.CreatePushStream();
         using var audioConfig = AudioConfig.FromStreamInput(pushStream);
+
+        var pronunciationConfig = new PronunciationAssessmentConfig(
+            translatedSentence,
+            GradingSystem.HundredMark,
+            Granularity.Phoneme,
+            enableMiscue: false);
+
+        using var recognizer = new SpeechRecognizer(speechConfig, language.Culture, audioConfig);
+        pronunciationConfig.ApplyTo(recognizer);
+
+        var recognitionTask = recognizer.RecognizeOnceAsync();
 
         var buffer = new byte[4096];
         int bytesRead;
@@ -89,42 +103,27 @@ public class SpeechService : ISpeechService
         }
         pushStream.Close();
 
-        using var recognizer = new SpeechRecognizer(_speechConfig, language.Culture, audioConfig);
+        var speechResult = await recognitionTask;
 
-        var pronunciationConfig = new PronunciationAssessmentConfig(
-            translatedSentence,
-            GradingSystem.HundredMark,
-            PronunciationAssessmentGranularity.Phoneme);
-        pronunciationConfig.ApplyTo(recognizer);
-
-        var speechResult = await recognizer.RecognizeOnceAsync();
         var resultDTO = new PronunciationResultDTO();
-
-        switch (speechResult.Reason)
+        if (speechResult.Reason == ResultReason.RecognizedSpeech)
         {
-            case ResultReason.RecognizedSpeech:
-                var pronResult = PronunciationAssessmentResult.FromResult(speechResult);
-                resultDTO.Score = pronResult.AccuracyScore;
-                resultDTO.IsCorrect = resultDTO.Score >= 80.0;
-                resultDTO.RecognizedText = speechResult.Text;
-                break;
-
-            case ResultReason.NoMatch:
-                resultDTO.Score = 0.0;
-                resultDTO.IsCorrect = false;
-                resultDTO.RecognizedText = string.Empty;
-                break;
-
-            case ResultReason.Canceled:
-                var cancel = CancellationDetails.FromResult(speechResult);
-                throw new ApplicationException(
-                    $"Pronunciation assessment canceled: {cancel.Reason}, {cancel.ErrorDetails}");
-
-            default:
-                resultDTO.Score = 0.0;
-                resultDTO.IsCorrect = false;
-                resultDTO.RecognizedText = string.Empty;
-                break;
+            var pronResult = PronunciationAssessmentResult.FromResult(speechResult);
+            resultDTO.Score = pronResult.AccuracyScore;
+            resultDTO.IsCorrect = resultDTO.Score >= 80.0;
+            resultDTO.RecognizedText = speechResult.Text;
+        }
+        else if (speechResult.Reason == ResultReason.NoMatch)
+        {
+            resultDTO.Score = 0.0;
+            resultDTO.IsCorrect = false;
+            resultDTO.RecognizedText = string.Empty;
+        }
+        else
+        {
+            var cancel = CancellationDetails.FromResult(speechResult);
+            throw new ApplicationException(
+                $"Pronunciation assessment canceled: {cancel.Reason}, {cancel.ErrorDetails}");
         }
 
         return resultDTO;

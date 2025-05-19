@@ -48,21 +48,18 @@ namespace LinguaRise.Api.Controllers.Lesson
         }
 
         [HttpPost("evaluate-speech")]
-        public async Task<ActionResult<PronunciationResultDTO>> EvaluatePronounciation(
-            [FromForm] IFormFile audioFile,
-            [FromForm] int wordId,
-            [FromForm] int courseId,
-            [FromForm] int lessonId)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<PronunciationResultDTO>> EvaluatePronounciation([FromForm] EvaluateSpeechRequest request)
         {
-            if (audioFile == null || audioFile.Length == 0)
+            if (request.AudioFile == null || request.AudioFile.Length == 0)
                 return BadRequest("No audio file");
 
-            using var audioStream = audioFile.OpenReadStream();
+            using var audioStream = request.AudioFile.OpenReadStream();
             PronunciationResultDTO result;
 
             try
             {
-                result = await _lessonService.EvaluatePronounciationAsync(audioStream, wordId, courseId, lessonId);
+                result = await _lessonService.EvaluatePronounciationAsync(audioStream, request.WordId, request.CourseId, request.LessonId);
             }
             catch (Exception ex)
             {
