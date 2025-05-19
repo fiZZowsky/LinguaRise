@@ -1,4 +1,5 @@
 ﻿using LinguaRise.Models.DTOs;
+using LinguaRise.Models.Entities;
 
 namespace LinguaRise.Services.Interfaces
 {
@@ -8,5 +9,6 @@ namespace LinguaRise.Services.Interfaces
         Task<LessonDTO> GetLessonAsync(int id);
         Task CreateLessonAsync(LessonDTO lesson);
         Task<SpeechResponseDTO> GetLessonContentSpeech(int categoryId, int languageId);
+        Task<PronunciationResultDTO> EvaluatePronounciationAsync(Stream audioStream, int wordId, int courseId, int lessonId);
     }
 }

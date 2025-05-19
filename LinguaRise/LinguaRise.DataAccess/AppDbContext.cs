@@ -47,13 +47,6 @@ public class AppDbContext : DbContext
             .HasForeignKey(c => c.LanguageId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Relacja: Język 1:N Kategorii słownictwa
-        modelBuilder.Entity<VocabularyCategory>()
-            .HasOne<Language>()
-            .WithMany(l => l.Categories)
-            .HasForeignKey(vc => vc.Id)
-            .OnDelete(DeleteBehavior.Cascade);
-
         // Relacja: Lekcja N:M Słowa (Lekcja zawiera nauczone słowa)
         modelBuilder.Entity<Lesson>()
             .HasMany(l => l.LearnedWords)

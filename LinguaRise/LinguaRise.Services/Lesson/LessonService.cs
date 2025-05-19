@@ -87,4 +87,20 @@ public class LessonService : ILessonService
 
         return response;
     }
+
+    public async Task<PronunciationResultDTO> EvaluatePronounciationAsync(Stream audioStream, int wordId, int courseId, int lessonId)
+    {
+        var language = await _courseRepository.GetCourseLanguage(courseId);
+        var response = await _speechService.EvaluatePronounciationAsync(audioStream, language, wordId);
+        if (response.IsCorrect)
+        {
+            var lesson = await _lessonRepository.GetAsync(lessonId);
+            var word = new Word { Id = wordId };
+            lesson.LearnedWords.Add(word);
+
+            await _lessonRepository.UpdateAsync(lesson);
+        }
+
+        return response;
+    }
 }

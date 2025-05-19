@@ -6,8 +6,8 @@ using Microsoft.Identity.Web.Resource;
 
 namespace LinguaRise.Api.Controllers.Word
 {
-    [Authorize]
-    [RequiredScope("API.Access")]
+    //[Authorize]
+    //[RequiredScope("API.Access")]
     [Route("api/word")]
     [ApiController]
     public class WordController : ControllerBase

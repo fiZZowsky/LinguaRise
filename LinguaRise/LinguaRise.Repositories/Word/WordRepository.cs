@@ -34,4 +34,19 @@ public class WordRepository : BaseRepository<Word, int>, IWordRepository
 
         return wordsToLearn;
     }
+
+    public async Task<string> GetTranslatedWord(int wordId, string languageCode)
+    {
+        var word = await _context.Words
+            .FirstOrDefaultAsync(w => w.Id == wordId);
+
+        var translatedWord = await _context.Resources
+            .Include(r => r.Language)
+            .Where(r => r.Key == word.ResourceKey 
+            && r.Language.Code == languageCode)
+            .Select(r => r.Name)
+            .FirstOrDefaultAsync();
+
+        return translatedWord;
+    }
 }

@@ -17,4 +17,12 @@ public class CourseRepository : BaseRepository<Course, int>, ICourseRepository
                 && c.LanguageId == languageId
             );
     }
+
+    public async Task<Language?> GetCourseLanguage(int courseId)
+    {
+        return await _context.Courses
+            .Where(c => c.Id == courseId)
+            .Select(c => c.Language)
+            .FirstOrDefaultAsync();
+    }
 }
