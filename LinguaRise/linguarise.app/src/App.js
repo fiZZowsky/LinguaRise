@@ -10,6 +10,7 @@ import { useLoading } from './context/LoadingContext';
 import Loader from './components/Loader';
 import CourseCategory from './pages/CourseCategory';
 import Profile from './pages/Profile';
+import ListeningRepetitionLesson from './pages/ListeningRepetitionLesson';
 
 function App() {
   const location = useLocation();
@@ -22,7 +23,7 @@ function App() {
     }, 500);
     return () => clearTimeout(timer);
   }, [location.pathname]);
-
+  
   return (
     <>
       <Navbar />
@@ -31,7 +32,8 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/home' element={<Home />} />
           <Route path='/courses' element={<Courses />} />
-          <Route path='/courses/:langId/:langCode/categories' element={<CourseCategory />} />
+          <Route path='/courses/:langId/categories' element={<CourseCategory />} />
+          <Route path='/courses/:langId/listening-repetition' element={<ListeningRepetitionLesson />} />
           <Route path='/about' element={<About />} />
           <Route path='/faq' element={<FAQ />} />
           <Route path='/profile' element={<Profile />} />

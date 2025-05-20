@@ -14,19 +14,19 @@ const Courses = () => {
   const { createCourse, isSuccess, error } = useCourse();
   const navigate = useNavigate();
 
-  const handleLanguageSelect = (langId, langCode) => {
+  const handleLanguageSelect = (langId) => {
     createCourse(langId)
     .then(() =>{
       navigate(
-        `/courses/${langId}/${langCode}/categories`
+        `/courses/${langId}/categories`
       );
     })
     .catch(console.error);
   };
 
-  const handleUserLanguageSelect = (langId, langCode) => {
+  const handleUserLanguageSelect = (langId) => {
     navigate(
-      `/courses/${langId}/${langCode}/categories`
+      `/courses/${langId}/categories`
     );
   };
 
@@ -39,7 +39,7 @@ const Courses = () => {
             <div
               key={lang.code}
               className="language-card"
-              onClick={() => handleLanguageSelect(lang.id, lang.code)}
+              onClick={() => handleLanguageSelect(lang.id)}
             >
               <img
                 src={`data:image/png;base64,${lang.flagImage}`}
@@ -62,7 +62,7 @@ const Courses = () => {
               <div
                 key={lang.id}
                 className="language-card"
-                onClick={() => handleUserLanguageSelect(lang.id, lang.code)}
+                onClick={() => handleUserLanguageSelect(lang.id)}
               >
                 <img
                   src={`data:image/png;base64,${lang.flagImage}`}

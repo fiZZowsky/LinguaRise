@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaChevronDown } from "react-icons/fa";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import repeatingByEarImage from '../assets/images/repeating-from-hearing.png';
 import writingFromHearing from '../assets/images/writing-by-ear.png';
 import writing from '../assets/images/filling-gaps.png';
@@ -11,30 +11,35 @@ import { useLanguage } from "../context/LanguageContext";
 
 const CourseCategory = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const { langCode, langId } = useParams();
+  const { langId } = useParams();
   const { language: selectedLang } = useLanguage();
   const translations = useTranslations(selectedLang, 'CourseCategory');
+  const navigate = useNavigate();
 
   const learningOptions = [
     {
       title: translations.ListeningRepetition || "Listening repetition",
       image: repeatingByEarImage,
       description: translations.ListenRecordingsAndRepeat || "Listen recordings and repeat to improve your pronunciation and comprehension.",
+      route: `/courses/${langId}/listening-repetition`,
     },
     {
       title: translations.WritingByEar || "Writing by ear",
       image: writingFromHearing,
       description: translations.ListenAndWriteDownTheWordsYouHear || "Listen and write down the words you hear, training your spelling and phonemic hearing.",
+      route: `/courses/${langId}/writing-by-ear`,
     },
     {
       title: translations.Writing || "Writing",
       image: writing,
       description: translations.WriteWordsAndSentences || "Write your own words and sentences in the language you are learning.",
+      route: `/courses/${langId}/writing`,
     },
     {
       title: translations.CasualConversation || "Casual conversation",
       image: casualConversation,
       description: translations.SpeakFreely || "Speak freely with the chatbot to practice natural dialogues.",
+      route: `/courses/${langId}/casual-conversation`,
     },
   ];
 
@@ -46,8 +51,10 @@ const CourseCategory = () => {
       <div className="learning-options-container">
         {learningOptions.map((option, index) => (
           <div
-            key={index}
-            className="learning-option-card"
+             key={index}
+             className="learning-option-card"
+             style={{ cursor: option.route ? 'pointer' : 'default' }}
+             onClick={() => option.route && navigate(option.route)}
           >
             <img
               src={option.image}
