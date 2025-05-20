@@ -11,7 +11,7 @@ public static class WordConverter
         return new WordDTO
         {
             Id = word.Id,
-            Level = Level.FromValue(word.Level),
+            Level = string.IsNullOrWhiteSpace(word.Level) ? null : Level.FromValue(word.Level),
             VocabularyCategoryId = word.VocabularyCategoryId,
             VocabularyCategoryName = word.VocabularyCategory?.Name
         };

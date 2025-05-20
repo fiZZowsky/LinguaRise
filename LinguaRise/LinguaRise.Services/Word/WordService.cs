@@ -24,16 +24,19 @@ public class WordService : IWordService
     public async Task<IEnumerable<WordDTO>> GetWordsAsync()
     {
         var words = await _wordRepository.GetAllAsync();
+        var result = new List<WordDTO>();
 
-        var wordDtoTasks = words.Select(async word =>
+        foreach (var word in words)
         {
-            var name = await _resourceRepository.GetTranslatedWordAsync(word.ResourceKey, _userSession.LanguageCode);
+            var name = await _resourceRepository
+                               .GetTranslatedWordAsync(word.ResourceKey, _userSession.LanguageCode);
+
             var dto = word.ToWordDTO();
             dto.Name = name ?? word.ResourceKey;
-            return dto;
-        });
+            result.Add(dto);
+        }
 
-        return await Task.WhenAll(wordDtoTasks);
+        return result;
     }
 
     public async Task<WordDTO> GetWordAsync(int id)
