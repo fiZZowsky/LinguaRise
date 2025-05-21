@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { FaMicrophone, FaStop, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { useLesson } from "../hooks/useLesson";
 import { useLoading } from "../context/LoadingContext";
+import './ListeningRepetitionLesson.css';
 
 const ListeningRepetitionLesson = () => {
   const { langId } = useParams();
@@ -21,7 +22,6 @@ const ListeningRepetitionLesson = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const audioRef = useRef(null);
 
-  // fetch lesson sentence once
   useEffect(() => {
     if (fetchedRef.current) return;
     showLoader();
@@ -37,7 +37,6 @@ const ListeningRepetitionLesson = () => {
     })();
   }, [getLessonSentence, languageId, showLoader, hideLoader]);
 
-  // enumerate audio devices
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(() => navigator.mediaDevices.enumerateDevices())
@@ -52,96 +51,57 @@ const ListeningRepetitionLesson = () => {
       .catch(err => console.error("Nie udało się pobrać urządzeń audio:", err));
   }, []);
 
-  // apply selected output sink
   useEffect(() => {
     if (audioRef.current && typeof audioRef.current.setSinkId === 'function') {
       audioRef.current.setSinkId(selectedOutput).catch(console.warn);
     }
   }, [selectedOutput, started, currentIndex]);
 
-  if (error) return <div className="text-red-500">Error: {error}</div>;
-  if (!speechData || !speechData.items.length) return <div>Brak danych do wyświetlenia.</div>;
+  if (error) return <div className="error">Error: {error}</div>;
+  if (!speechData || !speechData.items.length) return <div className="no-data">Brak danych do wyświetlenia.</div>;
 
   const handleStart = () => setStarted(true);
   const toggleRecord = () => setIsRecording(r => !r);
   const hasPrev = currentIndex > 0;
   const hasNext = currentIndex < speechData.items.length - 1;
 
-  const playPrev = () => {
-    if (!hasPrev) return;
-    setCurrentIndex(i => i - 1);
-  };
-  const playNext = () => {
-    if (!hasNext) return;
-    setCurrentIndex(i => i + 1);
-  };
+  const playPrev = () => hasPrev && setCurrentIndex(i => i - 1);
+  const playNext = () => hasNext && setCurrentIndex(i => i + 1);
 
   const currentItem = speechData.items[currentIndex];
   const audioSrc = `data:audio/mp3;base64,${currentItem.audioBase64}`;
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center bg-gray-50 p-4">
+    <div className="listening-repetition-lesson">
       {!started ? (
-        <div className="space-y-4 text-center">
-          <div className="flex space-x-4 justify-center">
-            <div>
-              <label className="block mb-1">Urządzenie do odtwarzania:</label>
-              <select
-                className="border rounded p-2"
-                value={selectedOutput}
-                onChange={e => setSelectedOutput(e.target.value)}
-              >
-                {audioOutputs.map(device => (
-                  <option key={device.deviceId} value={device.deviceId}>
-                    {device.label || device.deviceId}
-                  </option>
-                ))}
+        <div className="setup-panel">
+          <div className="device-row">
+            <div className="device-selector">
+              <label>Odtwarzanie:</label>
+              <select value={selectedOutput} onChange={e => setSelectedOutput(e.target.value)}>
+                {audioOutputs.map(d => <option key={d.deviceId} value={d.deviceId}>{d.label || d.deviceId}</option>)}
               </select>
             </div>
-            <div>
-              <label className="block mb-1">Urządzenie do nagrywania:</label>
-              <select
-                className="border rounded p-2"
-                value={selectedInput}
-                onChange={e => setSelectedInput(e.target.value)}
-              >
-                {audioInputs.map(device => (
-                  <option key={device.deviceId} value={device.deviceId}>
-                    {device.label || device.deviceId}
-                  </option>
-                ))}
+            <div className="device-selector">
+              <label>Nagrywanie:</label>
+              <select value={selectedInput} onChange={e => setSelectedInput(e.target.value)}>
+                {audioInputs.map(d => <option key={d.deviceId} value={d.deviceId}>{d.label || d.deviceId}</option>)}
               </select>
             </div>
           </div>
-          <button
-            onClick={handleStart}
-            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
-          >
-            Zaczynamy!
-          </button>
+          <button onClick={handleStart} className="start-button">Zaczynamy!</button>
         </div>
       ) : (
-        <div className="space-y-6 text-center">
-          <button
-            onClick={toggleRecord}
-            className="p-6 bg-red-500 rounded-full hover:bg-red-600 transition inline-flex items-center justify-center"
-          >
-            {isRecording ? <FaStop size={48} /> : <FaMicrophone size={48} />}
+        <div className="lesson-panel">
+          <button onClick={toggleRecord} className={`record-button ${isRecording ? 'recording' : ''}`}>
+            {isRecording ? <FaStop /> : <FaMicrophone />}
           </button>
-          <div className="flex items-center space-x-4">
-            {hasPrev && (
-              <button onClick={playPrev} className="p-3 bg-gray-200 rounded-full hover:bg-gray-300 transition">
-                <FaArrowLeft size={24} />
-              </button>
-            )}
-            <audio controls ref={audioRef} src={audioSrc} />
-            {hasNext && (
-              <button onClick={playNext} className="p-3 bg-gray-200 rounded-full hover:bg-gray-300 transition">
-                <FaArrowRight size={24} />
-              </button>
-            )}
+          <div className="player-row">
+            {hasPrev && <button onClick={playPrev} className="nav-button prev"><FaArrowLeft /></button>}
+            <audio controls ref={audioRef} src={audioSrc} className="audio-player" />
+            {hasNext && <button onClick={playNext} className="nav-button next"><FaArrowRight /></button>}
           </div>
-          <div className="text-sm text-gray-600">{currentItem.text}</div>
+          <div className="sentence-text">{currentItem.text}</div>
         </div>
       )}
     </div>

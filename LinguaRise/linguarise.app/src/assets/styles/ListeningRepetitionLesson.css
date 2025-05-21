@@ -1,0 +1,96 @@
+.listening-repetition-lesson {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #F3F4F6;
+  padding: 1rem;
+}
+
+.setup-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.device-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.device-selector label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.device-selector select {
+  border: 1px solid #D1D5DB;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+
+.start-button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #2563EB;
+  color: #FFF;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.start-button:hover {
+  background-color: #1D4ED8;
+}
+
+.lesson-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.record-button {
+  padding: 1.5rem;
+  background-color: #EF4444;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.record-button:hover {
+  background-color: #DC2626;
+}
+
+.player-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-button {
+  padding: 0.75rem;
+  background-color: #E5E7EB;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.nav-button:hover {
+  background-color: #D1D5DB;
+}
+
+.audio-player {
+  outline: none;
+}
+
+.sentence-text {
+  font-size: 0.875rem;
+  color: #4B5563;
+  margin-top: 0.5rem;
+}
