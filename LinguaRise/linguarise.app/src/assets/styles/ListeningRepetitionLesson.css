@@ -1,96 +1,130 @@
-.listening-repetition-lesson {
+/* kontener */
+.lr-container {
   height: 100vh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #F3F4F6;
+  background: #F3F4F6;
   padding: 1rem;
+  flex-direction: column;
 }
 
-.setup-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+/* panel ustawień */
+.lr-setup {
   text-align: center;
 }
-
-.device-row {
+.lr-devices {
   display: flex;
   gap: 1rem;
-  justify-content: center;
+  margin-bottom: 1rem;
 }
-
-.device-selector label {
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.device-selector select {
+.lr-devices select {
+  padding: 0.5rem;
   border: 1px solid #D1D5DB;
   border-radius: 0.25rem;
-  padding: 0.5rem;
 }
-
-.start-button {
-  margin-top: 1rem;
+.lr-start {
   padding: 0.75rem 1.5rem;
-  background-color: #2563EB;
-  color: #FFF;
+  background: #2563EB;
+  color: #fff;
   border-radius: 9999px;
   cursor: pointer;
-  transition: background-color 0.2s;
-}
-.start-button:hover {
-  background-color: #1D4ED8;
 }
 
-.lesson-panel {
+/* panel lekcji */
+.lr-lesson {
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  text-align: center;
 }
-
-.record-button {
-  padding: 1.5rem;
-  background-color: #EF4444;
-  border-radius: 9999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.lr-record {
+  background: #EF4444;
+  padding: 1rem;
+  border-radius: 50%;
+  color: #fff;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
-.record-button:hover {
-  background-color: #DC2626;
+.lr-record.recording {
+  background: #DC2626;
 }
 
-.player-row {
+/* player */
+.lr-player {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-
-.nav-button {
-  padding: 0.75rem;
-  background-color: #E5E7EB;
-  border-radius: 9999px;
+.play-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+.play-btn {
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(#ff6347, #ff6347);
   cursor: pointer;
-  transition: background-color 0.2s;
+  position: absolute;
+  top: 0; left: 0;
 }
-.nav-button:hover {
-  background-color: #D1D5DB;
+/* inner circle */
+.play-btn::before {
+  content: "";
+  position: absolute;
+  width: 93%;
+  height: 93%;
+  background: #000;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
 }
+/* border animation */
+.play-btn:checked {
+  animation: borderAnimate 700ms ease-in-out forwards;
+}
+@keyframes borderAnimate {
+  to { transform: rotate(360deg); }
+}
+/* ikonki */
+.icon {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.icon.play {
+  background: #ff6347;
+  clip-path: polygon(50% 15%, 0% 100%, 100% 100%);
+  transition: clip-path 0.4s;
+}
+.play-btn:checked + .icon.play {
+  clip-path: polygon(0 100%, 0 100%, 100% 100%);
+}
+.icon.pause::before,
+.icon.pause::after {
+  content: "";
+  position: absolute;
+  width: 0; height: 100%;
+  background: #ff6347;
+  top: 0;
+}
+.icon.pause::before { left: 0; }
+.icon.pause::after { right: 0; }
+.play-btn:checked ~ .icon.pause::before {
+  animation: reveal 0.3s ease-in-out 0.35s forwards;
+}
+.play-btn:checked ~ .icon.pause::after {
+  animation: reveal 0.3s ease-in-out 0.6s forwards;
+}
+@keyframes reveal { to { width: 35%; } }
 
-.audio-player {
-  outline: none;
-}
-
-.sentence-text {
-  font-size: 0.875rem;
+/* tekst zdania */
+.lr-text {
   color: #4B5563;
-  margin-top: 0.5rem;
 }
