@@ -6,8 +6,8 @@ using Microsoft.Identity.Web.Resource;
 
 namespace LinguaRise.Api.Controllers.Language;
 
-//[Authorize]
-//[RequiredScope("API.Access")]
+[Authorize]
+[RequiredScope("API.Access")]
 [Route("api/language")]
 [ApiController]
 public class LanguageController : ControllerBase

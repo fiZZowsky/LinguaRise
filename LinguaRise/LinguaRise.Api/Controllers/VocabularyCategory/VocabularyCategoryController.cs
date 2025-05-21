@@ -6,8 +6,8 @@ using Microsoft.Identity.Web.Resource;
 
 namespace LinguaRise.Api.Controllers.VocabularyCategory
 {
-    //[Authorize]
-    //[RequiredScope("API.Access")]
+    [Authorize]
+    [RequiredScope("API.Access")]
     [Route("api/vocabulary-category")]
     [ApiController]
     public partial class VocabularyCategoryController : ControllerBase
