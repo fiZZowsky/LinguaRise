@@ -8,5 +8,5 @@ export default function LoginButton({ label }) {
     instance.loginRedirect(loginRequest);
   };
 
-  return <button onClick={handleLogin}>{label}</button>;
+  return <button className="navbar-btn" onClick={handleLogin}>{label}</button>;
 }

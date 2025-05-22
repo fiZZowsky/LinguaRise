@@ -115,3 +115,16 @@
 .lr-tips { text-align:left; border-top:1px solid #e5e7eb; padding-top:1rem; }
 .lr-tips h2 { margin:0 0 0.5rem; font-size:1rem; color:#111827; }
 .lr-tips p { margin:0; font-size:0.875rem; color:#6b7280; }
+
+.btn.check.disabled,
+.btn.check:disabled {
+  background-color: #c4c4c4;
+  border-color:   #c4c4c4;
+  color: #6b6b6b;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn.check:not(.disabled):not(:disabled) {
+  transition: background-color .2s ease;
+}

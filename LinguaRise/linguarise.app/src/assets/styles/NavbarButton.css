@@ -1,4 +1,4 @@
-button {
+.navbar-btn {
  width: 9em;
  height: 3em;
  border-radius: 30em;
@@ -12,7 +12,7 @@ button {
              -6px -6px 12px #ffffff;
 }
 
-button::before {
+.navbar-btn::before {
  content: '';
  width: 0;
  height: 3em;
@@ -26,6 +26,6 @@ button::before {
  z-index: -1;
 }
 
-button:hover::before {
+.navbar-btn:hover::before {
  width: 9em;
 }

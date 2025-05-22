@@ -9,7 +9,7 @@ const LogoutButton = ({ label }) => {
   };
 
   return (
-    <button onClick={handleLogout}>
+    <button className="navbar-btn" onClick={handleLogout}>
       {label}
     </button>
   );

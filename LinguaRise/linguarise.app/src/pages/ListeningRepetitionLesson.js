@@ -31,6 +31,7 @@ const ListeningRepetitionLesson = () => {
   const streamRef = useRef(null);
   const [recordedUrl, setRecordedUrl] = useState(null);
 
+  const isCheckDisabled = isRecording || !recordedUrl;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(100);
@@ -146,9 +147,9 @@ const ListeningRepetitionLesson = () => {
   };
 
   const handleCheck = async () => {
-     setIsPlaying(false);
-     setIsRecording(false);
-
+    setIsPlaying(false);
+    setIsRecording(false);
+    
      if (chunksRef.current.length > 0) {
        const blob = new Blob(chunksRef.current, {
          type: "audio/webm",
@@ -161,7 +162,7 @@ const ListeningRepetitionLesson = () => {
          await getPronunciationData(
            speechData.lessonId,
            languageId,
-           current.wordId,
+           current.textId,
            file
          );
        } catch (e) {
@@ -279,7 +280,11 @@ const ListeningRepetitionLesson = () => {
           )}
 
           <div className="lr-actions">
-            <button className="btn check" onClick={handleCheck}>
+            <button
+              className={`btn check ${isCheckDisabled ? "disabled" : ""}`}
+              onClick={handleCheck}
+              disabled={isCheckDisabled}
+            >
               Check
             </button>
             <button className="btn skip" onClick={handleSkip}>
