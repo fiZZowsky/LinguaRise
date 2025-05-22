@@ -59,7 +59,7 @@ namespace LinguaRise.Api.Controllers.Lesson
 
             try
             {
-                result = await _lessonService.EvaluatePronounciationAsync(audioStream, request.WordId, request.CourseId, request.LessonId);
+                result = await _lessonService.EvaluatePronounciationAsync(audioStream, request.WordId, request.LanguageId, request.LessonId);
             }
             catch (Exception ex)
             {

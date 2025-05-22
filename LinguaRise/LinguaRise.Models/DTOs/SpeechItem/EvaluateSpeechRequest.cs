@@ -7,6 +7,6 @@ public class EvaluateSpeechRequest
 {
     public IFormFile AudioFile { get; set; }
     public int WordId { get; set; }
-    public int CourseId { get; set; }
+    public int LanguageId { get; set; }
     public int LessonId { get; set; }
 }

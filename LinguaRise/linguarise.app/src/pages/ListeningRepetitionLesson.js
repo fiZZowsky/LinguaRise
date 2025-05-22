@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   FaMicrophone,
@@ -6,7 +6,7 @@ import {
   FaVolumeUp,
   FaArrowLeft,
 } from "react-icons/fa";
-import { useLesson } from "../hooks/useLesson";
+import { useLesson, useSendRecording } from "../hooks/useLesson";
 import { useLoading } from "../context/LoadingContext";
 import "../assets/styles/ListeningRepetitionLesson.css";
 
@@ -15,6 +15,7 @@ const ListeningRepetitionLesson = () => {
   const { langId } = useParams();
   const languageId = Number(langId);
   const { getLessonSentence, speechData, error } = useLesson();
+  const { getPronunciationData, pronunciationData, error: pronError } = useSendRecording();
   const { showLoader, hideLoader } = useLoading();
   const fetched = useRef(false);
 
@@ -144,10 +145,39 @@ const ListeningRepetitionLesson = () => {
     }
   };
 
-  const handleCheck = () => {
-    if (hasNext) setCurrentIndex((i) => i + 1);
-    setIsPlaying(false);
-    setIsRecording(false);
+  const handleCheck = async () => {
+     setIsPlaying(false);
+     setIsRecording(false);
+
+     if (chunksRef.current.length > 0) {
+       const blob = new Blob(chunksRef.current, {
+         type: "audio/webm",
+       });
+       const file = new File([blob], "recording.webm", {
+         type: "audio/webm",
+       });
+
+       try {
+         await getPronunciationData(
+           speechData.lessonId,
+           languageId,
+           current.wordId,
+           file
+         );
+       } catch (e) {
+         console.error("Błąd wysyłania audio:", pronError);
+       }
+     }
+
+     if (recordedUrl) {
+       URL.revokeObjectURL(recordedUrl);
+       setRecordedUrl(null);
+     }
+     chunksRef.current = [];
+
+     if (hasNext) {
+       setCurrentIndex((i) => i + 1);
+     }
   };
 
   const handleSkip = () => {

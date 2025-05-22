@@ -16,18 +16,21 @@ public class LessonService : ILessonService
     private readonly ISpeechService _speechService;
     private readonly ICourseRepository _courseRepository;
     private readonly IUserContext _userContext;
+    private readonly ILanguageRepository _languageRepository;
 
     public LessonService(ILessonRepository lessonRepository, 
         IResourceRepository resourceRepository, 
         ISpeechService speechService,
         ICourseRepository courseRepository,
-        IUserContext userContext)
+        IUserContext userContext,
+        ILanguageRepository languageRepository)
     {
         _lessonRepository = lessonRepository;
         _resourceRepository = resourceRepository;
         _speechService = speechService;
         _courseRepository = courseRepository;
         _userContext = userContext;
+        _languageRepository = languageRepository;
     }
 
     public async Task<IEnumerable<LessonDTO>> GetLessonsAsync()
@@ -88,9 +91,9 @@ public class LessonService : ILessonService
         return response;
     }
 
-    public async Task<PronunciationResultDTO> EvaluatePronounciationAsync(Stream audioStream, int wordId, int courseId, int lessonId)
+    public async Task<PronunciationResultDTO> EvaluatePronounciationAsync(Stream audioStream, int wordId, int languageId, int lessonId)
     {
-        var language = await _courseRepository.GetCourseLanguage(courseId);
+        var language = await _languageRepository.GetAsync(languageId);
         var response = await _speechService.EvaluatePronounciationAsync(audioStream, language, wordId);
         if (response.IsCorrect)
         {

@@ -68,8 +68,8 @@ async function request(method, endpoint, data = null, isJson = true) {
 
 const api = {
   get: (endpoint) => request("GET", endpoint),
-  post: (endpoint, data) => request("POST", endpoint, data),
-  put: (endpoint, data) => request("PUT", endpoint, data),
+  post: (endpoint, data, isJson = true) => request("POST", endpoint, data, isJson),
+  put: (endpoint, data, isJson = true) => request("PUT", endpoint, data, isJson),
   delete: (endpoint) => request("DELETE", endpoint),
 };
 
