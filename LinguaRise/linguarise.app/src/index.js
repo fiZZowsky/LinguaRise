@@ -9,6 +9,8 @@ import { LanguageProvider } from './context/LanguageContext';
 import { MsalProvider } from '@azure/msal-react';
 import { msalInstance } from './lib/authConfig';
 import { UserProvider } from './context/UserContext';
+import { AlertProvider } from './context/AlertContext';
+import Alert from './components/Alert';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -27,7 +29,10 @@ async function initializeApp() {
           <BrowserRouter>
             <LoadingProvider>
               <LanguageProvider>
-                <App />
+                <AlertProvider>
+                  <Alert />
+                  <App />
+                </AlertProvider>
               </LanguageProvider>
             </LoadingProvider>
           </BrowserRouter>
