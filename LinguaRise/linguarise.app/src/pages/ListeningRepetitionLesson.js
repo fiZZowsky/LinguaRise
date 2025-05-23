@@ -177,7 +177,7 @@ const ListeningRepetitionLesson = () => {
        }
      }
      
-     if (pronunciationData.isCorrect == false)
+     if (pronunciationData != null && pronunciationData.isCorrect == false)
       return;
 
      if (recordedUrl) {
@@ -188,7 +188,12 @@ const ListeningRepetitionLesson = () => {
 
      if (hasNext) {
        setCurrentIndex((i) => i + 1);
-     }
+     } else {
+      const categoryId = 1;
+      navigate('/courses/listening-repetition/summary', {
+        state: { categoryId, lessonId: speechData.lessonId }
+      });
+    }
   };
 
   const handleSkip = () => {
@@ -197,7 +202,14 @@ const ListeningRepetitionLesson = () => {
       setRecordedUrl(null);
     }
     chunksRef.current = [];
-    if (hasNext) setCurrentIndex((i) => i + 1);
+    if (hasNext) {
+      setCurrentIndex((i) => i + 1);
+    } else {
+      const categoryId = 1;
+      navigate('/courses/listening-repetition/summary', {
+        state: { categoryId, lessonId: speechData.lessonId }
+      });
+    }
     setIsPlaying(false);
     setIsRecording(false);
   };

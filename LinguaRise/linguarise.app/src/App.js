@@ -11,6 +11,7 @@ import Loader from './components/Loader';
 import CourseCategory from './pages/CourseCategory';
 import Profile from './pages/Profile';
 import ListeningRepetitionLesson from './pages/ListeningRepetitionLesson';
+import LessonSummary from './pages/LessonSummary';
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function App() {
           <Route path='/about' element={<About />} />
           <Route path='/faq' element={<FAQ />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/courses/listening-repetition/summary' element={<LessonSummary />} />
         </Routes>
       </div>
       {isLoading && <Loader />}
