@@ -8,7 +8,9 @@ import {
 } from "react-icons/fa";
 import { useLesson, useSendRecording } from "../hooks/useLesson";
 import { useLoading } from "../context/LoadingContext";
+import { useAlert } from '../hooks/useAlert';
 import "../assets/styles/ListeningRepetitionLesson.css";
+import { AlertType } from '../data/alertTypes';
 
 const ListeningRepetitionLesson = () => {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ const ListeningRepetitionLesson = () => {
   const { getPronunciationData, pronunciationData, error: pronError } = useSendRecording();
   const { showLoader, hideLoader } = useLoading();
   const fetched = useRef(false);
+  const { showAlert } = useAlert();
 
   const [audioInputs, setAudioInputs] = useState([]);
   const [audioOutputs, setAudioOutputs] = useState([]);
@@ -42,9 +45,8 @@ const ListeningRepetitionLesson = () => {
     fetched.current = true;
     showLoader();
     getLessonSentence(1, languageId)
-      .catch(console.error)
-      .finally(hideLoader);
-  }, [getLessonSentence, languageId, showLoader, hideLoader]);
+      .catch(console.error);
+  }, [getLessonSentence, languageId, showLoader]);
 
   useEffect(() => {
     navigator.mediaDevices
@@ -95,8 +97,7 @@ const ListeningRepetitionLesson = () => {
   }, []);
 
   if (error) return <div className="lr-error">Error: {error}</div>;
-  if (!speechData?.items.length)
-    return <div className="lr-no-data">Brak danych.</div>;
+  if (!speechData) return null;
 
   const current = speechData.items[currentIndex];
   const hasNext = currentIndex < speechData.items.length - 1;
@@ -159,16 +160,25 @@ const ListeningRepetitionLesson = () => {
        });
 
        try {
-         await getPronunciationData(
+          await getPronunciationData(
            speechData.lessonId,
            languageId,
            current.textId,
            file
          );
+
+         const message = 
+          `Poprawnie rozpoznane? ${pronunciationData.isCorrect}\n` +
+          `Ocena wymowy: ${pronunciationData.score}\n` +
+          `Rozpoznany tekst: ${pronunciationData.recognizedText}`;
+         await showAlert(AlertType.ERROR, message);
        } catch (e) {
-         console.error("Błąd wysyłania audio:", pronError);
+         await showAlert(AlertType.ERROR, `Błąd wysyłania audio: ${e}`);
        }
      }
+     
+     if (pronunciationData.isCorrect == false)
+      return;
 
      if (recordedUrl) {
        URL.revokeObjectURL(recordedUrl);

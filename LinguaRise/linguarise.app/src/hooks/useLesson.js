@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import api from "../services/Api";
+import { useLoading } from '../context/LoadingContext';
 
 export const useLesson = () => {
   const [speechData, setSpeechData] = useState(null);
@@ -30,6 +31,7 @@ export const useLesson = () => {
 export const useSendRecording = () => {
   const [pronunciationData, setPronunciationData] = useState(null);
   const [error, setError] = useState(null);
+  const { showLoader, hideLoader } = useLoading();
 
   const getPronunciationData = useCallback(
     async (lessonId, languageId, wordId, audioFile) => {
@@ -40,6 +42,7 @@ export const useSendRecording = () => {
       formData.append("WordId", wordId.toString());
 
       try {
+        showLoader();
         const response = await api.post(
           "lesson/evaluate-speech",
           formData,
@@ -47,13 +50,15 @@ export const useSendRecording = () => {
         );
         setPronunciationData(response);
         console.log(response);
-        return response;
       } catch (err) {
         const message =
           (err && err.message) ||
           "Error sending Pronunciation data";
         setError(message);
         throw err;
+      }
+      finally{
+        hideLoader();
       }
     },
     []
