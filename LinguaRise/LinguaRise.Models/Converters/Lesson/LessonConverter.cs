@@ -21,6 +21,7 @@ public static class LessonConverter
             LanguageId = lesson.Course?.LanguageId,
             LanguageCode = languageCode,
             LanguageName = lesson.Course?.Language?.Name,
+            Score = lesson.Score,
             LearnedWords = lesson.LearnedWords?.Select(word => new WordDTO
             {
                 Id = word.Id,
@@ -41,6 +42,7 @@ public static class LessonConverter
             Id = lessonDTO.Id,
             CourseId = lessonDTO.CourseId ?? 0,
             CompletionDate = lessonDTO.CompletionDate,
+            Score = lessonDTO.Score.Value,
             Course = new Course
             {
                 Id = lessonDTO.CourseId ?? 0,

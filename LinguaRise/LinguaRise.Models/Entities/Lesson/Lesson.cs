@@ -9,6 +9,8 @@ public class Lesson
     public int? CourseId { get; set; }
     [Required]
     public DateTime CompletionDate { get; set; }
+    [Required]
+    public double Score { get; set; }
 
     public Course? Course { get; set; }
     public ICollection<Word> LearnedWords { get; set; } = new List<Word>();

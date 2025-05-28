@@ -10,5 +10,6 @@ namespace LinguaRise.Services.Interfaces
         Task CreateLessonAsync(LessonDTO lesson);
         Task<SpeechResponseDTO> GetLessonContentSpeech(int categoryId, int languageId);
         Task<PronunciationResultDTO> EvaluatePronounciationAsync(Stream audioStream, int wordId, int languageId, int lessonId);
+        Task<LessonSummaryDTO> GetLessonSummaryAsync(int lessonId, int categoryId);
     }
 }

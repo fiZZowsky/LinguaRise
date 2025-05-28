@@ -5,7 +5,6 @@ using LinguaRise.Models.Converters;
 using LinguaRise.Common.Exceptions;
 using LinguaRise.Common.Context.Interfaces;
 using LinguaRise.Models.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace LinguaRise.Services;
 
@@ -17,13 +16,15 @@ public class LessonService : ILessonService
     private readonly ICourseRepository _courseRepository;
     private readonly IUserContext _userContext;
     private readonly ILanguageRepository _languageRepository;
+    private readonly IVocabularyCategoryRepository _vocabularyCategoryRepository;
 
     public LessonService(ILessonRepository lessonRepository, 
         IResourceRepository resourceRepository, 
         ISpeechService speechService,
         ICourseRepository courseRepository,
         IUserContext userContext,
-        ILanguageRepository languageRepository)
+        ILanguageRepository languageRepository,
+        IVocabularyCategoryRepository vocabularyCategoryRepository)
     {
         _lessonRepository = lessonRepository;
         _resourceRepository = resourceRepository;
@@ -31,6 +32,7 @@ public class LessonService : ILessonService
         _courseRepository = courseRepository;
         _userContext = userContext;
         _languageRepository = languageRepository;
+        _vocabularyCategoryRepository = vocabularyCategoryRepository;
     }
 
     public async Task<IEnumerable<LessonDTO>> GetLessonsAsync()
@@ -100,10 +102,31 @@ public class LessonService : ILessonService
             var lesson = await _lessonRepository.GetAsync(lessonId);
             var word = new Word { Id = wordId };
             lesson.LearnedWords.Add(word);
+            lesson.Score += response.Score;
 
             await _lessonRepository.UpdateAsync(lesson);
         }
 
         return response;
+    }
+
+    public async Task<LessonSummaryDTO> GetLessonSummaryAsync(int lessonId, int categoryId)
+    {
+        var lesson = await _lessonRepository.GetAsync(lessonId);
+        var course = await _courseRepository.GetAsync(lesson.CourseId.Value);
+        var language = await _languageRepository.GetAsync(course.LanguageId.Value);
+        var learnedWords = lesson.LearnedWords;
+        var category = await _vocabularyCategoryRepository.GetAsync(categoryId);
+
+        var summary = new LessonSummaryDTO
+        {
+            CategoryName = category.Name,
+            LanguageName = language.Name,
+            Score = lesson.Score,
+            //LearnedWords = learnedWords.Select(x => x.ToWordDTO()),
+            FlagImage = language.FlagImage.ToString()
+        };
+
+        return summary;
     }
 }

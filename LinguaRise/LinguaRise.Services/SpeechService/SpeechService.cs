@@ -8,6 +8,7 @@ using LinguaRise.Models.Converters;
 using LinguaRise.Models.Entities;
 using Microsoft.CognitiveServices.Speech.Audio;
 using Microsoft.CognitiveServices.Speech.PronunciationAssessment;
+using System.Threading.Channels;
 
 namespace LinguaRise.Services;
 
@@ -81,14 +82,15 @@ public class SpeechService : ISpeechService
         var speechConfig = SpeechConfig.FromSubscription(_speechConfig.SubscriptionKey, _speechConfig.Region);
         speechConfig.SpeechRecognitionLanguage = language.Culture;
 
-        using var pushStream = AudioInputStream.CreatePushStream();
+        var audioFormat = AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1);
+        using var pushStream = AudioInputStream.CreatePushStream(audioFormat);
         using var audioConfig = AudioConfig.FromStreamInput(pushStream);
 
         var pronunciationConfig = new PronunciationAssessmentConfig(
             translatedSentence,
             GradingSystem.HundredMark,
             Granularity.Phoneme,
-            enableMiscue: false);
+            enableMiscue: true);
 
         using var recognizer = new SpeechRecognizer(speechConfig, language.Culture, audioConfig);
         pronunciationConfig.ApplyTo(recognizer);
@@ -119,11 +121,16 @@ public class SpeechService : ISpeechService
             resultDTO.IsCorrect = false;
             resultDTO.RecognizedText = string.Empty;
         }
-        else
+        else if (speechResult.Reason == ResultReason.Canceled)
         {
             var cancel = CancellationDetails.FromResult(speechResult);
             throw new ApplicationException(
                 $"Pronunciation assessment canceled: {cancel.Reason}, {cancel.ErrorDetails}");
+        }
+        else
+        {
+            throw new ApplicationException(
+            $"Pronunciation unhandled reason: {speechResult.Reason}");
         }
 
         return resultDTO;

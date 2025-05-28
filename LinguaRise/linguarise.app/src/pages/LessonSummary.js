@@ -1,84 +1,70 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import api from '../services/Api';
-import { useLoading } from '../context/LoadingContext';
+import { useLessonSummary } from "../hooks/useLessonSummary";
 import { useAlert } from '../hooks/useAlert';
-import { AlertType } from '../data/alertTypes';
 import '../assets/styles/LessonSummary.css';
 
 const LessonSummary = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { categoryId, lessonId } = state || {};
-
-  const { showLoader, hideLoader } = useLoading();
   const { showAlert } = useAlert();
 
-  const [summaryData, setSummaryData] = useState(null);
-  const [error, setError] = useState(null);
+  const { lessonSummaryData, error } = useLessonSummary(lessonId, categoryId);
 
   useEffect(() => {
-    if (!categoryId || !lessonId) {
-      showAlert(AlertType.ERROR, 'Brak parametrów: categoryId lub lessonId.');
-      return;
+    if (error) {
+      showAlert("Nie udało się pobrać podsumowania lekcji.", "error");
     }
+  }, [error, showAlert, navigate]);
 
-    const fetchSummary = async () => {
-      showLoader();
-      try {
-        const res = await api.get(
-          `lesson/summary?categoryId=${categoryId}&lessonId=${lessonId}`
-        );
-        setSummaryData(res.data);
-      } catch (err) {
-        const msg = err.response?.data?.message || err.message;
-        setError(msg);
-        showAlert(AlertType.ERROR, `Błąd pobierania podsumowania: ${msg}`);
-      } finally {
-        hideLoader();
-      }
-    };
-
-    fetchSummary();
-  }, [
-    categoryId,
-    lessonId,
-    showLoader,
-    hideLoader,
-    showAlert,
-  ]);
-
-  if (error) {
-    return <div className="ls-error">Błąd: {error}</div>;
-  }
-  if (!summaryData) {
+  if (!lessonSummaryData) {
     return null;
   }
 
+const {
+   languageName,
+   flagImage,
+   categoryName,
+   learnedWords,
+   score
+ } = lessonSummaryData;
+
+const rawScore = Number(score);
+const maxScore = 10 * 100;
+const percent = !isNaN(rawScore)
+  ? Math.round((rawScore / maxScore) * 100)
+  : 0;
+
   return (
     <div className="ls-container">
-      <button
-        className="ls-back-button"
-        onClick={() => navigate(-1)}
-      >
-        ← Wróć
-      </button>
-
       <h1 className="ls-title">Podsumowanie lekcji</h1>
-      <p className="ls-info">
-        Kategoria: {categoryId} &nbsp;&bull;&nbsp; Lekcja: {lessonId}
-      </p>
-
+      <div className="ls-meta">
+        {flagImage && (
+          <img
+            src={flagImage}
+            alt={`${languageName} flaga`}
+            className="ls-flag"
+          />
+        )}
+        <p className="ls-info">
+          Język: <strong>{languageName}</strong> &nbsp;&bull;&nbsp;
+          Kategoria: <strong>{categoryName}</strong> &nbsp;&bull;&nbsp;
+          Wynik: <strong>{percent}%</strong>
+        </p>
+      </div>
       <div className="ls-content">
-        {Array.isArray(summaryData.items) && summaryData.items.length > 0 ? (
-          summaryData.items.map((item, idx) => (
-            <div key={idx} className="ls-item">
-              <h2 className="ls-item-title">{item.title}</h2>
-              <p className="ls-item-text">{item.description}</p>
-            </div>
-          ))
+        {learnedWords.length > 0 ? (
+          <ul className="ls-word-list">
+            {learnedWords.map((word, idx) => (
+              <li key={word.id ?? idx}>
+                {word.name}
+                {word.level && ` — poziom: ${word.level}`}
+              </li>
+            ))}
+          </ul>
         ) : (
-          <p className="ls-no-data">Brak elementów do wyświetlenia.</p>
+          <p className="ls-no-data">Brak wyuczonych słówek w tej kategorii.</p>
         )}
       </div>
     </div>

@@ -11,5 +11,6 @@ public class LessonDTO
     public string? LanguageCode { get; set; }
     public string? LanguageName { get; set; }
     public DateTime CompletionDate { get; set; }
+    public double? Score { get; set; }
     public ICollection<WordDTO> LearnedWords { get; set; } = new List<WordDTO>();
 }

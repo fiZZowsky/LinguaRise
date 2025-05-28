@@ -67,5 +67,12 @@ namespace LinguaRise.Api.Controllers.Lesson
             }
             return Ok(result);
         }
+
+        [HttpGet("{id}/summary")]
+        public async Task<LessonSummaryDTO> GetLessonSummary(int id, [FromQuery] int categoryId)
+        {
+            var result = await _lessonService.GetLessonSummaryAsync(id, categoryId);
+            return result;
+        }
     }
 }
