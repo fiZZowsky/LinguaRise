@@ -400,3 +400,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 LinguaRise/LinguaRise.DataAccess/Migrations/
+LinguaRise/LinguaRise.Api/ffmpeg.exe
