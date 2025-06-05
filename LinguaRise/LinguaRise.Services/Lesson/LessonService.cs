@@ -136,19 +136,35 @@ public class LessonService : ILessonService
 
     public async Task<LessonSummaryDTO> GetLessonSummaryAsync(int lessonId, int categoryId)
     {
-        var lesson = await _lessonRepository.GetAsync(lessonId);
-        var course = await _courseRepository.GetAsync(lesson.CourseId.Value);
+        var lessonWithDetails = (await _lessonRepository.GetAllWithDetailsAsync())
+            .FirstOrDefault(l => l.Id == lessonId);
+
+        if (lessonWithDetails == null)
+            throw new NotFoundException($"Lesson with ID {lessonId} not found.", 404);
+
+        var course = await _courseRepository.GetAsync(lessonWithDetails.CourseId.Value);
         var language = await _languageRepository.GetAsync(course.LanguageId.Value);
-        var learnedWords = lesson.LearnedWords;
+
+        var learnedWordsDto = new List<WordDTO>();
+        foreach (var word in lessonWithDetails.LearnedWords)
+        {
+            var translated = await _resourceRepository.GetTranslatedWordAsync(word.ResourceKey, language.Code);
+            var dto = word.ToWordDTO();
+            dto.Name = translated ?? word.ResourceKey;
+            learnedWordsDto.Add(dto);
+        }
+
         var category = await _vocabularyCategoryRepository.GetAsync(categoryId);
 
         var summary = new LessonSummaryDTO
         {
             CategoryName = category.Name,
             LanguageName = language.Name,
-            Score = lesson.Score,
-            //LearnedWords = learnedWords.Select(x => x.ToWordDTO()),
-            FlagImage = language.FlagImage.ToString()
+            LearnedWords = learnedWordsDto,
+            Score = lessonWithDetails.Score,
+            FlagImage = language.FlagImage != null
+                ? Convert.ToBase64String(language.FlagImage)
+                : null
         };
 
         return summary;

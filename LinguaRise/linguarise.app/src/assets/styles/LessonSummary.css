@@ -33,6 +33,17 @@
   gap: 1rem;
 }
 
+.ls-flag {
+  width: 100px;
+  height: auto;
+  object-fit: contain;
+  margin-right: 0.5rem;
+}
+
+.ls-word-list p {
+  margin: 0.25rem 0;
+}
+
 .ls-item {
   padding: 1rem;
   border: 1px solid #d1d5db;

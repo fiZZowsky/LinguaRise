@@ -41,7 +41,7 @@ const percent = !isNaN(rawScore)
       <div className="ls-meta">
         {flagImage && (
           <img
-            src={flagImage}
+            src={`data:image/png;base64,${flagImage}`}
             alt={`${languageName} flaga`}
             className="ls-flag"
           />
@@ -54,14 +54,14 @@ const percent = !isNaN(rawScore)
       </div>
       <div className="ls-content">
         {learnedWords.length > 0 ? (
-          <ul className="ls-word-list">
+          <div className="ls-word-list">
             {learnedWords.map((word, idx) => (
-              <li key={word.id ?? idx}>
+              <p key={word.id ?? idx}>
                 {word.name}
                 {word.level && ` — poziom: ${word.level}`}
-              </li>
+              </p>
             ))}
-          </ul>
+          </div>
         ) : (
           <p className="ls-no-data">Brak wyuczonych słówek w tej kategorii.</p>
         )}
