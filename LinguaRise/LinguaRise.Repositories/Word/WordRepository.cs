@@ -12,7 +12,9 @@ public class WordRepository : BaseRepository<Word, int>, IWordRepository
     public async Task<IEnumerable<Word>> GetWordsToLearn(Guid userId, int categoryId, int languageId)
     {
         var learnedWordIds = await _context.Courses
-            .Where(c => c.UserId == userId)
+            .Where(c =>
+                c.UserId == userId &&
+                c.LanguageId == languageId)
             .SelectMany(c => c.Lessons)
             .SelectMany(l => l.LearnedWords)
             .Select(w => w.Id)
