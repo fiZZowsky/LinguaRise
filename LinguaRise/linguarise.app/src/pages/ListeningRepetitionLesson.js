@@ -17,7 +17,7 @@ const ListeningRepetitionLesson = () => {
   const { langId } = useParams();
   const languageId = Number(langId);
   const { getLessonSentence, speechData, error } = useLesson();
-  const { getPronunciationData, pronunciationData, error: pronError } = useSendRecording();
+  const { getPronunciationData, pronunciationData } = useSendRecording();
   const { showLoader, hideLoader } = useLoading();
   const fetched = useRef(false);
   const { showAlert } = useAlert();
@@ -167,15 +167,14 @@ const ListeningRepetitionLesson = () => {
            file
          );
 
-         const message = 
-          `Poprawnie rozpoznane? ${pronunciationData.isCorrect}\n` +
-          `Ocena wymowy: ${pronunciationData.score}\n` +
+         const message =
+          `Wynik: ${pronunciationData.score}\n` +
           `Rozpoznany tekst: ${pronunciationData.recognizedText}`;
          await showAlert(AlertType.ERROR, message);
        } catch (e) {
-         await showAlert(AlertType.ERROR, `Błąd wysyłania audio: ${e}`);
-       }
-     }
+        await showAlert(AlertType.ERROR, `Błąd wysyłania audio: ${e}`);
+      }
+    }
      
      if (pronunciationData != null && pronunciationData.isCorrect == false)
       return;

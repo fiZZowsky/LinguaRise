@@ -68,6 +68,13 @@ namespace LinguaRise.Api.Controllers.Lesson
             return Ok(result);
         }
 
+        [HttpPost("speech-recognition-assessment")]
+        public async Task<SoundRecognitionResult> RecognitionValidationController([FromBody] RecognitionValidationRequest request)
+        {
+            var response = await _lessonService.WritingByEarLessonValidationAsync(request);
+            return response;
+        }
+
         [HttpGet("{id}/summary")]
         public async Task<LessonSummaryDTO> GetLessonSummary(int id, [FromQuery] int categoryId)
         {

@@ -9,7 +9,6 @@ const LessonSummary = () => {
   const { state } = useLocation();
   const { categoryId, lessonId } = state || {};
   const { showAlert } = useAlert();
-
   const { lessonSummaryData, error } = useLessonSummary(lessonId, categoryId);
 
   useEffect(() => {

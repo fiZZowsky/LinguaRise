@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import api from "../services/Api";
 import { useLoading } from '../context/LoadingContext';
+import { RecognitionRequest } from "../data/RecognitionRequest";
 
 export const useLesson = () => {
   const [speechData, setSpeechData] = useState(null);
@@ -67,6 +68,51 @@ export const useSendRecording = () => {
   return {
     getPronunciationData,
     pronunciationData,
+    error,
+  };
+};
+
+export const useGetResultFromWritedText = () => {
+  const [responseData, setResponseData] = useState(null);
+  const [error, setError] = useState(null);
+  const { showLoader, hideLoader } = useLoading();
+
+  const getResultForWritedText = useCallback(
+    async (lessonId, languageId, wordId, recognizedText) => {
+      try {
+        showLoader();
+
+        const requestData = new RecognitionRequest({
+          lessonId: lessonId,
+          languageId: languageId,
+          wordId: wordId,
+          recognizedText: recognizedText,
+        });
+
+        const response = await api.post(
+          "lesson/speech-recognition-assessment",
+          requestData,
+          false
+        );
+
+        setResponseData(response.data);
+        console.log("Odpowiedź serwera:", response.data);
+      } catch (err) {
+        console.error("Błąd wysyłania danych:", err);
+
+        const serverMessage =
+          err.response?.data?.message || err.message || "Błąd przesyłania danych";
+        setError(serverMessage);
+      } finally {
+        hideLoader();
+      }
+    },
+    [showLoader, hideLoader]
+  );
+
+  return {
+    getResultForWritedText,
+    responseData,
     error,
   };
 };

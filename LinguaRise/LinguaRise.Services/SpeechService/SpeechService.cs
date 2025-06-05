@@ -8,7 +8,8 @@ using LinguaRise.Models.Converters;
 using LinguaRise.Models.Entities;
 using Microsoft.CognitiveServices.Speech.Audio;
 using Microsoft.CognitiveServices.Speech.PronunciationAssessment;
-using System.Threading.Channels;
+using LinguaRise.Common;
+using Azure.Core;
 
 namespace LinguaRise.Services;
 
@@ -82,24 +83,19 @@ public class SpeechService : ISpeechService
         var speechConfig = SpeechConfig.FromSubscription(_speechConfig.SubscriptionKey, _speechConfig.Region);
         speechConfig.SpeechRecognitionLanguage = language.Culture;
 
+        await using var pcmStream = await SoundConverter.ConvertWebmToWavAsync(audioStream);
+
         var audioFormat = AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1);
         using var pushStream = AudioInputStream.CreatePushStream(audioFormat);
         using var audioConfig = AudioConfig.FromStreamInput(pushStream);
 
-        var pronunciationConfig = new PronunciationAssessmentConfig(
-            translatedSentence,
-            GradingSystem.HundredMark,
-            Granularity.Phoneme,
-            enableMiscue: true);
-
         using var recognizer = new SpeechRecognizer(speechConfig, language.Culture, audioConfig);
-        pronunciationConfig.ApplyTo(recognizer);
 
         var recognitionTask = recognizer.RecognizeOnceAsync();
 
         var buffer = new byte[4096];
         int bytesRead;
-        while ((bytesRead = await audioStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+        while ((bytesRead = await pcmStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
         {
             pushStream.Write(buffer, bytesRead);
         }
@@ -110,8 +106,7 @@ public class SpeechService : ISpeechService
         var resultDTO = new PronunciationResultDTO();
         if (speechResult.Reason == ResultReason.RecognizedSpeech)
         {
-            var pronResult = PronunciationAssessmentResult.FromResult(speechResult);
-            resultDTO.Score = pronResult.AccuracyScore;
+            resultDTO.Score = StringSimilarity.CalculateSimilarity(speechResult.Text, translatedSentence);
             resultDTO.IsCorrect = resultDTO.Score >= 80.0;
             resultDTO.RecognizedText = speechResult.Text;
         }

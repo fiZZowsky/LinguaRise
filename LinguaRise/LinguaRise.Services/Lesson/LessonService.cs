@@ -5,6 +5,7 @@ using LinguaRise.Models.Converters;
 using LinguaRise.Common.Exceptions;
 using LinguaRise.Common.Context.Interfaces;
 using LinguaRise.Models.Entities;
+using LinguaRise.Common;
 
 namespace LinguaRise.Services;
 
@@ -17,6 +18,7 @@ public class LessonService : ILessonService
     private readonly IUserContext _userContext;
     private readonly ILanguageRepository _languageRepository;
     private readonly IVocabularyCategoryRepository _vocabularyCategoryRepository;
+    private readonly IWordRepository _wordRepository;
 
     public LessonService(ILessonRepository lessonRepository, 
         IResourceRepository resourceRepository, 
@@ -24,7 +26,8 @@ public class LessonService : ILessonService
         ICourseRepository courseRepository,
         IUserContext userContext,
         ILanguageRepository languageRepository,
-        IVocabularyCategoryRepository vocabularyCategoryRepository)
+        IVocabularyCategoryRepository vocabularyCategoryRepository,
+        IWordRepository wordRepository)
     {
         _lessonRepository = lessonRepository;
         _resourceRepository = resourceRepository;
@@ -33,6 +36,7 @@ public class LessonService : ILessonService
         _userContext = userContext;
         _languageRepository = languageRepository;
         _vocabularyCategoryRepository = vocabularyCategoryRepository;
+        _wordRepository = wordRepository;
     }
 
     public async Task<IEnumerable<LessonDTO>> GetLessonsAsync()
@@ -100,10 +104,30 @@ public class LessonService : ILessonService
         if (response.IsCorrect)
         {
             var lesson = await _lessonRepository.GetAsync(lessonId);
-            var word = new Word { Id = wordId };
+            var word = await _wordRepository.GetAsync(wordId);
             lesson.LearnedWords.Add(word);
             lesson.Score += response.Score;
 
+            await _lessonRepository.UpdateAsync(lesson);
+        }
+
+        return response;
+    }
+
+    public async Task<SoundRecognitionResult> WritingByEarLessonValidationAsync(RecognitionValidationRequest request)
+    {
+        var response = new SoundRecognitionResult();
+        var language = await _languageRepository.GetAsync(request.LanguageId);
+        var learnedWord = await _wordRepository.GetTranslatedWord(request.WordId, language.Code);
+
+        response.Score = StringSimilarity.CalculateSimilarity(request.RecognizedText, learnedWord);
+        response.IsCorrect = response.Score > 90;
+
+        if (response.IsCorrect)
+        {
+            var word = new Word { Id = request.WordId };
+            var lesson = await _lessonRepository.GetAsync(request.LessonId);
+            lesson.LearnedWords.Add(word);
             await _lessonRepository.UpdateAsync(lesson);
         }
 

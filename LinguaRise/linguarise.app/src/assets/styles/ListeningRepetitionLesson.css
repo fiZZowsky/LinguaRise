@@ -1,4 +1,4 @@
-.lr-container {
+  .lr-container {
   position: relative;
   height: 100vh;
   display: flex;
@@ -127,4 +127,25 @@
 
 .btn.check:not(.disabled):not(:disabled) {
   transition: background-color .2s ease;
+}
+
+.answer-input {
+  width: 100%;
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 1rem;
+  color: #374151;
+}
+
+.answer-input::placeholder {
+  color: #9ca3af;
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: #4b5563;
+  box-shadow: 0 0 0 1px #4b5563;
 }

@@ -12,6 +12,7 @@ import CourseCategory from './pages/CourseCategory';
 import Profile from './pages/Profile';
 import ListeningRepetitionLesson from './pages/ListeningRepetitionLesson';
 import LessonSummary from './pages/LessonSummary';
+import WritingByEarLesson from './pages/WritingByEarLesson';
 
 function App() {
   const location = useLocation();
@@ -35,6 +36,7 @@ function App() {
           <Route path='/courses' element={<Courses />} />
           <Route path='/courses/:langId/categories' element={<CourseCategory />} />
           <Route path='/courses/:langId/listening-repetition' element={<ListeningRepetitionLesson />} />
+          <Route path='/courses/:langId/writing-by-ear' element={<WritingByEarLesson />} />
           <Route path='/about' element={<About />} />
           <Route path='/faq' element={<FAQ />} />
           <Route path='/profile' element={<Profile />} />
