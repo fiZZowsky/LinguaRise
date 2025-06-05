@@ -97,10 +97,10 @@ public class LessonService : ILessonService
         return response;
     }
 
-    public async Task<PronunciationResultDTO> EvaluatePronounciationAsync(Stream audioStream, int wordId, int languageId, int lessonId)
+    public async Task<PronunciationResultDTO> EvaluatePronunciationAsync(Stream audioStream, int wordId, int languageId, int lessonId)
     {
         var language = await _languageRepository.GetAsync(languageId);
-        var response = await _speechService.EvaluatePronounciationAsync(audioStream, language, wordId);
+        var response = await _speechService.EvaluatePronunciationAsync(audioStream, language, wordId);
         if (response.IsCorrect)
         {
             var lesson = await _lessonRepository.GetAsync(lessonId);

@@ -73,7 +73,7 @@ public class SpeechService : ISpeechService
         return new SpeechResponseDTO { Items = items };
     }
 
-    public async Task<PronunciationResultDTO> EvaluatePronounciationAsync(Stream audioStream, Language language, int wordId)
+    public async Task<PronunciationResultDTO> EvaluatePronunciationAsync(Stream audioStream, Language language, int wordId)
     {
         var translatedSentence = await _wordRepository.GetTranslatedWord(wordId, language.Code);
         if (string.IsNullOrWhiteSpace(translatedSentence))
