@@ -51,6 +51,7 @@ export const useSendRecording = () => {
         );
         setPronunciationData(response);
         console.log(response);
+        return response;
       } catch (err) {
         const message =
           (err && err.message) ||

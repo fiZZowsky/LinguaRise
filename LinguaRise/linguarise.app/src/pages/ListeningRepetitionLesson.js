@@ -160,7 +160,7 @@ const ListeningRepetitionLesson = () => {
        });
 
        try {
-          await getPronunciationData(
+          const result = await getPronunciationData(
            speechData.lessonId,
            languageId,
            current.textId,
@@ -168,17 +168,16 @@ const ListeningRepetitionLesson = () => {
          );
 
          const message =
-          `Wynik: ${pronunciationData.score}\n` +
-          `Rozpoznany tekst: ${pronunciationData.recognizedText}`;
-         await showAlert(AlertType.ERROR, message);
+          `Wynik: ${result.score}\n` +
+          `Rozpoznany tekst: ${result.recognizedText}`;
+         await showAlert(AlertType.INFO, message);
+         if (result != null && result.isCorrect == false)
+          return;
        } catch (e) {
         await showAlert(AlertType.ERROR, `Błąd wysyłania audio: ${e}`);
       }
     }
      
-     if (pronunciationData != null && pronunciationData.isCorrect == false)
-      return;
-
      if (recordedUrl) {
        URL.revokeObjectURL(recordedUrl);
        setRecordedUrl(null);
