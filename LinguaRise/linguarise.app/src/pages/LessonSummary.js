@@ -57,8 +57,7 @@ const percent = !isNaN(rawScore)
           <div className="ls-word-list">
             {learnedWords.map((word, idx) => (
               <p key={word.id ?? idx}>
-                {word.name}
-                {word.level && ` — poziom: ${word.level}`}
+                 {word.name ?? word.Name}
               </p>
             ))}
           </div>
