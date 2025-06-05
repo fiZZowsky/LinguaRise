@@ -9,6 +9,8 @@ using LinguaRise.Models.Entities;
 using Microsoft.CognitiveServices.Speech.Audio;
 using Microsoft.CognitiveServices.Speech.PronunciationAssessment;
 using System.Threading.Channels;
+using System.Diagnostics;
+using System.IO;
 
 namespace LinguaRise.Services;
 
@@ -20,7 +22,7 @@ public class SpeechService : ISpeechService
     private readonly IResourceRepository _resourceRepository;
     private readonly SpeechConfig _speechConfig;
 
-    public SpeechService(IConfiguration configuration, 
+    public SpeechService(IConfiguration configuration,
         ILanguageRepository languageRepository,
         IWordRepository wordRepository,
         IUserContext userContext,
@@ -35,6 +37,37 @@ public class SpeechService : ISpeechService
         _speechConfig = SpeechConfig.FromSubscription(
             speechSection["Key"]!,
             speechSection["Region"]!);
+    }
+
+    private async Task<Stream> ConvertWebmToWavAsync(Stream webmStream)
+    {
+        var inputPath = Path.GetTempFileName() + ".webm";
+        var outputPath = Path.GetTempFileName() + ".wav";
+
+        await using (var file = File.Create(inputPath))
+        {
+            await webmStream.CopyToAsync(file);
+        }
+
+        var psi = new ProcessStartInfo
+        {
+            FileName = "ffmpeg",
+            Arguments = $"-y -i \"{inputPath}\" -ac 1 -ar 16000 -f wav \"{outputPath}\"",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false
+        };
+
+        using (var proc = Process.Start(psi)!)
+        {
+            await proc.WaitForExitAsync();
+        }
+
+        var ms = new MemoryStream(await File.ReadAllBytesAsync(outputPath));
+        File.Delete(inputPath);
+        File.Delete(outputPath);
+        ms.Position = 0;
+        return ms;
     }
 
     public async Task<SpeechResponseDTO> SynthesizeAsync(int categoryId, int courseLanguageId)
@@ -82,6 +115,8 @@ public class SpeechService : ISpeechService
         var speechConfig = SpeechConfig.FromSubscription(_speechConfig.SubscriptionKey, _speechConfig.Region);
         speechConfig.SpeechRecognitionLanguage = language.Culture;
 
+        await using var pcmStream = await ConvertWebmToWavAsync(audioStream);
+
         var audioFormat = AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1);
         using var pushStream = AudioInputStream.CreatePushStream(audioFormat);
         using var audioConfig = AudioConfig.FromStreamInput(pushStream);
@@ -99,7 +134,7 @@ public class SpeechService : ISpeechService
 
         var buffer = new byte[4096];
         int bytesRead;
-        while ((bytesRead = await audioStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+        while ((bytesRead = await pcmStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
         {
             pushStream.Write(buffer, bytesRead);
         }
