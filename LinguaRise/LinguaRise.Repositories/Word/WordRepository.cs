@@ -17,6 +17,7 @@ public class WordRepository : BaseRepository<Word, int>, IWordRepository
                 c.LanguageId == languageId)
             .SelectMany(c => c.Lessons)
             .SelectMany(l => l.LearnedWords)
+            .Where(w => w.VocabularyCategoryId == categoryId)
             .Select(w => w.Id)
             .Distinct()
             .ToListAsync();
