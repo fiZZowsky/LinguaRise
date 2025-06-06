@@ -290,16 +290,10 @@ const ListeningRepetitionLesson = () => {
             ref={audioRef}
             src={`data:audio/mp3;base64,${current.audioBase64}`}
             onEnded={onEnded}
-            style={{ display: "none" }}
-          />
-
-          {recordedUrl && (
-            <div className="lr-user-recording">
-              <audio controls src={recordedUrl}></audio>
-            </div>
-          )}
-
-          <div className="lr-actions">
+          style={{ display: "none" }}
+        />
+          
+        <div className="lr-actions">
             <button
               className={`btn check ${isCheckDisabled ? "disabled" : ""}`}
               onClick={handleCheck}
