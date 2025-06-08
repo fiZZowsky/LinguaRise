@@ -136,6 +136,17 @@ public class LessonService : ILessonService
         return response;
     }
 
+    public async Task<LessonWritingContentDTO> GetWritingLessonContent(int languageId)
+    {
+        const int CATEGORY = 3;
+
+        var words = await _wordRepository.GetWordsToLearn(_userContext.UserId.Value, CATEGORY, languageId);
+
+        var response = new LessonWritingContentDTO();
+
+        return response;
+    }
+
     public async Task<LessonSummaryDTO> GetLessonSummaryAsync(int lessonId, int categoryId)
     {
         var lessonWithDetails = await _lessonRepository.GetWithDetailsAsync(lessonId);
