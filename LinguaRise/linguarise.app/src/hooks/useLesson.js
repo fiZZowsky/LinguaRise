@@ -82,22 +82,21 @@ export const useGetResultFromWritedText = () => {
     async (lessonId, languageId, wordId, recognizedText) => {
       try {
         showLoader();
-
         const requestData = new RecognitionRequest({
-          lessonId: lessonId,
-          languageId: languageId,
-          wordId: wordId,
           recognizedText: recognizedText,
+          lessonId: lessonId,
+          wordId: wordId,
+          languageId: languageId
         });
 
         const response = await api.post(
           "lesson/speech-recognition-assessment",
-          requestData,
-          false
+          requestData
         );
 
         setResponseData(response.data);
         console.log("Odpowiedź serwera:", response.data);
+        return response.data;
       } catch (err) {
         console.error("Błąd wysyłania danych:", err);
 

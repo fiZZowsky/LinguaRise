@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaVolumeUp, FaArrowLeft } from "react-icons/fa";
-import { useLesson } from "../hooks/useLesson";
+import { useLesson, useGetResultFromWritedText } from "../hooks/useLesson";
 import { useLoading } from "../context/LoadingContext";
 import "../assets/styles/ListeningRepetitionLesson.css";
+import { useAlert } from "../hooks/useAlert";
+import { AlertType } from '../data/alertTypes';
 
 const WritingByEarLesson = () => {
   const navigate = useNavigate();
@@ -11,8 +13,10 @@ const WritingByEarLesson = () => {
   const languageId = Number(langId);
 
   const { getLessonSentence, speechData, error } = useLesson();
+  const { getResultForWritedText, responseData } = useGetResultFromWritedText();
   const { showLoader } = useLoading();
   const fetched = useRef(false);
+  const { showAlert } = useAlert();
 
   const [answer, setAnswer] = useState("");
   const [started, setStarted] = useState(false);
@@ -25,7 +29,7 @@ const WritingByEarLesson = () => {
     if (fetched.current) return;
     fetched.current = true;
     showLoader();
-    getLessonSentence(1, languageId).catch(console.error);
+    getLessonSentence(2, languageId).catch(console.error);
   }, [getLessonSentence, languageId, showLoader]);
 
   useEffect(() => {
@@ -50,9 +54,28 @@ const WritingByEarLesson = () => {
       setIsPlaying(false);
     }
   };
-
-  const handleCheck = () => {
+  
+const handleCheck = async () => {
     setIsPlaying(false);
+
+    try {
+      const result = await getResultForWritedText(
+        speechData.lessonId,
+        languageId,
+        current.textId,
+        answer
+      );
+      const message = `Wynik: ${result.score}`;
+      await showAlert(AlertType.INFO, message);
+      if (result && result.isCorrect === false) return;
+    } catch (e) {
+      await showAlert(
+        AlertType.ERROR,
+        `Błąd sprawdzania odpowiedzi: ${e}`
+      );
+      return;
+    }
+    console.log(`${responseData}`);
     setAnswer("");
 
     if (hasNext) {
