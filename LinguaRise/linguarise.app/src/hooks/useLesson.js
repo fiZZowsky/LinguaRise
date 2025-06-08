@@ -96,7 +96,7 @@ export const useGetResultFromWritedText = () => {
 
         setResponseData(response.data);
         console.log("Odpowiedź serwera:", response.data);
-        return response.data;
+        return response;
       } catch (err) {
         console.error("Błąd wysyłania danych:", err);
 
