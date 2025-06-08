@@ -13,7 +13,7 @@ const WritingByEarLesson = () => {
   const languageId = Number(langId);
 
   const { getLessonSentence, speechData, error } = useLesson();
-  const { getResultForWritedText, responseData } = useGetResultFromWritedText();
+  const { getResultForWritedText } = useGetResultFromWritedText();
   const { showLoader } = useLoading();
   const fetched = useRef(false);
   const { showAlert } = useAlert();
@@ -75,13 +75,12 @@ const handleCheck = async () => {
       );
       return;
     }
-    console.log(`${responseData}`);
     setAnswer("");
 
     if (hasNext) {
       setCurrentIndex((idx) => idx + 1);
     } else {
-      const categoryId = 1;
+      const categoryId = 2;
       navigate("/courses/listening-repetition/summary", {
         state: { categoryId, lessonId: speechData.lessonId },
       });
@@ -95,7 +94,7 @@ const handleCheck = async () => {
     if (hasNext) {
       setCurrentIndex((idx) => idx + 1);
     } else {
-      const categoryId = 1;
+      const categoryId = 2;
       navigate("/courses/listening-repetition/summary", {
         state: { categoryId, lessonId: speechData.lessonId },
       });

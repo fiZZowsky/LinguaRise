@@ -50,7 +50,6 @@ export const useSendRecording = () => {
           false
         );
         setPronunciationData(response);
-        console.log(response);
         return response;
       } catch (err) {
         const message =
@@ -94,8 +93,7 @@ export const useGetResultFromWritedText = () => {
           requestData
         );
 
-        setResponseData(response.data);
-        console.log("Odpowiedź serwera:", response.data);
+        setResponseData(response);
         return response;
       } catch (err) {
         console.error("Błąd wysyłania danych:", err);
