@@ -142,7 +142,34 @@ public class LessonService : ILessonService
 
         var words = await _wordRepository.GetWordsToLearn(_userContext.UserId.Value, CATEGORY, languageId);
 
-        var response = new LessonWritingContentDTO();
+        var course = await _courseRepository.GetByUserAndLanguageAsync(_userContext.UserId.Value, languageId);
+        var lesson = new Lesson
+        {
+            CourseId = course?.Id,
+            CompletionDate = DateTime.UtcNow
+        };
+
+        var language = await _languageRepository.GetAsync(languageId);
+
+        var items = new List<WritingItemDTO>();
+        foreach (var word in words)
+        {
+            var userLangTranslation = await _resourceRepository.GetTranslatedWordAsync(word.ResourceKey, _userContext.LanguageCode);
+
+            items.Add(new WritingItemDTO
+            {
+                WordId = word.Id,
+                WordInUserLanguage = userLangTranslation ?? word.ResourceKey
+            });
+        }
+
+        var lessonId = await _lessonRepository.AddAsync(lesson);
+
+        var response = new LessonWritingContentDTO
+        {
+            LessonId = lessonId,
+            Items = items
+        };
 
         return response;
     }

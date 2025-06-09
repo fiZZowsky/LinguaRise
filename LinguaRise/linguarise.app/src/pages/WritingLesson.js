@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaVolumeUp, FaArrowLeft } from "react-icons/fa";
-import { useLesson, useGetResultFromWritedText } from "../hooks/useLesson";
+import { FaArrowLeft } from "react-icons/fa";
+import { useWritingLesson, useGetResultFromWritedText } from "../hooks/useLesson";
 import { useLoading } from "../context/LoadingContext";
 import "../assets/styles/ListeningRepetitionLesson.css";
 import { useAlert } from "../hooks/useAlert";
@@ -12,8 +12,8 @@ const WritingLesson = () => {
   const { langId } = useParams();
   const languageId = Number(langId);
 
-//   const { getLessonSentence, speechData, error } = useLesson();
-//   const { getResultForWritedText } = useGetResultFromWritedText();
+  const { getWritingLessonContent, writingData, error } = useWritingLesson();
+  const { getResultForWritedText } = useGetResultFromWritedText();
   const { showLoader } = useLoading();
   const fetched = useRef(false);
   const { showAlert } = useAlert();
@@ -26,18 +26,18 @@ const WritingLesson = () => {
     if (fetched.current) return;
     fetched.current = true;
     showLoader();
-    getLessonSentence(3, languageId).catch(console.error);
-  }, [getLessonSentence, languageId, showLoader]);
+    getWritingLessonContent(languageId).catch(console.error);
+  }, [getWritingLessonContent, languageId, showLoader]);
 
-  const current = speechData?.items?.[currentIndex];
-  const hasNext = currentIndex < (speechData?.items?.length || 0) - 1;
+  const current = writingData?.items?.[currentIndex];
+  const hasNext = currentIndex < (writingData?.items?.length || 0) - 1;
 
 const handleCheck = async () => {
     try {
       const result = await getResultForWritedText(
-        speechData.lessonId,
+        writingData.lessonId,
         languageId,
-        current.textId,
+        current.wordId,
         answer
       );
       const message = `Wynik: ${result.score}`;
@@ -57,7 +57,7 @@ const handleCheck = async () => {
     } else {
       const categoryId = 3;
       navigate("/courses/listening-repetition/summary", {
-        state: { categoryId, lessonId: speechData.lessonId },
+        state: { categoryId, lessonId: writingData.lessonId },
       });
     }
   };
@@ -70,15 +70,12 @@ const handleCheck = async () => {
     } else {
       const categoryId = 3;
       navigate("/courses/listening-repetition/summary", {
-        state: { categoryId, lessonId: speechData.lessonId },
+        state: { categoryId, lessonId: writingData.lessonId },
       });
     }
   };
 
-  const onEnded = () => setIsPlaying(false);
-
-  if (error) return <div className="lr-error">Error: {error}</div>;
-  if (!speechData || !current) return null;
+  if (!writingData || !current) return null;
 
   return (
     <div className="lr-container">
@@ -96,36 +93,21 @@ const handleCheck = async () => {
       ) : (
         <div className="lr-card">
           <div className="lr-counter">
-            {currentIndex + 1} / {speechData.items.length}
+            {currentIndex + 1} / {writingData.items.length}
           </div>
 
-          <h1 className="lr-title">Practice Listening</h1>
-          <p className="lr-subtitle">Type what you hear in the text box</p>
-
-          <div className="lr-playback-row">
-            <div className="lr-audio-controls">
-              <button className="icon-button play" onClick={handlePlay}>
-                <FaVolumeUp size={24} />
-              </button>
-            </div>
-            <input
-              type="range"
-              className="lr-volume-slider"
-              min="0"
-              max="100"
-              value={volume}
-              onChange={(e) => setVolume(Number(e.target.value))}
-            />
-          </div>
-
-          <audio
-            ref={audioRef}
-            src={`data:audio/mp3;base64,${current.audioBase64}`}
-            onEnded={onEnded}
-            style={{ display: "none" }}
-          />
+        <h1 className="lr-title">Practice Writing</h1>
+          <p className="lr-subtitle">Translate the word below</p>
 
           <div className="lr-input-container">
+            <input
+              type="text"
+              readOnly
+              tabIndex={-1}
+              className="answer-input"
+              value={current.wordInUserLanguage}
+            />
+
             <input
               type="text"
               name="answer"
