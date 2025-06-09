@@ -6,6 +6,7 @@ using LinguaRise.Common.Exceptions;
 using LinguaRise.Common.Context.Interfaces;
 using LinguaRise.Models.Entities;
 using LinguaRise.Common;
+using System.Linq;
 
 namespace LinguaRise.Services;
 
@@ -125,9 +126,10 @@ public class LessonService : ILessonService
 
         if (response.IsCorrect)
         {
-            var word = new Word { Id = request.WordId };
+            var word = await _wordRepository.GetAsync(request.WordId);
             var lesson = await _lessonRepository.GetAsync(request.LessonId);
             lesson.LearnedWords.Add(word);
+            lesson.Score += response.Score;
             await _lessonRepository.UpdateAsync(lesson);
         }
 
@@ -136,18 +138,18 @@ public class LessonService : ILessonService
 
     public async Task<LessonSummaryDTO> GetLessonSummaryAsync(int lessonId, int categoryId)
     {
-        var lessonWithDetails = (await _lessonRepository.GetAllWithDetailsAsync())
-            .FirstOrDefault(l => l.Id == lessonId);
+        var lessonWithDetails = await _lessonRepository.GetWithDetailsAsync(lessonId);
 
         if (lessonWithDetails == null)
             throw new NotFoundException($"Lesson with ID {lessonId} not found.", 404);
 
-        var course = await _courseRepository.GetAsync(lessonWithDetails.CourseId.Value);
-        var language = await _languageRepository.GetAsync(course.LanguageId.Value);
+        var course = lessonWithDetails.Course ?? await _courseRepository.GetAsync(lessonWithDetails.CourseId!.Value);
+        var language = course.Language ?? await _languageRepository.GetAsync(course.LanguageId!.Value);
 
         var learnedWordsDto = new List<WordDTO>();
-        foreach (var word in lessonWithDetails.LearnedWords)
+        foreach (var wordId in lessonWithDetails.LearnedWords.Select(x => x.Id))
         {
+            var word = await _wordRepository.GetAsync(wordId);
             var translated = await _resourceRepository.GetTranslatedWordAsync(word.ResourceKey, language.Code);
             var dto = word.ToWordDTO();
             dto.Name = translated ?? word.ResourceKey;

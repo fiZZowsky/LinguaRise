@@ -13,6 +13,7 @@ import Profile from './pages/Profile';
 import ListeningRepetitionLesson from './pages/ListeningRepetitionLesson';
 import LessonSummary from './pages/LessonSummary';
 import WritingByEarLesson from './pages/WritingByEarLesson';
+import CasualConservationLesson from './pages/CasualConservationLesson';
 
 function App() {
   const location = useLocation();
@@ -25,7 +26,7 @@ function App() {
     }, 500);
     return () => clearTimeout(timer);
   }, [location.pathname]);
-  
+
   return (
     <>
       <Navbar />
@@ -37,10 +38,12 @@ function App() {
           <Route path='/courses/:langId/categories' element={<CourseCategory />} />
           <Route path='/courses/:langId/listening-repetition' element={<ListeningRepetitionLesson />} />
           <Route path='/courses/:langId/writing-by-ear' element={<WritingByEarLesson />} />
+          <Route path='/courses/:langId/casual-conversation' element={<CasualConservationLesson />} />
           <Route path='/about' element={<About />} />
           <Route path='/faq' element={<FAQ />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/courses/listening-repetition/summary' element={<LessonSummary />} />
+
         </Routes>
       </div>
       {isLoading && <Loader />}
