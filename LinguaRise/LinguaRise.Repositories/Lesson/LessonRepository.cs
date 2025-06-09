@@ -20,4 +20,16 @@ public class LessonRepository : BaseRepository<Lesson, int>, ILessonRepository
             .ThenInclude(w => w.VocabularyCategory)
         .ToListAsync();
     }
+
+    public async Task<Lesson?> GetWithDetailsAsync(int id)
+    {
+        return await _dbSet
+            .Include(l => l.Course)
+                .ThenInclude(c => c.User)
+            .Include(l => l.Course)
+                .ThenInclude(c => c.Language)
+            .Include(l => l.LearnedWords)
+                .ThenInclude(w => w.VocabularyCategory)
+            .FirstOrDefaultAsync(l => l.Id == id);
+    }
 }

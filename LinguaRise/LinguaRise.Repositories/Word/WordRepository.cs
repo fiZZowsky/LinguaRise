@@ -40,13 +40,17 @@ public class WordRepository : BaseRepository<Word, int>, IWordRepository
 
     public async Task<string> GetTranslatedWord(int wordId, string languageCode)
     {
-        var word = await _context.Words
-            .FirstOrDefaultAsync(w => w.Id == wordId);
+        var resourceKey = await _context.Words
+            .AsNoTracking()
+            .Where(w => w.Id == wordId)
+            .Select(w => w.ResourceKey)
+            .FirstOrDefaultAsync();
 
         var translatedWord = await _context.Resources
             .Include(r => r.Language)
-            .Where(r => r.Key == word.ResourceKey 
-            && r.Language.Code == languageCode)
+            .Where(r => r.Key == resourceKey
+                && r.Language.Code == languageCode)
+            .AsNoTracking()
             .Select(r => r.Name)
             .FirstOrDefaultAsync();
 
