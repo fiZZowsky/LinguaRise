@@ -174,6 +174,27 @@ public class LessonService : ILessonService
         return response;
     }
 
+    public async Task<SoundRecognitionResult> ValidateWrittenAnswerAsync(WrittenAnswerRequest request)
+    {
+        var response = new SoundRecognitionResult();
+        var language = await _languageRepository.GetAsync(request.LanguageId);
+        var learnedWord = await _wordRepository.GetTranslatedWord(request.WordId, language.Code);
+
+        response.Score = StringSimilarity.CalculateSimilarity(request.Answer, learnedWord);
+        response.IsCorrect = response.Score > 90;
+
+        if (response.IsCorrect)
+        {
+            var word = await _wordRepository.GetAsync(request.WordId);
+            var lesson = await _lessonRepository.GetAsync(request.LessonId);
+            lesson.LearnedWords.Add(word);
+            lesson.Score += response.Score;
+            await _lessonRepository.UpdateAsync(lesson);
+        }
+
+        return response;
+    }
+
     public async Task<LessonSummaryDTO> GetLessonSummaryAsync(int lessonId, int categoryId)
     {
         var lessonWithDetails = await _lessonRepository.GetWithDetailsAsync(lessonId);
