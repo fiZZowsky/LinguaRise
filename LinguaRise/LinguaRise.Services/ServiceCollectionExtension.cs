@@ -15,5 +15,6 @@ public static class ServiceCollectionExtension
         services.AddScoped<IResourceService, ResourceService>();
         services.AddScoped<ISpeechService, SpeechService>();
         services.AddScoped<IVocabularyCategoryService, VocabularyCategoryService>();
+        services.AddScoped<IChatService, ChatService>();
     }
 }
