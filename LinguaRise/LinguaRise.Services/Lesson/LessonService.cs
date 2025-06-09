@@ -136,6 +136,65 @@ public class LessonService : ILessonService
         return response;
     }
 
+    public async Task<LessonWritingContentDTO> GetWritingLessonContent(int languageId)
+    {
+        const int CATEGORY = 3;
+
+        var words = await _wordRepository.GetWordsToLearn(_userContext.UserId.Value, CATEGORY, languageId);
+
+        var course = await _courseRepository.GetByUserAndLanguageAsync(_userContext.UserId.Value, languageId);
+        var lesson = new Lesson
+        {
+            CourseId = course?.Id,
+            CompletionDate = DateTime.UtcNow
+        };
+
+        var language = await _languageRepository.GetAsync(languageId);
+
+        var items = new List<WritingItemDTO>();
+        foreach (var word in words)
+        {
+            var userLangTranslation = await _resourceRepository.GetTranslatedWordAsync(word.ResourceKey, _userContext.LanguageCode);
+
+            items.Add(new WritingItemDTO
+            {
+                WordId = word.Id,
+                WordInUserLanguage = userLangTranslation ?? word.ResourceKey
+            });
+        }
+
+        var lessonId = await _lessonRepository.AddAsync(lesson);
+
+        var response = new LessonWritingContentDTO
+        {
+            LessonId = lessonId,
+            Items = items
+        };
+
+        return response;
+    }
+
+    public async Task<SoundRecognitionResult> ValidateWrittenAnswerAsync(WrittenAnswerRequest request)
+    {
+        var response = new SoundRecognitionResult();
+        var language = await _languageRepository.GetAsync(request.LanguageId);
+        var learnedWord = await _wordRepository.GetTranslatedWord(request.WordId, language.Code);
+
+        response.Score = StringSimilarity.CalculateSimilarity(request.Answer, learnedWord);
+        response.IsCorrect = response.Score > 90;
+
+        if (response.IsCorrect)
+        {
+            var word = await _wordRepository.GetAsync(request.WordId);
+            var lesson = await _lessonRepository.GetAsync(request.LessonId);
+            lesson.LearnedWords.Add(word);
+            lesson.Score += response.Score;
+            await _lessonRepository.UpdateAsync(lesson);
+        }
+
+        return response;
+    }
+
     public async Task<LessonSummaryDTO> GetLessonSummaryAsync(int lessonId, int categoryId)
     {
         var lessonWithDetails = await _lessonRepository.GetWithDetailsAsync(lessonId);

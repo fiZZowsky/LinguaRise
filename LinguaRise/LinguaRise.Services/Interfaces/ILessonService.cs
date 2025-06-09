@@ -11,6 +11,8 @@ namespace LinguaRise.Services.Interfaces
         Task<SpeechResponseDTO> GetLessonContentSpeech(int categoryId, int languageId);
         Task<SoundRecognitionResult> WritingByEarLessonValidationAsync(RecognitionValidationRequest request);
         Task<PronunciationResultDTO> EvaluatePronunciationAsync(Stream audioStream, int wordId, int languageId, int lessonId);
+        Task<LessonWritingContentDTO> GetWritingLessonContent(int languageId);
+        Task<SoundRecognitionResult> ValidateWrittenAnswerAsync(WrittenAnswerRequest request);
         Task<LessonSummaryDTO> GetLessonSummaryAsync(int lessonId, int categoryId);
     }
 }

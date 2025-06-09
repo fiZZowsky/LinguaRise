@@ -75,6 +75,21 @@ namespace LinguaRise.Api.Controllers.Lesson
             return response;
         }
 
+        [HttpPost("lesson-writing-content")]
+        public async Task<LessonWritingContentDTO> GetWritingLessonContent([FromQuery] int languageId)
+        {
+            var response = await _lessonService.GetWritingLessonContent(languageId);
+            return response;
+        }
+
+        [HttpPost("writing-assessment")]
+        public async Task<SoundRecognitionResult> ValidateWrittenAnswer([FromBody] WrittenAnswerRequest request)
+        {
+            var response = await _lessonService.ValidateWrittenAnswerAsync(request);
+            return response;
+        }
+
+
         [HttpGet("{id}/summary")]
         public async Task<LessonSummaryDTO> GetLessonSummary(int id, [FromQuery] int categoryId)
         {
