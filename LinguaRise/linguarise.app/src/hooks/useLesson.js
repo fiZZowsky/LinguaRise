@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import api from "../services/Api";
 import { useLoading } from '../context/LoadingContext';
 import { RecognitionRequest } from "../data/RecognitionRequest";
+import { WrittenAnswerRequest } from "../data/WrittenAnswerRequest";
 
 export const useLesson = () => {
   const [speechData, setSpeechData] = useState(null);
@@ -110,6 +111,77 @@ export const useGetResultFromWritedText = () => {
 
   return {
     getResultForWritedText,
+    responseData,
+    error,
+  };
+};
+
+export const useWritingLesson = () => {
+  const [writingData, setWritingData] = useState(null);
+  const [error, setError] = useState(null);
+  const { showLoader, hideLoader } = useLoading();
+
+  const getWritingLessonContent = useCallback(
+    async (languageId) => {
+      try {
+        showLoader();
+        const response = await api.post(
+          `lesson/lesson-writing-content?languageId=${languageId}`
+        );
+        setWritingData(response);
+        return response;
+      } catch (err) {
+        setError(err.message || "Error getting writing lesson.");
+        throw err;
+      } finally {
+        hideLoader();
+      }
+    },
+    [showLoader, hideLoader]
+  );
+
+  return {
+    getWritingLessonContent,
+    writingData,
+    error,
+  };
+};
+
+export const useValidateWrittenAnswer = () => {
+  const [responseData, setResponseData] = useState(null);
+  const [error, setError] = useState(null);
+  const { showLoader, hideLoader } = useLoading();
+
+  const validateWrittenAnswer = useCallback(
+    async (lessonId, languageId, wordId, answer) => {
+      try {
+        showLoader();
+        const requestData = new WrittenAnswerRequest({
+          answer,
+          lessonId,
+          wordId,
+          languageId,
+        });
+        const response = await api.post(
+          "lesson/writing-assessment",
+          requestData
+        );
+        setResponseData(response);
+        return response;
+      } catch (err) {
+        const message =
+          (err && err.message) || "Error validating written answer.";
+        setError(message);
+        throw err;
+      } finally {
+        hideLoader();
+      }
+    },
+    [showLoader, hideLoader]
+  );
+
+  return {
+    validateWrittenAnswer,
     responseData,
     error,
   };

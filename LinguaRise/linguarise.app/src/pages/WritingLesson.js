@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import { useWritingLesson, useGetResultFromWritedText } from "../hooks/useLesson";
+import { useWritingLesson, useValidateWrittenAnswer } from "../hooks/useLesson";
 import { useLoading } from "../context/LoadingContext";
 import "../assets/styles/ListeningRepetitionLesson.css";
 import { useAlert } from "../hooks/useAlert";
@@ -13,7 +13,7 @@ const WritingLesson = () => {
   const languageId = Number(langId);
 
   const { getWritingLessonContent, writingData, error } = useWritingLesson();
-  const { getResultForWritedText } = useGetResultFromWritedText();
+  const { validateWrittenAnswer } = useValidateWrittenAnswer();
   const { showLoader } = useLoading();
   const fetched = useRef(false);
   const { showAlert } = useAlert();
@@ -34,7 +34,7 @@ const WritingLesson = () => {
 
 const handleCheck = async () => {
     try {
-      const result = await getResultForWritedText(
+      const result = await validateWrittenAnswer(
         writingData.lessonId,
         languageId,
         current.wordId,
