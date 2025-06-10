@@ -2,6 +2,6 @@
 
 public interface IChatService
 {
-    Task<string> GetChatCompletionAsync(string userPrompt);
+    Task<string> GetChatCompletionAsync(string userPrompt, int languageId, string languageCode);
     Task<IEnumerable<string>> GetAvailableModelsAsync();
 }
