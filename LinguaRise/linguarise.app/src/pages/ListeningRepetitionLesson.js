@@ -11,11 +11,15 @@ import { useLoading } from "../context/LoadingContext";
 import { useAlert } from '../hooks/useAlert';
 import "../assets/styles/ListeningRepetitionLesson.css";
 import { AlertType } from '../data/alertTypes';
+import { useTranslations } from "../hooks/useTranslations";
+import { useLanguage } from "../context/LanguageContext";
 
 const ListeningRepetitionLesson = () => {
   const navigate = useNavigate();
   const { langId } = useParams();
   const languageId = Number(langId);
+  const { language: selectedLang } = useLanguage();
+  const translations = useTranslations(selectedLang, 'ListeningRepetitionLesson');
   const { getLessonSentence, speechData, error } = useLesson();
   const { getPronunciationData, pronunciationData } = useSendRecording();
   const { showLoader, hideLoader } = useLoading();
@@ -60,7 +64,7 @@ const ListeningRepetitionLesson = () => {
         if (inputs[0]) setSelectedInput(inputs[0].deviceId);
         if (outputs[0]) setSelectedOutput(outputs[0].deviceId);
       })
-      .catch((e) => console.error("Błąd audio:", e));
+      .catch((e) => showAlert(AlertType.ERROR, `${translations.AudioError || "Audio error"}` + `: ${e}`));
   }, []);
 
   useEffect(() => {
@@ -74,7 +78,7 @@ const ListeningRepetitionLesson = () => {
       .then((stream) => {
         streamRef.current = stream;
       })
-      .catch((err) => console.error("Nie można pobrać streamu:", err));
+      .catch((err) => showAlert(AlertType.ERROR, `${translations.CantDownloadStream || "Can't download stream"}` + `: ${err}`));
   }, [selectedInput]);
 
   useEffect(() => {
@@ -96,7 +100,7 @@ const ListeningRepetitionLesson = () => {
     };
   }, []);
 
-  if (error) return <div className="lr-error">Error: {error}</div>;
+  if (error) return <div className="lr-error">{translations.Error || "Error"}: {error}</div>;
   if (!speechData) return null;
 
   const current = speechData.items[currentIndex];
@@ -118,7 +122,7 @@ const ListeningRepetitionLesson = () => {
   const handleRecord = () => {
     const stream = streamRef.current;
     if (!stream) {
-      console.error("Stream not ready");
+      showAlert(AlertType.ERROR, `${translations.StreamNotReady || "Stream not ready"}`)
       return;
     }
 
@@ -168,13 +172,13 @@ const ListeningRepetitionLesson = () => {
          );
 
          const message =
-          `Wynik: ${result.score}\n` +
-          `Rozpoznany tekst: ${result.recognizedText}`;
+          `${translations.Score || "Score"}: ${result.score}\n` +
+          `${translations.RecognizedText || "Recognized text"}: ${result.recognizedText}`;
          await showAlert(AlertType.INFO, message);
          if (result != null && result.isCorrect == false)
           return;
        } catch (e) {
-        await showAlert(AlertType.ERROR, `Błąd wysyłania audio: ${e}`);
+        await showAlert(AlertType.ERROR, `${translations.AudioSendingError || "Audio sending error"}: ${e}`);
       }
     }
      
@@ -218,7 +222,7 @@ const ListeningRepetitionLesson = () => {
     <div className="lr-container">
       <button className="lr-back" onClick={() => navigate(-1)}>
         <FaArrowLeft size={16} />
-        <span>Back</span>
+        <span>{translations.Back || "Back"}</span>
       </button>
 
       {!started ? (
@@ -246,7 +250,7 @@ const ListeningRepetitionLesson = () => {
             </select>
           </div>
           <button className="lr-start" onClick={() => setStarted(true)}>
-            Zaczynamy!
+            {translations.HereWeGo || "Here we go"}!
           </button>
         </div>
       ) : (
@@ -255,8 +259,8 @@ const ListeningRepetitionLesson = () => {
             {currentIndex + 1} / {speechData.items.length}
           </div>
 
-          <h1 className="lr-title">Practice Listening</h1>
-          <p className="lr-subtitle">Type what you hear in the text box</p>
+          <h1 className="lr-title">{translations.PracticeListening || "Practice Listening"}</h1>
+          <p className="lr-subtitle">{translations.TypeWhatYouHearInTheTextBox || "Type what you hear in the text box"}</p>
 
           <div className="lr-playback-row">
             <div className="lr-audio-controls">
@@ -299,16 +303,16 @@ const ListeningRepetitionLesson = () => {
               onClick={handleCheck}
               disabled={isCheckDisabled}
             >
-              Check
+              {translations.Check || "Check"}
             </button>
             <button className="btn skip" onClick={handleSkip}>
-              Don't know
+              {translations.DontKnow || "Don't know"}
             </button>
           </div>
 
           <div className="lr-tips">
-            <h2>Tips</h2>
-            <p>Pay attention to the pronunciation of words.</p>
+            <h2>{translations.Tips || "Tips"}</h2>
+            <p>{translations.PayAttentionToThePronunciationOfWords || "Pay attention to the pronunciation of words"}</p>
           </div>
         </div>
       )}

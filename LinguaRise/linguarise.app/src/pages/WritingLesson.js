@@ -6,6 +6,8 @@ import { useLoading } from "../context/LoadingContext";
 import "../assets/styles/ListeningRepetitionLesson.css";
 import { useAlert } from "../hooks/useAlert";
 import { AlertType } from '../data/alertTypes';
+import { useTranslations } from "../hooks/useTranslations";
+import { useLanguage } from "../context/LanguageContext";
 
 const WritingLesson = () => {
   const navigate = useNavigate();
@@ -42,7 +44,9 @@ const handleCheck = async () => {
         current.wordId,
         answer
       );
-      const message = `${translations.Score + ": " || "Score: "} ${result.score}`;
+
+      const message = `${translations.Score || "Score"}: ${result.score}`;
+
       await showAlert(AlertType.INFO, message);
       if (result && result.isCorrect === false) return;
     } catch (e) {
@@ -89,7 +93,7 @@ const handleCheck = async () => {
       {!started ? (
         <div className="lr-setup">
           <button className="lr-start" onClick={() => setStarted(true)}>
-            {translations.HereWeGo || "Here we go!"}
+            {translations.HereWeGo || "Here we go"}!
           </button>
         </div>
       ) : (

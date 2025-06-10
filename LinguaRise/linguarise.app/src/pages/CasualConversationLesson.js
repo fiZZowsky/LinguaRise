@@ -1,17 +1,19 @@
-// src/pages/CasualConservationLesson.jsx
 import React, { useState, useRef, useEffect } from "react";
 import { FaArrowLeft, FaPaperPlane } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useChat } from "../hooks/useChat";
-import "../assets/styles/CasualConservationLesson.css";
+import "../assets/styles/CasualConversationLesson.css";
+import { useTranslations } from "../hooks/useTranslations";
+import { useLanguage } from "../context/LanguageContext";
 
-const CasualConservationLesson = () => {
+const CasualConversationLesson = () => {
     const navigate = useNavigate();
     const { messages, sendMessage, error } = useChat();
     const [input, setInput] = useState("");
     const scrollRef = useRef(null);
+    const { language: selectedLang } = useLanguage();
+    const translations = useTranslations(selectedLang, 'CasualConversationLesson');
 
-    // auto-scroll do dołu przy nowej wiadomości
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -29,9 +31,9 @@ const CasualConservationLesson = () => {
         <div className="chat-container">
             <header className="chat-header">
                 <button className="back-button" onClick={() => navigate(-1)}>
-                    <FaArrowLeft /> Back
+                    <FaArrowLeft /> {translations.Back || "Back"}
                 </button>
-                <h2 className="chat-title">Chat with Bot</h2>
+                <h2 className="chat-title">{translations.ChatWithBot || "Chat with Bot"}</h2>
             </header>
 
             <div className="chat-window" ref={scrollRef}>
@@ -51,7 +53,7 @@ const CasualConservationLesson = () => {
             <form className="chat-input-form" onSubmit={handleSubmit}>
                 <input
                     type="text"
-                    placeholder="Type your message..."
+                    placeholder={translations.TypeYourMessage || "Type your message..."}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
@@ -63,4 +65,4 @@ const CasualConservationLesson = () => {
     );
 };
 
-export default CasualConservationLesson;
+export default CasualConversationLesson;
