@@ -10,53 +10,53 @@ import homeImg from '../assets/images/home-page-bg1.png';
 
 export default function About() {
   const { language: selectedLang } = useLanguage();
-  const t = useTranslations(selectedLang, 'AboutPage');
+  const translations = useTranslations(selectedLang, 'About');
 
   const features = [
     {
       image: listeningImg,
-      title: t.FeatureListeningTitle || 'Słuchanie i powtarzanie',
+      title: translations.ListeningAndRepeating || 'Listening and repeating',
       desc:
-        t.FeatureListeningDesc ||
-        'Doskonal wymowę, powtarzając nagrania i porównując je ze swoim głosem.'
+        translations.ImproveYourPronunciationByRepeatingRecordingsAndComparingThemToYourVoice ||
+        'Improve your pronunciation by repeating recordings and comparing them to your voice.'
     },
     {
       image: writingByEarImg,
-      title: t.FeatureWritingByEarTitle || 'Pisanie ze słuchu',
+      title: translations.WritingByEar || 'Writing by ear',
       desc:
-        t.FeatureWritingByEarDesc ||
-        'Ćwicz poprawną pisownię, zapisując usłyszane zdania.'
+        translations.PracticeSpellingCorrectlyByWritingDownTheSentencesYouHear ||
+        'Practice spelling correctly by writing down the sentences you hear.'
     },
     {
       image: fillGapsImg,
-      title: t.FeatureFillGapsTitle || 'Uzupełnianie luk',
+      title: translations.Writing || 'Writing',
       desc:
-        t.FeatureFillGapsDesc ||
-        'Sprawdzaj znajomość słówek wypełniając brakujące fragmenty zdań.'
+        translations.CheckYourKnowledgeOfWords ||
+        'Check your knowledge of words.'
     },
     {
       image: conversationImg,
-      title: t.FeatureConversationTitle || 'Rozmowy z chatbotem',
+      title: translations.ConversationsWithAChatbot || 'Conversations with a chatbot',
       desc:
-        t.FeatureConversationDesc ||
-        'Prowadź swobodne konwersacje dostosowane do Twojego poziomu.'
+          translations.ConductCasualConversationsAdaptedToYourLevel ||
+        'Conduct casual conversations adapted to your level.'
     },
     {
       image: homeImg,
-      title: t.FeatureProgressTitle || 'Śledzenie postępów',
+      title: translations.TrackYourProgress || 'Track your progress',
       desc:
-        t.FeatureProgressDesc ||
-        'Aplikacja zapamiętuje Twoje osiągnięcia, dzięki czemu możesz łatwo kontynuować naukę.'
+        translations.TheAppRemembersYourAchievementsSoYouCanEasilyContinueLearning ||
+        'The app remembers your achievements so you can easily continue learning.'
     }
   ];
 
   return (
     <div className="about-container">
       <section className="about-hero">
-        <h1 id="AboutTitle">{t.AboutTitle || 'O aplikacji LinguaRise'}</h1>
+        <h1 id="AboutTitle">{translations.AboutAppLinguaRise || 'About App LinguaRise'}</h1>
         <p id="AboutSubtitle">
-          {t.AboutSubtitle ||
-            'LinguaRise pomaga w nauce języków obcych wykorzystując nowoczesne technologie Azure.'}
+          {translations.LinguaRiseHelpsYouLearnForeignLanguagesUsingModernAzureTechnologies ||
+            'LinguaRise helps you learn foreign languages ​​using modern Azure technologies.'}
         </p>
       </section>
 

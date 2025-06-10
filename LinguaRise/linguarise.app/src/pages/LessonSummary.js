@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useLessonSummary } from "../hooks/useLessonSummary";
 import { useAlert } from '../hooks/useAlert';
 import '../assets/styles/LessonSummary.css';
+import { AlertType } from '../data/alertTypes';
+import { useTranslations } from "../hooks/useTranslations";
+import { useLanguage } from "../context/LanguageContext";
 
 const LessonSummary = () => {
   const navigate = useNavigate();
@@ -10,10 +13,12 @@ const LessonSummary = () => {
   const { categoryId, lessonId } = state || {};
   const { showAlert } = useAlert();
   const { lessonSummaryData, error } = useLessonSummary(lessonId, categoryId);
+  const { language: selectedLang } = useLanguage();
+  const translations = useTranslations(selectedLang, 'LessonSummary');
 
   useEffect(() => {
     if (error) {
-      showAlert("Nie udało się pobrać podsumowania lekcji.", "error");
+      showAlert(AlertType.ERROR, `${translations.FailedToDownloadLessonSummary || "Failed to download lesson summary."}`);
     }
   }, [error, showAlert, navigate]);
 
@@ -37,7 +42,7 @@ const percent = !isNaN(rawScore)
 
   return (
     <div className="ls-container">
-      <h1 className="ls-title">Podsumowanie lekcji</h1>
+      <h1 className="ls-title">{translations.LessonSummary || "Lesson summary"}</h1>
       <div className="ls-meta">
         {flagImage && (
           <img
@@ -47,9 +52,9 @@ const percent = !isNaN(rawScore)
           />
         )}
         <p className="ls-info">
-          Język: <strong>{languageName}</strong> &nbsp;&bull;&nbsp;
-          Kategoria: <strong>{categoryName}</strong> &nbsp;&bull;&nbsp;
-          Wynik: <strong>{percent}%</strong>
+          {translations.Language || "Language"}: <strong>{languageName}</strong> &nbsp;&bull;&nbsp;
+          {translations.Category || "Category"}: <strong>{categoryName}</strong> &nbsp;&bull;&nbsp;
+          {translations.Score || "Score"}: <strong>{percent}%</strong>
         </p>
       </div>
       <div className="ls-content">
@@ -62,7 +67,7 @@ const percent = !isNaN(rawScore)
             ))}
           </div>
         ) : (
-          <p className="ls-no-data">Brak wyuczonych słówek w tej kategorii.</p>
+          <p className="ls-no-data">{translations.ThereAreNoWordsLearnedInThisCategory || "There are no words learned in this category."}</p>
         )}
       </div>
     </div>

@@ -1,6 +1,8 @@
 import React from "react";
 import { msalInstance } from '../lib/authConfig';
 import "../assets/styles/Profile.css";
+import { useTranslations } from "../hooks/useTranslations";
+import { useLanguage } from "../context/LanguageContext";
 
 const getProfileData = () => {
   const account =
@@ -19,12 +21,14 @@ const getProfileData = () => {
 };
 
 const Profile = () => {
+  const { language: selectedLang } = useLanguage();
+  const translations = useTranslations(selectedLang, 'Profile');
   const profile = getProfileData();
 
   if (!profile)
     return (
       <p className="profile-info">
-        You need to sign in to view profile information.
+        {translations.YoutNeedToSignInToViewProfileInformation || "You need to sign in to view profile information."}
       </p>
     );
 
@@ -33,20 +37,20 @@ const Profile = () => {
   return (
     <div className="profile-wrapper">
       <div className="profile-card">
-        <h2 className="profile-header">General Information</h2>
+        <h2 className="profile-header">{translations.GeneralInformation || "General Information"}</h2>
 
         <div className="profile-field">
-          <label>First Name</label>
+          <label>{translations.FirstName || "First Name"}</label>
           <input value={firstName} readOnly  tabIndex={-1} />
         </div>
 
         <div className="profile-field">
-          <label>Last Name</label>
+          <label>{translations.LastName || "Last Name"}</label>
           <input value={lastName} readOnly  tabIndex={-1} />
         </div>
 
         <div className="profile-field">
-          <label>Email</label>
+          <label>{translations.Email || "Email"}</label>
           <input value={email} readOnly  tabIndex={-1} />
         </div>
       </div>

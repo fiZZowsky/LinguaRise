@@ -6,11 +6,15 @@ import { useLoading } from "../context/LoadingContext";
 import "../assets/styles/ListeningRepetitionLesson.css";
 import { useAlert } from "../hooks/useAlert";
 import { AlertType } from '../data/alertTypes';
+import { useTranslations } from "../hooks/useTranslations";
+import { useLanguage } from "../context/LanguageContext";
 
 const WritingLesson = () => {
   const navigate = useNavigate();
   const { langId } = useParams();
   const languageId = Number(langId);
+  const { language: selectedLang } = useLanguage();
+  const translations = useTranslations(selectedLang, 'WritingLesson');
 
   const { getWritingLessonContent, writingData, error } = useWritingLesson();
   const { validateWrittenAnswer } = useValidateWrittenAnswer();
@@ -40,13 +44,13 @@ const handleCheck = async () => {
         current.wordId,
         answer
       );
-      const message = `Wynik: ${result.score}`;
+      const message = `${translations.Score || "Score"}: ${result.score}`;
       await showAlert(AlertType.INFO, message);
       if (result && result.isCorrect === false) return;
     } catch (e) {
       await showAlert(
         AlertType.ERROR,
-        `Błąd sprawdzania odpowiedzi: ${e}`
+        `${translations.ErrorCheckingAnswers || "Error checking answers"}: ${e}`
       );
       return;
     }
@@ -81,13 +85,13 @@ const handleCheck = async () => {
     <div className="lr-container">
       <button className="lr-back" onClick={() => navigate(-1)}>
         <FaArrowLeft size={16} />
-        <span>Back</span>
+        <span>{translations.Back || "Back"}</span>
       </button>
 
       {!started ? (
         <div className="lr-setup">
           <button className="lr-start" onClick={() => setStarted(true)}>
-            Zaczynamy!
+            {translations.HereWeGo || "Here we go"}!
           </button>
         </div>
       ) : (
@@ -96,8 +100,8 @@ const handleCheck = async () => {
             {currentIndex + 1} / {writingData.items.length}
           </div>
 
-        <h1 className="lr-title">Practice Writing</h1>
-          <p className="lr-subtitle">Translate the word below</p>
+        <h1 className="lr-title">{translations.PracticeWriting || "Practice Writing"}</h1>
+          <p className="lr-subtitle">{translations.TranslateTheWordBelow || "Translate the word below"}</p>
 
           <div className="lr-input-container">
             <input
@@ -111,7 +115,7 @@ const handleCheck = async () => {
             <input
               type="text"
               name="answer"
-              placeholder="Type your answer here..."
+              placeholder={translations.TypeYpurAnswerHere || "Type your answer here..."}
               className="answer-input"
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
@@ -120,16 +124,16 @@ const handleCheck = async () => {
 
           <div className="lr-actions">
             <button className="btn check" onClick={handleCheck}>
-              Check
+              {translations.Check || "Check"}
             </button>
             <button className="btn skip" onClick={handleSkip}>
-              Next
+              {translations.Next || "Next"}
             </button>
           </div>
 
           <div className="lr-tips">
-            <h2>Tips</h2>
-            <p>Pay attention to the pronunciation of words.</p>
+            <h2>{translations.Tips || "Tips"}</h2>
+            <p>{translations.PayAttentionToThePronunciationOfWords || "Pay attention to the pronunciation of words."}</p>
           </div>
         </div>
       )}
