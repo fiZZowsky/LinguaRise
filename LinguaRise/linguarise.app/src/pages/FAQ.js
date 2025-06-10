@@ -34,8 +34,6 @@ const FAQ = () => {
     const [expandedIndex, setExpandedIndex] = useState(null);
     const contentRefs = useRef([]);
     const { language: selectedLang } = useLanguage();
-    // Zakładam, że namespace 'CasualConversationLesson' zawiera klucze:
-    //   faqQuestionOne, faqAnswerOne, faqQuestionTwo, faqAnswerTwo, itd.
     const translations = useTranslations(selectedLang, 'FAQ');
 
     const toggleFAQ = (idx) =>
