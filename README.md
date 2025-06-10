@@ -97,21 +97,44 @@ Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest k
 
 ### 🖼️ Podgląd ekranów
 
-```text
-![Strona główna](Resources/Screens/home.png)
-![Logowanie](Resources/Screens/login.png)
-![Profil](Resources/Screens/profile.png)
-![Wybór języka kursu](Resources/Screens/Languages.png)
-![Kategorie](Resources/Screens/Categories.png)
-![Lekcja słuchania i powtarzania](Resources/Screens/ListeningRepetition.png)
-![Lekcja pisanie ze słuchu](Resources/Screens/WritingByEar.png)
-![Lekcja tłumaczenie słów](Resources/Screens/Writing.png)
-![Lekcja swobodna konwersacja z chatbotem](Resources/Screens/CasualConversation.png)
-![Podsumowanie lekcji](Resources/Screens/LessonSummary.png)
-![Strona o nas](Resources/Screens/About.png)
-![Strona FAQ](Resources/Screens/FAQ.png)
-```
----
+<p align="center">
+  <img src="Resources/Screens/home.png" alt="Strona główna" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/login.png" alt="Logowanie" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/profile.png" alt="Profil" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/Languages.png" alt="Wybór języka kursu" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/Categories.png" alt="Kategorie" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/ListeningRepetition.png" alt="Lekcja – słuchanie i powtarzanie" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/WritingByEar.png" alt="Lekcja – pisanie ze słuchu" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/Writing.png" alt="Lekcja – tłumaczenie słów" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/CasualConversation.png" alt="Lekcja – konwersacja z chatbotem" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/LessonSummary.png" alt="Podsumowanie lekcji" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/About.png" alt="Strona o nas" width="540" />
+  <br/><br/>
+
+  <img src="Resources/Screens/FAQ.png" alt="Strona FAQ" width="540" />
+</p>
+
+
 
 ## Funkcjonalności  
 ✔️ Logowanie lokalne i przez Microsoft Entra  
