@@ -12,6 +12,18 @@ namespace LinguaRise.Services
     {
         private readonly HttpClient _http;
         private const string ModelId = "LIama 3.2 3B Instruct";
+        private static readonly Dictionary<int, string> Languages = new()
+        {
+            [1] = "English",
+            [2] = "Spanish",
+            [3] = "Polish"
+        };
+        private static readonly Dictionary<string, string> LanguageNames = new()
+        {
+            ["EN"] = "English",
+            ["ES"] = "Spanish",
+            ["PL"] = "Polish"
+        };
 
         public ChatService()
         {
@@ -35,14 +47,25 @@ namespace LinguaRise.Services
             return list;
         }
 
-        public async Task<string> GetChatCompletionAsync(string prompt)
+        public async Task<string> GetChatCompletionAsync(string prompt, int languageId, string languageCode)
         {
+            Languages.TryGetValue(languageId, out var studLangName);
+            LanguageNames.TryGetValue(languageCode.ToUpper(), out var langName);
+            
+            var predefinePrompt = $@"
+            You are a {studLangName} language assistant and expert.
+            Whenever the user asks you something, answer that exact question in **{langName}**,
+            and include a brief explanation in {langName} of your answer.
+            Do not add anything else—focus only on the user's request.";
+            
+            var fullPrompt = $"{predefinePrompt.Trim()}\n\n{prompt}";
+            
             var payload = new
             {
                 model = ModelId,
-                prompt = prompt,
-                max_tokens = 128,
-                temperature = 0.7
+                prompt = fullPrompt,
+                max_tokens = 256,
+                temperature = 0.3
             };
 
             var json = JsonSerializer.Serialize(payload);
@@ -51,14 +74,13 @@ namespace LinguaRise.Services
             var body = await resp.Content.ReadAsStringAsync();
 
             if (!resp.IsSuccessStatusCode)
-                throw new Exception($"GPT4All API error {(int)resp.StatusCode}: {body}");
+                throw new Exception($"LLM API error {(int)resp.StatusCode}: {body}");
 
             using var doc = JsonDocument.Parse(body);
             var text = doc.RootElement
                 .GetProperty("choices")[0]
                 .GetProperty("text")
                 .GetString();
-
             return text?.Trim() ?? throw new Exception("Brak treści odpowiedzi");
         }
     }

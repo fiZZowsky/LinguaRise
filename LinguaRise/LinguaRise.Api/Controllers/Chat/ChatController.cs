@@ -23,6 +23,9 @@ namespace LinguaRise.Api.Controllers.Chat
         public class ChatRequest
         {
             public string Prompt { get; set; }
+            public int LanguageId { get; set; }
+            
+            public string LanguageCode { get; set; }
         }
 
         public class ChatResponse
@@ -38,7 +41,7 @@ namespace LinguaRise.Api.Controllers.Chat
 
             // Tu używamy nowej metody
             Console.WriteLine(request.Prompt);
-            string answer = await _chatService.GetChatCompletionAsync(request.Prompt);
+            string answer = await _chatService.GetChatCompletionAsync(request.Prompt, request.LanguageId, request.LanguageCode);
             return Ok(new ChatResponse { Response = answer });
         }
         
