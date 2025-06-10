@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaArrowLeft, FaPaperPlane } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { useChat } from "../hooks/useChat";
 import "../assets/styles/CasualConversationLesson.css";
 import { useTranslations } from "../hooks/useTranslations";
@@ -8,6 +8,8 @@ import { useLanguage } from "../context/LanguageContext";
 
 const CasualConversationLesson = () => {
     const navigate = useNavigate();
+    const { langId } = useParams();
+    const languageId = Number(langId);
     const { messages, sendMessage, error } = useChat();
     const [input, setInput] = useState("");
     const scrollRef = useRef(null);
@@ -23,7 +25,7 @@ const CasualConversationLesson = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!input.trim()) return;
-        sendMessage(input.trim());
+        sendMessage(input.trim(), languageId, selectedLang);
         setInput("");
     };
 
