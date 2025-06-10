@@ -7,8 +7,7 @@
 System wspiera naukę języka poprzez różne metody, takie jak:  
 - 🎧 Słuchanie i powtarzanie fraz  
 - ✍️ Pisanie ze słuchu  
-- 📝 Uzupełnianie luk w zdaniach  
-- 🖼️ Nauka słownictwa poprzez obrazki  
+- 📝 Tłumaczenie słów
 - 💬 Swobodna konwersacja z chatbotem dostosowaną do poziomu użytkownika
 
 Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest kontynuowanie nauki w dowolnym momencie.
@@ -48,7 +47,7 @@ Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest k
 ☁️ **Azure Speech to Text** – analiza poprawności wymowy użytkownika  
 ☁️ **Azure Text to Speech** – generowanie odpowiedzi głosowych  
 ☁️ **Azure Bot Service** – chatbot do nauki języka  
-☁️ **Azure Microsoft Entra** – zarządzanie kontami użytkowników  
+☁️ **Microsoft Entra** – zarządzanie kontami użytkowników  
 
 ---
 
@@ -58,22 +57,60 @@ Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest k
 ---
 
 ## Użyte technologie oraz biblioteki  
-### Backend:  
-- 🟣 .NET Core  
-- 🔵 Entity Framework  
-- 🔵 ASP.NET Web API  
+### Backend
+- 🟣 .NET Core
+- 🔵 Entity Framework
+- 🔵 ASP.NET Web API 
 - 🔵 Azure SDK
 
-### Frontend:  
+### Frontend
 - 🟡 ReactJS
 
-### Baza danych:  
+### Baza danych
 - 🗄️ Microsoft SQL Server
 
 ---
 
 ## Interfejs użytkownika  
 
+> Responsywny interfejs stworzony w **React** zapewnia łatwy dostęp do ćwiczeń, widoków postępu oraz ustawień konta.  
+> Działa płynnie zarówno na komputerach, jak i urządzeniach mobilnych.
+
+### 📑 Nawigacja
+
+| Strona | Opis |
+| ------ | ---- |
+| **Strona główna** | Szybki dostęp do najnowszych lekcji |
+| **Strona logowania** | Bezpieczne logowanie przy użyciu konta Microsoft |
+| **Profil użytkownika** | Dane zalogowanej osoby |
+| **Wybór języka kursu** | Lista dostępnych języków |
+| **Wybór sposobu nauki** | Tryby nauki dopasowane do Twojego stylu |
+| **Lekcja – słuchanie & powtarzanie** | Ćwiczenia wymowy z natywnymi nagraniami audio |
+| **Lekcja – słuchanie & pisanie** | Dyktanda z natychmiastową weryfikacją odpowiedzi |
+| **Lekcja – tłumaczenie słów** | Fiszki z inteligentnym powtórzeniem |
+| **Lekcja – konwersacja z chatbotem** | Symulacja realnych dialogów |
+| **Podsumowanie lekcji** | Wyniki i statystyki |
+| **Strona o nas** | Opis funkcjonalności aplikacji |
+| **FAQ** | Najczęściej zadawane pytania i odpowiedzi |
+
+---
+
+### 🖼️ Podgląd ekranów
+
+```text
+![Strona główna](Resources/Screens/home.png)
+![Logowanie](Resources/Screens/login.png)
+![Profil](Resources/Screens/profile.png)
+![Wybór języka kursu](Resources/Screens/Languages.png)
+![Kategorie](Resources/Screens/Categories.png)
+![Lekcja słuchania i powtarzania](Resources/Screens/ListeningRepetition.png)
+![Lekcja pisanie ze słuchu](Resources/Screens/WritingByEar.png)
+![Lekcja tłumaczenie słów](Resources/Screens/Writing.png)
+![Lekcja swobodna konwersacja z chatbotem](Resources/Screens/CasualConversation.png)
+![Podsumowanie lekcji](Resources/Screens/LessonSummary.png)
+![Strona o nas](Resources/Screens/About.png)
+![Strona FAQ](Resources/Screens/FAQ.png)
+```
 ---
 
 ## Funkcjonalności  
@@ -88,26 +125,39 @@ Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest k
 ## Instrukcja uruchomienia  
 
 ### Backend  
-1. Zainstaluj .NET SDK  
-2. Skonfiguruj Microsoft SQL Server  
-3. Wykonaj migracje bazy danych:  
-   a) Dodanie migracji:  
+1. Zainstalować .NET SDK  
+2. Skonfigurować Microsoft SQL Server  
+3. Wykonać migracje bazy danych:
+   a) Wyświetlić konsolę **`Package Manager Console`**
+   b) Ustawić default project na **`LinguaRise.DataAccess`**
+   c) Dodać migrację:  
       ```sh
       Add-Migration InitialCreate
       ```
-   b) Utworzenie bazy i schematu:  
+   d) Utworzyć bazę i schemat:  
       ```sh
       Update-Database
       ```
-4. Uruchom backend:  
+   e) Zainicjować bazę danymi:
+   - Pobrać plik **`script`** z katalogu **`Resources/`**
+   - Otworzyć za pomocą Microsoft SQL Server Management Studio pobrany plik
+   - Uruchomić skrypt zasilający bazę
+5. Dodać do projektu plik ffmpeg.exe
+   - Przejść do katalogu **`Resources/`**
+   - Skopiować lub wypakować plik **`ffmpeg.exe`** do folderu projektu
+     **`LinguaRise/LinguaRise.Api/`**
+6. Uruchomić backend:  
    ```sh
    dotnet run --project LinguaRise.Api
+   ```
    
 ### Frontend
-1. Zainstaluj Node.js oraz npm
-2. Pobierz zależności:
+1. Zainstalować Node.js oraz npm
+2. Pobrać zależności:
    ```sh
    npm install
-3. Uruchom frontend:
+   ```
+3. Uruchomić frontend:
    ```sh
    npm start
+   ```
