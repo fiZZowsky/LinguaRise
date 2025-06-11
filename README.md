@@ -174,8 +174,8 @@ Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest k
    - Przejść do katalogu **`Resources/`**
    - Uruchomić instalator **`gpt4all-installer-win64.exe`**
      
-   > [!NOTE]
-   > chatbota można zainstalować w dowolnym miejscu w systemie. Ważen by znajdował się on jedynie w pustym katalogu, gdyż dane które się w nim znajdują zostaną usunięte.
+> [!NOTE]
+   chatbota można zainstalować w dowolnym miejscu w systemie. Ważen by znajdował się on jedynie w pustym katalogu, gdyż dane które się w nim znajdują zostaną usunięte.
 
    b) Konfiguracja:
    - Uruchomić zainstalowany program **`GPT4All`**
@@ -186,8 +186,8 @@ Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest k
    - Ustawić `Default Model` na ten który został pobrany
    - Zaznaczyć opcję `Enable Local API Server`
   
-   > [!IMPORTANT]
-   > Po wykonaniu konfiguracji, dla prawidłowego działania, należy wyłączyć i uruchomić ponownie aplikację **`GPT4All`**
+> [!IMPORTANT]
+   Po wykonaniu konfiguracji, dla prawidłowego działania, należy wyłączyć i uruchomić ponownie aplikację **`GPT4All`**
    
 8. Uruchomić backend:  
    ```sh
