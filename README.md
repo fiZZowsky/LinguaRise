@@ -169,7 +169,27 @@ Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest k
    - Przejść do katalogu **`Resources/`**
    - Skopiować lub wypakować plik **`ffmpeg.exe`** do folderu projektu
      **`LinguaRise/LinguaRise.Api/`**
-6. Uruchomić backend:  
+6. Dodać i skonfigurować chatbota dla projektu:
+   a) Instalacja chatbota:
+   - Przejść do katalogu **`Resources/`**
+   - Uruchomić instalator **`gpt4all-installer-win64.exe`**
+     
+   > [!NOTE]
+   > chatbota można zainstalować w dowolnym miejscu w systemie. Ważen by znajdował się on jedynie w pustym katalogu, gdyż dane które się w nim znajdują zostaną usunięte.
+
+   b) Konfiguracja:
+   - Uruchomić zainstalowany program **`GPT4All`**
+   - Przejść do zakładki `Find Models`
+   - Wybrać z listy model `LIama 3.2 3B Instruct`
+   - Pobrać znaleziony model
+   - Po zakończeniu pobierania wejść w ustawienia
+   - Ustawić `Default Model` na ten który został pobrany
+   - Zaznaczyć opcję `Enable Local API Server`
+  
+   > [!IMPORTANT]
+   > Po wykonaniu konfiguracji, dla prawidłowego działania, należy wyłączyć i uruchomić ponownie aplikację **`GPT4All`**
+   
+8. Uruchomić backend:  
    ```sh
    dotnet run --project LinguaRise.Api
    ```
