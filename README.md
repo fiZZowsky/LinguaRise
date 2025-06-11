@@ -46,7 +46,7 @@ Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest k
 ## Usługi Azure  
 ☁️ **Azure Speech to Text** – analiza poprawności wymowy użytkownika  
 ☁️ **Azure Text to Speech** – generowanie odpowiedzi głosowych  
-☁️ **Azure Bot Service** – chatbot do nauki języka  
+☁️ **LLM - LIama 3 8B Instruct** – chatbot do nauki języka  
 ☁️ **Microsoft Entra** – zarządzanie kontami użytkowników  
 
 ---
