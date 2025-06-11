@@ -137,7 +137,7 @@ Postęp użytkownika jest na bieżąco zapisywany, dzięki czemu możliwe jest k
 
 
 ## Funkcjonalności  
-✔️ Logowanie lokalne i przez Microsoft Entra  
+✔️ Logowanie przez Microsoft Entra  
 ✔️ Interaktywna nauka języka poprzez różne metody  
 ✔️ Analiza wymowy użytkownika  
 ✔️ Personalizowane kursy i śledzenie postępów  
